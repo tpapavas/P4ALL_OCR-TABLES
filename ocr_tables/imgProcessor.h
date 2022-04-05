@@ -7,8 +7,10 @@
 #include <numeric>
 
 //OPENCV
-#include <cv.h>
-#include <highgui.h>
+//#include <cv.h> //DEPRECATED
+//#include <highgui.h> //DEPRECATED
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 
 
 //MUPDF
@@ -18,7 +20,8 @@ extern "C" {
 }
 
 //LEPTONICA
-#include "allheaders.h"
+//#include "allheaders.h"	//not working
+#include "leptonica/allheaders.h"
 #define NO_CONSOLE_IO
 #define DFLAG        0
 
