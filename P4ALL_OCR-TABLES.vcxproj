@@ -79,22 +79,32 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\OpenCV\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\OpenCV\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include</IncludePath>
+    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\OpenCV\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\OpenCV\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include</IncludePath>
+    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\OpenCV\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\OpenCV\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include</IncludePath>
+    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>false</VcpkgEnableManifest>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <VcpkgUseStatic>false</VcpkgUseStatic>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <VcpkgUseStatic>false</VcpkgUseStatic>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,7 +119,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world455d.lib;libmupdf.lib;libthirdparty.lib;tesseract41.lib;leptonica-1.82.0.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world455d.lib;libmupdf.lib;libthirdparty.lib;tesseract41.lib;leptonica-1.82.0.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -130,7 +140,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world455d.lib;libmupdf.lib;libthirdparty.lib;tesseract41.lib;leptonica-1.82.0.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world455d.lib;libmupdf.lib;libthirdparty.lib;tesseract41.lib;leptonica-1.82.0.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -146,6 +156,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opencv_world455d.lib;libmupdf.lib;libthirdparty.lib;tesseract41d.lib;leptonica-1.82.0d.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,6 +176,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opencv_world455d.lib;libmupdf.lib;libthirdparty.lib;tesseract41d.lib;leptonica-1.82.0d.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
