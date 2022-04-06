@@ -1394,7 +1394,7 @@ void ocr_tabs::DrawBoxes()
 		cout << boxes[i][0] << "|"<< boxes[i][1] << "|"<< boxes[i][2] << "|"<< boxes[i][3];
 		cout<<"\n";
 		imshow("img", test);
-		char c=cvWaitKey(0);
+		char c=waitKey(0);
 	}
 }
 //////////////////////////////////////////////////////////////
@@ -1410,123 +1410,123 @@ void ocr_tabs::DrawLines()
 		line( test, Point2i( page_right,Line_dims[i][1]),Point2i( page_left,Line_dims[i][1]), Scalar (0,0,0), 2 );
 		line( test, Point2i( page_left,Line_dims[i][1]),Point2i( page_left,Line_dims[i][0]), Scalar (0,0,0), 2 );
 		imshow("img", test);
-	char c=cvWaitKey(0);
+	char c= waitKey(0);
 	}
 }
 //////////////////////////////////////////////////////////////
 void ocr_tabs::DrawSegments()
 {
-		namedWindow("img", 0);
-		float ratio=(float)(std::max(test.cols,test.rows))/850;
-	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
-	for (int i=0;i<Lines.size();i++)
+	namedWindow("img", 0);
+	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
+	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
+	for (int i = 0; i < Lines.size(); i++)
 	{
-		for (int j=0;j<Lines_segments[i].size();j++)
+		for (int j = 0; j < Lines_segments[i].size(); j++)
 		{
-			int top=Line_dims[i][0];
-			int bottom=Line_dims[i][1];
-			int left=boxes[Lines_segments[i][j][0]][0];
-			int right=boxes[Lines_segments[i][j][Lines_segments[i][j].size()-1]][2];
-			line( test, Point2i( left,top),Point2i( right,top), Scalar (0,0,0), 2 );
-			line( test, Point2i( right,top),Point2i( right,bottom), Scalar (0,0,0), 2 );
-			line( test, Point2i( right,bottom),Point2i( left,bottom), Scalar (0,0,0), 2 );
-			line( test, Point2i( left,bottom),Point2i( left,top), Scalar (0,0,0), 2 );
+			int top = Line_dims[i][0];
+			int bottom = Line_dims[i][1];
+			int left = boxes[Lines_segments[i][j][0]][0];
+			int right = boxes[Lines_segments[i][j][Lines_segments[i][j].size() - 1]][2];
+			line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
+			line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
+			line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
+			line(test, Point2i(left, bottom), Point2i(left, top), Scalar(0, 0, 0), 2);
 			imshow("img", test);
-			char c=cvWaitKey(0);
+			char c = waitKey(0);
 		}
 	}
 }
 //////////////////////////////////////////////////////////////
 void ocr_tabs::DrawAreas()
 {
-		namedWindow("img", 0);
-		float ratio=(float)(std::max(test.cols,test.rows))/850;
-	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
-	for (int i=0;i<table_area.size();i++)
+	namedWindow("img", 0);
+	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
+	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
+	for (int i = 0; i < table_area.size(); i++)
 	{
-		int top=Line_dims[table_area[i][0]][0];
-		int bottom=Line_dims[table_area[i][table_area[i].size()-1]][1];
-		int left=page_left;
-		int right=page_right;
-		line( test, Point2i( left,top),Point2i( right,top), Scalar (0,0,0), 2 );
-		line( test, Point2i( right,top),Point2i( right,bottom), Scalar (0,0,0), 2 );
-		line( test, Point2i( right,bottom),Point2i( left,bottom), Scalar (0,0,0), 2 );
-		line( test, Point2i( left,bottom),Point2i( left,top), Scalar (0,0,0), 2 );
+		int top = Line_dims[table_area[i][0]][0];
+		int bottom = Line_dims[table_area[i][table_area[i].size() - 1]][1];
+		int left = page_left;
+		int right = page_right;
+		line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
+		line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
+		line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
+		line(test, Point2i(left, bottom), Point2i(left, top), Scalar(0, 0, 0), 2);
 		imshow("img", test);
-		char c=cvWaitKey(0);
+		char c = waitKey(0);
 	}
 }
 //////////////////////////////////////////////////////////////
 void ocr_tabs::DrawRows()
 {
-		namedWindow("img", 0);
-		float ratio=(float)(std::max(test.cols,test.rows))/850;
-	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
-	for (int i=0;i<multi_Rows.size();i++)
+	namedWindow("img", 0);
+	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
+	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
+	for (int i = 0; i < multi_Rows.size(); i++)
 	{
-		for (int j=0;j<multi_Rows[i].size();j++)
+		for (int j = 0; j < multi_Rows[i].size(); j++)
 		{
 
-		int top=Line_dims[multi_Rows[i][j][0]][0];
-		int bottom=Line_dims[multi_Rows[i][j][multi_Rows[i][j].size()-1]][1];
-		int left=page_left;
-		int right=page_right;
-		line( test, Point2i( left,top),Point2i( right,top), Scalar (0,0,0), 2 );
-		line( test, Point2i( right,top),Point2i( right,bottom), Scalar (0,0,0), 2 );
-		line( test, Point2i( right,bottom),Point2i( left,bottom), Scalar (0,0,0), 2 );
-		line( test, Point2i( left,bottom),Point2i( left,top), Scalar (0,0,0), 2 );
-		imshow("img", test);
-		char c=cvWaitKey(0);
+			int top = Line_dims[multi_Rows[i][j][0]][0];
+			int bottom = Line_dims[multi_Rows[i][j][multi_Rows[i][j].size() - 1]][1];
+			int left = page_left;
+			int right = page_right;
+			line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
+			line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
+			line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
+			line(test, Point2i(left, bottom), Point2i(left, top), Scalar(0, 0, 0), 2);
+			imshow("img", test);
+			char c = waitKey(0);
 		}
 	}
 }
 //////////////////////////////////////////////////////////////
 void ocr_tabs::DrawColsPartial()
 {
-		namedWindow("img", 0);
-		float ratio=(float)(std::max(test.cols,test.rows))/850;
-	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
-	for (int i=0;i<tmp_col.size();i++)
+	namedWindow("img", 0);
+	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
+	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
+	for (int i = 0; i < tmp_col.size(); i++)
 	{
-		for (int j=0;j<tmp_col[i].size();j++)
+		for (int j = 0; j < tmp_col[i].size(); j++)
 		{
-				int top=boxes[tmp_col[i][j][0]][1];
-				int bottom=boxes[tmp_col[i][j][0]][3];
-				int left=boxes[tmp_col[i][j][0]][0];
-				int right=boxes[tmp_col[i][j][tmp_col[i][j].size()-1]][2];
-				line( test, Point2i( left,top),Point2i( right,top), Scalar (0,0,0), 2 );
-				line( test, Point2i( right,top),Point2i( right,bottom), Scalar (0,0,0), 2 );
-				line( test, Point2i( right,bottom),Point2i( left,bottom), Scalar (0,0,0), 2 );
-				line( test, Point2i( left,bottom),Point2i( left,top), Scalar (0,0,0), 2 );
-				imshow("img", test);
-				char c=cvWaitKey(0);
+			int top = boxes[tmp_col[i][j][0]][1];
+			int bottom = boxes[tmp_col[i][j][0]][3];
+			int left = boxes[tmp_col[i][j][0]][0];
+			int right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][2];
+			line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
+			line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
+			line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
+			line(test, Point2i(left, bottom), Point2i(left, top), Scalar(0, 0, 0), 2);
+			imshow("img", test);
+			char c = waitKey(0);
 		}
 	}
 }
 //////////////////////////////////////////////////////////////
 void ocr_tabs::DrawCols()
 {
-		namedWindow("img", 0);
-		float ratio=(float)(std::max(test.cols,test.rows))/850;
-	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
-	for (int i=0;i<table_Columns.size();i++)
+	namedWindow("img", 0);
+	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
+	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
+	for (int i = 0; i < table_Columns.size(); i++)
 	{
-		for (int j=0;j<table_Columns[i].size();j++)
+		for (int j = 0; j < table_Columns[i].size(); j++)
 		{
-			for (int k=0;k<table_Columns[i][j].size();k++)
+			for (int k = 0; k < table_Columns[i][j].size(); k++)
 			{
-				int tmp=table_Columns[i][j][k][0];
-				int bottom=boxes[tmp][3];
-				int top=boxes[tmp][1]; 
-				int left=boxes[tmp][0];
-				tmp=table_Columns[i][j][k][table_Columns[i][j][k].size()-1];
-				int right=boxes[tmp][2];
-				line( test, Point2i( left,top),Point2i( right,top), Scalar (0,0,0), 2 );
-				line( test, Point2i( right,top),Point2i( right,bottom), Scalar (0,0,0), 2 );
-				line( test, Point2i( right,bottom),Point2i( left,bottom), Scalar (0,0,0), 2 );
-				line( test, Point2i( left,bottom),Point2i( left,top), Scalar (0,0,0), 2 );
+				int tmp = table_Columns[i][j][k][0];
+				int bottom = boxes[tmp][3];
+				int top = boxes[tmp][1];
+				int left = boxes[tmp][0];
+				tmp = table_Columns[i][j][k][table_Columns[i][j][k].size() - 1];
+				int right = boxes[tmp][2];
+				line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
+				line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
+				line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
+				line(test, Point2i(left, bottom), Point2i(left, top), Scalar(0, 0, 0), 2);
 				imshow("img", test);
-				char c=cvWaitKey(0);
+				char c = waitKey(0);
 			}
 		}
 	}
@@ -1581,16 +1581,16 @@ void ocr_tabs::DrawGrid()
 		}
 	}
 				imshow("img", test);
-				char c=cvWaitKey(0);
+				char c= waitKey(0);
 }
 //////////////////////////////////////////////////////////////
 void ocr_tabs::DrawGridlessImage()
 {
 	namedWindow("img", 0);
-	float ratio=(float)(std::max(test.cols,test.rows))/850;
-	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
-	imshow("img",test);
-	cvWaitKey(0);
+	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
+	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
+	imshow("img", test);
+	waitKey(0);
 }
 //////////////////////////////////////////////////////////////
 /*void ocr_tabs::DrawFootHead()
@@ -1609,12 +1609,12 @@ void ocr_tabs::DrawGridlessImage()
 	}
 	imshow("img", test);
 	char c=cvWaitKey(0);
-	
+
 }*/
 
 void ocr_tabs::ResetImage()
 {
-	test=initial.clone();
+	test = initial.clone();
 	//resize(test,test,Size(test.size().width*2,test.size().height*2));
 }
 //////////////////////////////////////////////////////////////
@@ -1624,41 +1624,41 @@ Mat ocr_tabs::ImgSeg(Mat img)
 	cout << "Segment Image...";
 	start = clock();
 	Mat dst;
-	threshold( img, img, 200, 255,0 );
+	threshold(img, img, 200, 255, 0);
 	namedWindow("img", 0);
-	vector<double> hor,ver;
-	test=img;
+	vector<double> hor, ver;
+	test = img;
 
 	uchar* data = (uchar*)img.data;
-	
-	for (int i=0;i<img.rows;i++)
+
+	for (int i = 0; i < img.rows; i++)
 	{
-		double sum=0;
-		for (int j=0;j<img.cols;j++)
+		double sum = 0;
+		for (int j = 0; j < img.cols; j++)
 		{
-			sum += data[j+i*img.cols];
+			sum += data[j + i * img.cols];
 		}
-		hor.push_back(sum/img.cols);
+		hor.push_back(sum / img.cols);
 	}
-	for (int i=0;i<img.cols;i++)
+	for (int i = 0; i < img.cols; i++)
 	{
-		double sum=0;
-		for (int j=0;j<img.rows;j++)
+		double sum = 0;
+		for (int j = 0; j < img.rows; j++)
 		{
-			sum += data[i+j*img.cols];
+			sum += data[i + j * img.cols];
 		}
-		ver.push_back(sum/img.rows);
+		ver.push_back(sum / img.rows);
 	}
 
 
-	cvtColor(img,img,CV_GRAY2BGR);
-	for (int i=0;i<hor.size();i++)
+	cvtColor(img, img, cv::COLOR_GRAY2BGR);  //CV_GRAY2BGR
+	for (int i = 0; i < hor.size(); i++)
 	{
-			line(img,Point2i(0,i),Point2i(hor[i]*2-400,i),Scalar(0,0,255),2);
+		line(img, Point2i(0, i), Point2i(hor[i] * 2 - 400, i), Scalar(0, 0, 255), 2);
 	}
-		for (int i=0;i<ver.size();i++)
+	for (int i = 0; i < ver.size(); i++)
 	{
-			line(img,Point2i(i,0),Point2i(i,ver[i]*2-400),Scalar(0,255,0),2);
+		line(img, Point2i(i, 0), Point2i(i, ver[i] * 2 - 400), Scalar(0, 255, 0), 2);
 	}
 
 
@@ -1670,10 +1670,10 @@ Mat ocr_tabs::ImgSeg(Mat img)
 
 
 
-	float ratio=(float)(std::max(test.cols,test.rows))/850;
-	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
-	imshow("img",img);
-	cvWaitKey(0);
+	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
+	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
+	imshow("img", img);
+	waitKey(0);
 	
 	
 	
@@ -2202,18 +2202,22 @@ bool ocr_tabs::parsePDF(const std::string& filename, std::vector<cv::Mat>& image
 	for (unsigned i=0;i<pagecount;i++)
 	{
 		fz_page *page = fz_load_page(ctx, doc, i);
-		fz_matrix transform;
-		fz_rotate(&transform, rotation);
-		fz_pre_scale(&transform, zoom / 100.0f, zoom / 100.0f);
-		fz_rect bounds;
-		fz_bound_page(ctx, page, &bounds);
-		fz_transform_rect(&bounds, &transform);
-		fz_irect bbox;
-		fz_round_rect(&bbox, &bounds);
-		fz_pixmap *pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), &bbox);
+		fz_matrix transform = fz_rotate(rotation);
+		//fz_rotate(&transform, rotation);
+		fz_pre_scale(transform, zoom / 100.0f, zoom / 100.0f);
+		//fz_pre_scale(&transform, zoom / 100.0f, zoom / 100.0f);
+		fz_rect bounds = fz_bound_page(ctx, page);
+		//fz_bound_page(ctx, page, &bounds);
+		fz_transform_rect(bounds, transform);
+		//fz_transform_rect(&bounds, &transform);
+		fz_irect bbox = fz_round_rect(bounds);
+		//fz_round_rect(&bbox, &bounds);
+		fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), bbox, NULL, 0);
+		//fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), bbox);
 		fz_clear_pixmap_with_value(ctx, pix, 0xff);
-		fz_device *dev = fz_new_draw_device(ctx, pix);
-		fz_run_page(ctx, page, dev, &transform, NULL);
+		//fz_device* dev = fz_new_draw_device(ctx, pix);
+		fz_device* dev = fz_new_draw_device(ctx, transform, pix);
+		fz_run_page(ctx, page, dev, transform, NULL);
 		fz_drop_device(ctx,dev);
 		cv::Mat input;
 		imgProcessor::pixmap2mat(&pix, input);
@@ -2333,7 +2337,7 @@ bool ocr_tabs::img2html_withXML (const std::string& filename, const std::string&
 {
 	resetAll();
 	std::vector<cv::Mat> imageList,imageClean;
-	imageList.push_back(cv::imread(filename,CV_LOAD_IMAGE_GRAYSCALE));	
+	imageList.push_back(cv::imread(filename,cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE	
 	if (imageList[0].empty()) {cout << "File not available\n"; return false;}
 	if (!ImagePreproccesing_withXML(filenameXML,imageList,imageClean)) {cout << "Preprocessing with XML failed\n"; return false;}
 	SetImage(imageClean[0]);

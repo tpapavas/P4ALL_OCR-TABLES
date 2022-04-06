@@ -21,9 +21,11 @@
   <ItemGroup>
     <ClInclude Include="ocr_tables\dll_config.h" />
     <ClInclude Include="ocr_tables\imgProcessor.h" />
+    <ClInclude Include="ocr_tables\ocr_tabs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ocr_tables\imgProcessor.cpp" />
+    <ClCompile Include="ocr_tables\ocr_tabs.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -79,13 +81,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\OpenCV\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include</IncludePath>
-    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib</LibraryPath>
+    <IncludePath>C:\OpenCV–2.4.13.6\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenCV–2.4.13.6\build\x86\vc14\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\OpenCV\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include</IncludePath>
-    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib</LibraryPath>
+    <IncludePath>C:\OpenCV–2.4.13.6\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt\5.15.2\msvc2019_64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenCV–2.4.13.6\build\x86\vc14\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt\5.15.2\msvc2019_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -115,12 +117,13 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CallingConvention>Cdecl</CallingConvention>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world455d.lib;libmupdf.lib;libthirdparty.lib;tesseract41.lib;leptonica-1.82.0.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>opencv_core2413d.lib;opencv_highgui2413d.lib;opencv_imgproc2413d.lib;libmupdf.lib;libthirdparty.lib;tesseract41d.lib;leptonica-1.82.0d.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -134,13 +137,18 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CallingConvention>Cdecl</CallingConvention>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world455d.lib;libmupdf.lib;libthirdparty.lib;tesseract41.lib;leptonica-1.82.0.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core2413.lib;opencv_highgui2413.lib;opencv_imgproc2413.lib;libmupdf.lib;libthirdparty.lib;tesseract41.lib;leptonica-1.82.0.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>

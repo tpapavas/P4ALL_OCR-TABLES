@@ -495,7 +495,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	cv::Mat mask (blk.text>100);
 
 	cv::Mat vertSpaces;
-	cv::reduce(mask, vertSpaces, 0, cv::REDUCE_SUM, CV_32FC1);  //CV_REDUCE_SUM
+	cv::reduce(mask, vertSpaces, 0, CV_REDUCE_SUM, CV_32FC1);  //CV_REDUCE_SUM
 	float* data = (float*)vertSpaces.data;
 
 	std::vector<int> emptyCols, trueEmptyCols;
@@ -562,7 +562,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 
 
 	cv::Mat horSpaces;
-	cv::reduce(mask, horSpaces, 1, cv::REDUCE_SUM, CV_32FC1);
+	cv::reduce(mask, horSpaces, 1, CV_REDUCE_SUM, CV_32FC1);
 	data = (float*)horSpaces.data;
 
 	std::vector<int> emptyRows, trueEmptyRows;
@@ -610,7 +610,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 		if ( rcts.height > (float)input.rows/10)
 		{
 			cv::Mat localVertSpaces;
-			cv::reduce(part, localVertSpaces, 0, cv::REDUCE_SUM, CV_32FC1);
+			cv::reduce(part, localVertSpaces, 0, CV_REDUCE_SUM, CV_32FC1);
 			data = (float*)localVertSpaces.data;
 				
 

@@ -27,9 +27,15 @@
     <ClInclude Include="ocr_tables\imgProcessor.h">
       <Filter>Header Files\ocr_tables</Filter>
     </ClInclude>
+    <ClInclude Include="ocr_tables\ocr_tabs.h">
+      <Filter>Header Files\ocr_tables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ocr_tables\imgProcessor.cpp">
+      <Filter>Source Files\ocr_tables</Filter>
+    </ClCompile>
+    <ClCompile Include="ocr_tables\ocr_tabs.cpp">
       <Filter>Source Files\ocr_tables</Filter>
     </ClCompile>
   </ItemGroup>
