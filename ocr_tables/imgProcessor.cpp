@@ -186,9 +186,9 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
     return 0;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
-double  imgProcessor::calcLocalStats (Mat &im, Mat &map_m, Mat &map_s, int winx, int winy)
+double  imgProcessor::calcLocalStats (cv::Mat &im, cv::Mat &map_m, cv::Mat &map_s, int winx, int winy)
 {
-	   Mat im_sum, im_sum_sq;
+	cv::Mat im_sum, im_sum_sq;
     cv::integral(im,im_sum,im_sum_sq,CV_64F);
 
 	double m,s,max_s,sum,sum_sq;	
@@ -235,7 +235,7 @@ double  imgProcessor::calcLocalStats (Mat &im, Mat &map_m, Mat &map_s, int winx,
 	return max_s;
 }
 //////////////////////////////////////////////////////////////////////////////////////////
-void  imgProcessor::NiblackSauvolaWolfJolion (Mat im, Mat output, NiblackVersion version, int winx, int winy, double k, double dR)
+void  imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, NiblackVersion version, int winx, int winy, double k, double dR)
 {
 	double m, s, max_s;
 	double th=0;
@@ -249,13 +249,13 @@ void  imgProcessor::NiblackSauvolaWolfJolion (Mat im, Mat output, NiblackVersion
 	//int mx, my;
 
 	// Create local statistics and store them in a double matrices
-	Mat map_m = Mat::zeros (im.rows, im.cols, CV_32F);
-	Mat map_s = Mat::zeros (im.rows, im.cols, CV_32F);
-	max_s = calcLocalStats (im, map_m, map_s, winx, winy);
-	
+	cv::Mat map_m = cv::Mat::zeros(im.rows, im.cols, CV_32F);
+	cv::Mat map_s = cv::Mat::zeros(im.rows, im.cols, CV_32F);
+	max_s = calcLocalStats(im, map_m, map_s, winx, winy);
+
 	minMaxLoc(im, &min_I, &max_I);
-			
-	Mat thsurf (im.rows, im.cols, CV_32F);
+
+	cv::Mat thsurf (im.rows, im.cols, CV_32F);
 			
 	// Create the threshold surface, including border processing
 	// ----------------------------------------------------
@@ -495,7 +495,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	cv::Mat mask (blk.text>100);
 
 	cv::Mat vertSpaces;
-	cv::reduce(mask, vertSpaces, 0, CV_REDUCE_SUM, CV_32FC1);
+	cv::reduce(mask, vertSpaces, 0, cv::REDUCE_SUM, CV_32FC1);  //CV_REDUCE_SUM
 	float* data = (float*)vertSpaces.data;
 
 	std::vector<int> emptyCols, trueEmptyCols;
@@ -562,7 +562,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 
 
 	cv::Mat horSpaces;
-	cv::reduce(mask, horSpaces, 1, CV_REDUCE_SUM, CV_32FC1);
+	cv::reduce(mask, horSpaces, 1, cv::REDUCE_SUM, CV_32FC1);
 	data = (float*)horSpaces.data;
 
 	std::vector<int> emptyRows, trueEmptyRows;
@@ -610,7 +610,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 		if ( rcts.height > (float)input.rows/10)
 		{
 			cv::Mat localVertSpaces;
-			cv::reduce(part, localVertSpaces, 0, CV_REDUCE_SUM, CV_32FC1);
+			cv::reduce(part, localVertSpaces, 0, cv::REDUCE_SUM, CV_32FC1);
 			data = (float*)localVertSpaces.data;
 				
 

@@ -25,8 +25,9 @@ extern "C" {
 #define NO_CONSOLE_IO
 #define DFLAG        0
 
+////probably problematic////
 using namespace std;
-using namespace cv;
+//using namespace cv;
 
 
 #define uget(x,y)    at<unsigned char>(y,x)
@@ -84,8 +85,8 @@ namespace imgProcessor
 	bool pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat);
 
 	bool thresholdImg (cv::Mat& input, cv::Mat& output, double k = 0.2, double dR = 128);
-	double calcLocalStats (Mat &im, Mat &map_m, Mat &map_s, int winx, int winy);
-	void NiblackSauvolaWolfJolion (Mat im, Mat output, NiblackVersion version, int winx, int winy, double k, double dR);
+	double calcLocalStats (cv::Mat &im, cv::Mat &map_m, cv::Mat &map_s, int winx, int winy);
+	void NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, NiblackVersion version, int winx, int winy, double k, double dR);
 	
 	l_int32 DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks);
 

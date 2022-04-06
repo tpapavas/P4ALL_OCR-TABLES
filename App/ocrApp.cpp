@@ -77,4 +77,3 @@ bool ocrApp::showBt()
 	ShellExecuteA(NULL, ("open"), (filenameHtml.c_str()), NULL, NULL, SW_SHOWNORMAL);
 	return true;
 }
-}

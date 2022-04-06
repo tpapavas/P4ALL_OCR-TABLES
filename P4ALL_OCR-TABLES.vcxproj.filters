@@ -13,47 +13,23 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\App">
-      <UniqueIdentifier>{8620d7a0-7cba-4afb-a49c-901767758b61}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ocr_tables">
       <UniqueIdentifier>{daa43f62-7302-455e-834a-30115eac35f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\App">
-      <UniqueIdentifier>{7be493bd-8f46-44ed-9b9d-ef35aa65a8cd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\ocr_tables">
       <UniqueIdentifier>{d81b3b98-b8e1-4ed9-b743-eca4f9dead28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App\gui.h">
-      <Filter>Header Files\App</Filter>
-    </ClInclude>
-    <ClInclude Include="App\ocrApp.h">
-      <Filter>Header Files\App</Filter>
-    </ClInclude>
     <ClInclude Include="ocr_tables\dll_config.h">
       <Filter>Header Files\ocr_tables</Filter>
     </ClInclude>
     <ClInclude Include="ocr_tables\imgProcessor.h">
       <Filter>Header Files\ocr_tables</Filter>
     </ClInclude>
-    <ClInclude Include="ocr_tables\ocr_tabs.h">
-      <Filter>Header Files\ocr_tables</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App\main.cpp">
-      <Filter>Source Files\App</Filter>
-    </ClCompile>
-    <ClCompile Include="App\ocrApp.cpp">
-      <Filter>Source Files\App</Filter>
-    </ClCompile>
     <ClCompile Include="ocr_tables\imgProcessor.cpp">
-      <Filter>Source Files\ocr_tables</Filter>
-    </ClCompile>
-    <ClCompile Include="ocr_tables\ocr_tabs.cpp">
       <Filter>Source Files\ocr_tables</Filter>
     </ClCompile>
   </ItemGroup>

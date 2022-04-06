@@ -10,15 +10,16 @@
 
 #include "tesseract/baseapi.h"
 
-using namespace cv;
-using namespace std;
+//probably problematic
+//using namespace cv;
+//using namespace std;
 
 class ocr_tabs
 {
 	public:
 			OCRTABS_API ocr_tabs ();
 			OCRTABS_API ~ocr_tabs ();
-			void SetImage(Mat img);
+			void SetImage(cv::Mat img);
 			void RemoveGridLines(float ratio=1);
 			void OCR_Recognize();
 			void BoxesAndWords();
@@ -36,8 +37,8 @@ class ocr_tabs
 			void WriteHTML(std::string& filename);
 			void PrepareMulti1();
 			void PrepareMulti2();
-			Mat ImgSeg(Mat img);
-			Mat getInitial (){return initial;}
+			cv::Mat ImgSeg(cv::Mat img);
+			cv::Mat getInitial (){return initial;}
 
 			void DrawBoxes();
 			void DrawLines();
@@ -51,7 +52,7 @@ class ocr_tabs
 			//void DrawFootHead();
 
 			void ResetImage();
-			Mat ImagePreproccesing(Mat img);
+			cv::Mat ImagePreproccesing(cv::Mat img);
 			bool ImagePreproccesing_withXML(const std::string& fileXML, std::vector<cv::Mat>& imageRAW, std::vector<cv::Mat>& imageCLN);
 			
 			bool fail_condition();
@@ -63,35 +64,35 @@ class ocr_tabs
 			void resetAll();
 
 private:
-			Mat test,initial;
+			cv::Mat test,initial;
 			tesseract::TessBaseAPI  tess;
 			clock_t start;
 			double duration;
-			vector<char*> words;
-			vector<vector<int>> boxes, Lines, table_area, table_Rows;
-			vector<vector<vector<int>>> multi_Rows;
-			vector<int*> Line_dims;
-			vector<vector<vector<int>>> Lines_segments;
-			vector<vector<vector<vector<int>>>> table_Columns;
-			vector<vector<int*>> col_dims, row_dims;
-			vector<vector<vector<int>>> tmp_col;
-			vector<float> confs;
-			vector<bool> bold;
-			vector<bool> dict;
-			vector<bool> italic;
-			vector<bool> underscore;
-			vector<int> font_size;
+			std::vector<char*> words;
+			std::vector<std::vector<int>> boxes, Lines, table_area, table_Rows;
+			std::vector<std::vector<std::vector<int>>> multi_Rows;
+			std::vector<int*> Line_dims;
+			std::vector<std::vector<std::vector<int>>> Lines_segments;
+			std::vector<std::vector<std::vector<std::vector<int>>>> table_Columns;
+			std::vector<std::vector<int*>> col_dims, row_dims;
+			std::vector<std::vector<std::vector<int>>> tmp_col;
+			std::vector<float> confs;
+			std::vector<bool> bold;
+			std::vector<bool> dict;
+			std::vector<bool> italic;
+			std::vector<bool> underscore;
+			std::vector<int> font_size;
 			int page_left, page_right, page_top, page_bottom;
 			int* Lines_type;
-			vector<vector<char*>> words_;
-			vector<vector<vector<int>>> Lines_;
-			vector<vector<vector<int>>> boxes_;
-			vector<vector<float>> confs_;
-			vector<vector<int>> font_size_;
-			vector<vector<bool>> bold_;
-			vector<vector<bool>> dict_;
-			vector<vector<bool>> italic_;
-			vector<vector<bool>> underscore_;
-			vector<int> page_height,page_width;
+			std::vector<std::vector<char*>> words_;
+			std::vector<std::vector<std::vector<int>>> Lines_;
+			std::vector<std::vector<std::vector<int>>> boxes_;
+			std::vector<std::vector<float>> confs_;
+			std::vector<std::vector<int>> font_size_;
+			std::vector<std::vector<bool>> bold_;
+			std::vector<std::vector<bool>> dict_;
+			std::vector<std::vector<bool>> italic_;
+			std::vector<std::vector<bool>> underscore_;
+			std::vector<int> page_height,page_width;
 			bool fail;
 };
