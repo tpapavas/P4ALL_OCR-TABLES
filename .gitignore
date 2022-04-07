@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 #mine
 extra/
+test files/*.html
