@@ -19,7 +19,8 @@ ocr_tabs::ocr_tabs()
 {
 	fail=false;
 	Lines_type = NULL;
-	tess.Init("..\\tessdata", "eng");
+	//tess.Init("..\\tessdata", "eng");
+	tess.Init("tessdata", "eng");
 }
 //////////////////////////////////////////////////////////////
 ocr_tabs::~ocr_tabs()
