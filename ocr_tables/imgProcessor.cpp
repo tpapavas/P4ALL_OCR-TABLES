@@ -3,7 +3,6 @@
 #include "imgProcessor.h"
 
 
-
 bool imgProcessor::thresholdImg (cv::Mat& input, cv::Mat& output, double k, double dR)
 {
 	 if ((input.rows<=0) || (input.cols<=0)) 
@@ -77,13 +76,13 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
 	/* Get bit-inverted image */
     pixi = pixInvert(NULL, pixnht);
 
-        /* The whitespace mask will break textlines where there
-         * is a large amount of white space below or above.
-         * We can prevent this by identifying regions of the
-         * inverted image that have large horizontal (bigger than
-         * the separation between columns) and significant
-         * vertical extent (bigger than the separation between
-         * textlines), and subtracting this from the whitespace mask. */
+    /* The whitespace mask will break textlines where there
+	 * is a large amount of white space below or above.
+	 * We can prevent this by identifying regions of the
+	 * inverted image that have large horizontal (bigger than
+	 * the separation between columns) and significant
+	 * vertical extent (bigger than the separation between
+	 * textlines), and subtracting this from the whitespace mask. */
     pixt1 = pixMorphCompSequence(pixi, "o80.60", 0);
     pixt2 = pixSubtract(NULL, pixi, pixt1);
     pixDestroy(&pixt1);
@@ -107,15 +106,15 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
     pixOpenBrick(pixtm2, pixtm2, 3, 3);
     pixtm3 = pixExpandBinaryPower2(pixtm2, 2);
 
-        /* Join pixels vertically to make text block mask */
+    /* Join pixels vertically to make text block mask */
     pixtb1 = pixMorphSequence(pixtm2, "c1.10 + o4.1", 0);
 
-        /* Solidify the textblock mask and remove noise:
-         *  (1) For each c.c., close the blocks and dilate slightly
-         *      to form a solid mask.
-         *  (2) Small horizontal closing between components
-         *  (3) Open the white space between columns, again
-         *  (4) Remove small components */
+    /* Solidify the textblock mask and remove noise:
+     *  (1) For each c.c., close the blocks and dilate slightly
+     *      to form a solid mask.
+     *  (2) Small horizontal closing between components
+     *  (3) Open the white space between columns, again
+     *  (4) Remove small components */
     pixt1 = pixMorphSequenceByComponent(pixtb1, "c30.30 + d3.3", 8, 0, 0, NULL);
     pixCloseSafeBrick(pixt1, pixt1, 10, 1);
     pixt2 = pixSubtract(NULL, pixt1, pixvws);
@@ -127,7 +126,7 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
     pixDestroy(&pixt2);
     pixDestroy(&pixt3);
 
-        /* Identify the outlines of each textblock */
+	/* Identify the outlines of each textblock */
     ptaa = pixGetOuterBordersPtaa(pixtb2);
     pixt1 = pixRenderRandomCmapPtaa(pixtb2, ptaa, 1, 8, 1);
     cmap = pixGetColormap(pixt1);
@@ -135,31 +134,31 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
      ptaaDestroy(&ptaa);
     pixDestroy(&pixt1);
 
-        /* Fill line mask (as seed) into the original */
+    /* Fill line mask (as seed) into the original */
     pixt1 = pixSeedfillBinary(NULL, pixtm3, pixs, 8);
     pixOr(pixtm3, pixtm3, pixt1);
     pixDestroy(&pixt1);
  
-        /* Fill halftone mask (as seed) into the original */
+    /* Fill halftone mask (as seed) into the original */
     pixt1 = pixSeedfillBinary(NULL, pixhm2, pixs, 8);
     pixOr(pixhm2, pixhm2, pixt1);
     pixDestroy(&pixt1);
 	pix2mat(&pixhm2, blocks.figures);
   
-        /* Find objects that are neither text nor halftones */
+    /* Find objects that are neither text nor halftones */
     pixt1 = pixSubtract(NULL, pixs, pixtm3);  /* remove text pixels */
     pixnon = pixSubtract(NULL, pixt1, pixhm2);  /* remove halftone pixels */
      pixDestroy(&pixt1);
 	 pix2mat(&pixnon, blocks.other);
 
-        /* Write out b.b. for text line mask and halftone mask components */
+    /* Write out b.b. for text line mask and halftone mask components */
     boxatm = pixConnComp(pixtm3, NULL, 4);
     boxahm = pixConnComp(pixhm2, NULL, 8);
 
     //pixDestroy(&pixt1);
     //pixaDestroy(&pixa);
 
-        /* clean up to test with valgrind */
+    /* clean up to test with valgrind */
     pixDestroy(&pixr);
     pixDestroy(&pixhs);
     pixDestroy(&pixm);
@@ -177,7 +176,6 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
     pixDestroy(&pixnon);
     boxaDestroy(&boxatm);
     boxaDestroy(&boxahm);
-
 
 	blocks.resize(defSize);
 	//blocks.resize(blocks.text.size());
@@ -259,7 +257,6 @@ void  imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, Niblac
 			
 	// Create the threshold surface, including border processing
 	// ----------------------------------------------------
-
 	for	(int j = y_firstth ; j<=y_lastth; j++) {
 
 		// NORMAL, NON-BORDER AREA IN THE MIDDLE OF THE WINDOW:
@@ -336,7 +333,6 @@ void  imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, Niblac
 				thsurf.fset(i,u,th);
 	}
 	//cerr << "surface created" << endl;
-	
 	
 	for	(int y=0; y<im.rows; ++y) 
 	for	(int x=0; x<im.cols; ++x) 
@@ -447,7 +443,6 @@ void imgProcessor::prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks
 {
 	std::cout << "Thresholding Image...";
 	
-	
 	cv::Mat tr,tr2;
 	cv::erode(input,tr2,cv::Mat(), cv::Point(-1,-1), 1);
 	imgProcessor::thresholdImg(tr2, thres);
@@ -486,8 +481,6 @@ void imgProcessor::getTextImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	output.setTo(255, blk.figures==255);
 	output.setTo(255, blk.text==0);
 	//output.setTo(255, blk.other==255);
-
-
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output)
@@ -560,7 +553,6 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 
 	//if non of the above works, check for subareas between empty rows
 
-
 	cv::Mat horSpaces;
 	cv::reduce(mask, horSpaces, 1, CV_REDUCE_SUM, CV_32FC1);
 	data = (float*)horSpaces.data;
@@ -599,7 +591,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 		return;
 	}
 
-	//search for columned text between empty lines
+	// search for columned text between empty lines
 	std::vector <cv::Mat> outputParts;
 	for (unsigned s=0;s<trueEmptyRows.size()-1;s++)
 	{
@@ -679,5 +671,4 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	{
 		cv::vconcat(output,outputParts[i],output);
 	}
-
 }

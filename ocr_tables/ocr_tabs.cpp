@@ -35,57 +35,60 @@ void ocr_tabs::SetImage(Mat img)
 	initial=test.clone();
 }
 //////////////////////////////////////////////////////////////
+/**
+	Each input image is OCRed, in order to extract words and bounding boxes
+	Then we check for similar lines on the top and bottom of the images 
+	in order to remove headers/footers
+*/
 void ocr_tabs::PrepareMulti1()
-// Each input image is OCRed, in order to extract words and bounding boxes
-// Then we check for similar lines on the top and bottom of the images in order to remove headers/footers
 {
-		//RemoveGridLines();
-		page_height.push_back(test.size().height);
-		page_width.push_back(test.size().width);
-		OCR_Recognize();
-		BoxesAndWords();
+	//RemoveGridLines();
+	page_height.push_back(test.size().height);
+	page_width.push_back(test.size().width);
+	OCR_Recognize();
+	BoxesAndWords();
 
-		for (int i=0;i<boxes.size();i++)
+	for (int i=0;i<boxes.size();i++)
+	{
+		vector<int> tmp;
+		tmp.push_back(i);
+		int j;
+		for (j=i+1;j<boxes.size();j++)
 		{
-			vector<int> tmp;
-			tmp.push_back(i);
-			int j;
-			for (j=i+1;j<boxes.size();j++)
+			if (((boxes[j-1][1]<=boxes[j][1])&&(boxes[j][1]<=boxes[j-1][3]))||
+				((boxes[j][1]<=boxes[j-1][1])&&(boxes[j-1][1]<=boxes[j][3])))
 			{
-				if (((boxes[j-1][1]<=boxes[j][1])&&(boxes[j][1]<=boxes[j-1][3]))||
-					((boxes[j][1]<=boxes[j-1][1])&&(boxes[j-1][1]<=boxes[j][3])))
-				{
-					tmp.push_back(j);
-				}
-				else
-				{
-					break;
-				}
+				tmp.push_back(j);
 			}
-			i=j-1;
-			Lines.push_back(tmp);
+			else
+			{
+				break;
+			}
 		}
+		i=j-1;
+		Lines.push_back(tmp);
+	}
 		
-		boxes_.push_back(boxes);
-		words_.push_back(words);
-		confs_.push_back(confs);
-		Lines_.push_back(Lines);
-		font_size_.push_back(font_size);
-		bold_.push_back(bold);
-		italic_.push_back(italic);
-		underscore_.push_back(underscore);
-		dict_.push_back(dict);
+	boxes_.push_back(boxes);
+	words_.push_back(words);
+	confs_.push_back(confs);
+	Lines_.push_back(Lines);
+	font_size_.push_back(font_size);
+	bold_.push_back(bold);
+	italic_.push_back(italic);
+	underscore_.push_back(underscore);
+	dict_.push_back(dict);
 		
-		test.release();
-		confs.clear();
-		boxes.clear();
-		words.clear();
-		Lines.clear();
-		font_size.clear();
-		bold.clear();
-		italic.clear();
-		underscore.clear();
-		dict.clear();
+	test.release();
+	confs.clear();
+	boxes.clear();
+	words.clear();
+	Lines.clear();
+	font_size.clear();
+	bold.clear();
+	italic.clear();
+	underscore.clear();
+	dict.clear();
 }
 //////////////////////////////////////////////////////////////	
 void ocr_tabs::PrepareMulti2()
@@ -149,8 +152,8 @@ void ocr_tabs::PrepareMulti2()
 	std::cout << "\nPROCESSING OVERALL DOCUMENT\n\n";
 }
 //////////////////////////////////////////////////////////////
+//Remove grid lines, because tesseract has a problem recognizing words when the are dark, dense gridlines
 void ocr_tabs::RemoveGridLines(float ratio /*=1*/)
-	// Remove grid lines, because tesseract has a problem recognizing words when the are dark, dense gridlines
 {
 	Mat dst;
 	std::cout << "Remove Grid Lines...";
@@ -203,13 +206,12 @@ void ocr_tabs::RemoveGridLines(float ratio /*=1*/)
 	//cv::imshow("asd", test);
 	//cv::waitKey(0);
 
-	std::cout << " Done in "<< duration << "s \n";
+	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
+//Tesseract recognizes all data in the image
 void ocr_tabs::OCR_Recognize()
-	//Tesseract recognizes all data in the image
 {
-	
 	//resize(test,test,Size(test.size().width*2,test.size().height*2));
 	//tess.Init("..\\tessdata", "eng");
 	tess.SetImage((uchar*)test.data, test.size().width, test.size().height, test.channels(), test.step1());
@@ -221,8 +223,8 @@ void ocr_tabs::OCR_Recognize()
 	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
-void ocr_tabs::BoxesAndWords()
 // Retrieve all the recognized words and their bounding boxes from tesseract
+void ocr_tabs::BoxesAndWords()
 {
 	//tess.SetPageSegMode( tesseract::PSM_AUTO_OSD);
 	//tesseract::PageIterator* ri = tess.AnalyseLayout();
@@ -316,8 +318,8 @@ void ocr_tabs::BoxesAndWords()
 	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
+// Find the text boundaries of the whole image
 void ocr_tabs::TextBoundaries()
-//Find the text boundaries of the whole image
 {
 	std::cout << "Find text boundaries...";
 	start = clock();
@@ -337,8 +339,8 @@ void ocr_tabs::TextBoundaries()
 	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
-void ocr_tabs::TextLines()
 // Create lines by assigning vertically-overlapping word boxes to the same unique line
+void ocr_tabs::TextLines()
 {
 	std::cout << "Find lines...";
 	start = clock();
@@ -378,7 +380,7 @@ void ocr_tabs::TextLines()
 	}
 
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
-	std::cout << " Done in "<<duration<< "s \n";
+	std::cout << " Done in "<< duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
 void ocr_tabs::HeadersFooters()
@@ -544,10 +546,12 @@ void ocr_tabs::HeadersFooters()
 	}
 }
 //////////////////////////////////////////////////////////////
+/**
+	Create text Segments for each line.
+	If the horizontal distance between two word boxes is smaller than a threshold,
+	they will be considered as a single text segment
+*/
 void ocr_tabs::LineSegments()
-	// Create text Segments for each line. 
-	// If the horizontal distance between two word boxes is smaller than a threshold,
-	// they will be considered as a single text segment
 {
 	std::cout << "Find line segments...";
 	start = clock();
@@ -592,10 +596,12 @@ void ocr_tabs::LineSegments()
 	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
+/**
+	Type 1 - TEXT : Lines with a single long segment (longer than half of the length of the line)
+	Type 2 - TABLE : Lines with multiple segments
+	Type 3 - UNKNOWN : Lines with a single short segment
+*/
 void ocr_tabs::LineTypes()
-// Type 1 - TEXT : Lines with a single long segment (longer than half of the length of the line)
-// Type 2 - TABLE : Lines with multiple segments
-// Type 3 - UNKNOWN : Lines with a single short segment
 {
 	std::cout <<"Find line types...";
 	start = clock();
@@ -675,9 +681,11 @@ void ocr_tabs::LineTypes()
 	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
+/**
+	Find areas that can potentially be real tables.
+	Such areas include consequential type-2 and type-3 lines.
+*/
 void ocr_tabs::TableAreas()
-// Find areas that can potentially be real tables.
-// Such areas include consequential type-2 and type-3 lines.
 {
 	std::cout << "Find table areas...";
 	start = clock();
@@ -711,9 +719,12 @@ void ocr_tabs::TableAreas()
 	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
+/**
+	Assign Rows to tables. Each table must start with a type-2 line. 
+	So if there are initially type-3 without a type-2 line over them, 
+	they are not assigned to the table, unless they are not left-aligned
+*/
 void ocr_tabs::TableRows()
-// Assign Rows to tables. Each table must start with a type-2 line. So if there are initially type-3
-// without a type-2 line over them, they are not assigned to the table, unless they are not left-aligned
 {
 	std::cout << "Find table rows...";
 	start = clock();
@@ -742,13 +753,12 @@ void ocr_tabs::TableRows()
 		}
 	}
 
-
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
-void ocr_tabs::TableColumns()
 // Assign Columns to each table
+void ocr_tabs::TableColumns()
 {
 	std::cout << "Find table columns...";
 	start = clock();
@@ -781,7 +791,6 @@ void ocr_tabs::TableColumns()
 				cout << "TASK FAILED\n";
 				break;
 			}
-
 
 			for (int j = 0; j < table_Rows[i].size(); j++)
 			{
@@ -908,7 +917,6 @@ void ocr_tabs::TableColumns()
 			// are less than the multiple segemnts (segments assigned to more than 1 column), we merge this column with
 			// the immediatelly previous one
 
-
 			for (int i = 0; i < table_Columns.size(); i++)
 			{
 				for (int j = 1; j < table_Columns[i].size(); j++)
@@ -947,7 +955,6 @@ void ocr_tabs::TableColumns()
 					}
 				}
 			}
-
 
 			// Type-3 lines that are in the end of a table, and their single segment is assigned to more than one columns,
 			// are removed from the table
@@ -1118,16 +1125,14 @@ void ocr_tabs::TableColumns()
 				}
 			}
 
-
-
 			duration = (std::clock() - start) / CLOCKS_PER_SEC;
 			std::cout << " Done in " << duration << "s \n";
 		}
 	}
 }
 //////////////////////////////////////////////////////////////
-void ocr_tabs::TableMultiRows()
 // create table rows that include more than one lines
+void ocr_tabs::TableMultiRows()
 {
 	cout << "Find table multiple-rows...";
 	start = clock();
@@ -1244,8 +1249,6 @@ void ocr_tabs::TableMultiRows()
 			table_Columns[i][0].erase(table_Columns[i][0].begin() + table_Columns[i][0].size() - 1);
 		}
 
-
-
 		//Finalize Line Types. Change all Lines within the table to type-2
 		for (int j = 0; j < multi_Rows[i].size(); j++)
 		{
@@ -1274,15 +1277,16 @@ void ocr_tabs::TableMultiRows()
 		}
 	}
 
-
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in "<<duration<< "s \n";
-
 }
 //////////////////////////////////////////////////////////////
+/**
+	Find the sizes of the columns. 
+	Each columns spans from the leftest single segment to the rightest
+	single segment (single segment = assigned to only one column)
+*/
 void ocr_tabs::ColumnSize()
-	//find the sizes of the columns. Each columns spans from the leftest single segment to the rightest
-	// single segment (single segment = assigned to only one column)
 {
 	std::cout << "Find column sizes...";
 	start = clock();
@@ -1353,10 +1357,12 @@ void ocr_tabs::ColumnSize()
 	std::cout << " Done in " << duration << "s \n";
 }
 //////////////////////////////////////////////////////////////
+/** 
+find the final rowand column sizes in order to create the table
+merge cells that contain multi segments
+widen columns and rows so that there is no white space between them
+*/ 
 void ocr_tabs::FinalizeGrid()
-// find the final row and column sizes in order to create the table
-// merge cells that contain multi segments
-// widen columns and rows so that there is no white space between them
 {
 	std::cout << "Finalize grid...";
 	start = clock();
@@ -1386,6 +1392,7 @@ void ocr_tabs::FinalizeGrid()
 		}
 		row_dims.push_back(dims);
 	}
+
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
@@ -1684,23 +1691,10 @@ Mat ocr_tabs::ImgSeg(Mat img)
 		line(img, Point2i(i, 0), Point2i(i, ver[i] * 2 - 400), Scalar(0, 255, 0), 2);
 	}
 
-
-
-
-
-
-
-
-
-
 	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 	imshow("img", img);
 	waitKey(0);
-
-
-
-
 
 	/*img=255-img;
 	cv::distanceTransform(img, dst, CV_DIST_L2, 3);
@@ -1734,17 +1728,12 @@ Mat ocr_tabs::ImgSeg(Mat img)
 			}
 		}
 
-
-
-
 	test=SegMap;
 		namedWindow("img", 0);
 	float ratio=(float)(std::max(test.cols,test.rows))/850;
 	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
 	imshow("img",test);
 	cvWaitKey(0);*/
-
-
 
 
 	img = 255 - img;
@@ -1772,16 +1761,6 @@ Mat ocr_tabs::ImgSeg(Mat img)
 	resizeWindow("img",(test.cols)/ratio,(test.rows)/ratio);
 	imshow("img",test);
 	cvWaitKey(0);*/
-
-
-
-
-
-
-
-
-
-
 
 
 	for (int i = 0; i < img.cols; i++)
