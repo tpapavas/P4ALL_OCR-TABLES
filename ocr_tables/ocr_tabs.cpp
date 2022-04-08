@@ -34,12 +34,12 @@ void ocr_tabs::SetImage(Mat img)
 	test=img.clone();
 	initial=test.clone();
 }
-//////////////////////////////////////////////////////////////
+
 /**
-	Each input image is OCRed, in order to extract words and bounding boxes
-	Then we check for similar lines on the top and bottom of the images 
-	in order to remove headers/footers
-*/
+ * Each input image is OCRed, in order to extract words and bounding boxes
+ * Then we check for similar lines on the top and bottom of the images 
+ * in order to remove headers/footers
+ */
 void ocr_tabs::PrepareMulti1()
 {
 	//RemoveGridLines();
@@ -151,8 +151,8 @@ void ocr_tabs::PrepareMulti2()
 	}
 	std::cout << "\nPROCESSING OVERALL DOCUMENT\n\n";
 }
-//////////////////////////////////////////////////////////////
-//Remove grid lines, because tesseract has a problem recognizing words when the are dark, dense gridlines
+
+//Remove grid lines, because tesseract has a problem recognizing words when there are dark, dense gridlines
 void ocr_tabs::RemoveGridLines(float ratio /*=1*/)
 {
 	Mat dst;
@@ -208,7 +208,7 @@ void ocr_tabs::RemoveGridLines(float ratio /*=1*/)
 
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 //Tesseract recognizes all data in the image
 void ocr_tabs::OCR_Recognize()
 {
@@ -222,7 +222,7 @@ void ocr_tabs::OCR_Recognize()
 	duration = ( std::clock() - start ) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 // Retrieve all the recognized words and their bounding boxes from tesseract
 void ocr_tabs::BoxesAndWords()
 {
@@ -317,7 +317,7 @@ void ocr_tabs::BoxesAndWords()
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 // Find the text boundaries of the whole image
 void ocr_tabs::TextBoundaries()
 {
@@ -338,7 +338,7 @@ void ocr_tabs::TextBoundaries()
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 // Create lines by assigning vertically-overlapping word boxes to the same unique line
 void ocr_tabs::TextLines()
 {
@@ -515,7 +515,7 @@ void ocr_tabs::HeadersFooters()
 
 	for (int i=Lines_.size()-1;i>=0;i--)
 	{
-		if (footer_limit[i]!=(-1))
+		if (footer_limit[i] != (-1))
 		{
 			for (int j=Lines_[i][footer_limit[i]].size()-1;j>=0;j--)
 			{
@@ -529,9 +529,9 @@ void ocr_tabs::HeadersFooters()
 				dict_[i].erase(dict_[i].begin()+Lines_[i][footer_limit[i]][j]);
 			}
 		}
-		for (int k=header_limit[i];k>=0;k--)
+		for (int k = header_limit[i]; k>=0; k--)
 		{
-			for (int j=Lines_[i][k].size()-1;j>=0;j--)
+			for (int j=Lines_[i][k].size()-1; j>=0; j--)
 			{
 				words_[i].erase(words_[i].begin()+Lines_[i][k][j]);
 				boxes_[i].erase(boxes_[i].begin()+Lines_[i][k][j]);
@@ -545,7 +545,7 @@ void ocr_tabs::HeadersFooters()
 		}
 	}
 }
-//////////////////////////////////////////////////////////////
+
 /**
 	Create text Segments for each line.
 	If the horizontal distance between two word boxes is smaller than a threshold,
@@ -595,7 +595,7 @@ void ocr_tabs::LineSegments()
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 /**
 	Type 1 - TEXT : Lines with a single long segment (longer than half of the length of the line)
 	Type 2 - TABLE : Lines with multiple segments
@@ -680,7 +680,7 @@ void ocr_tabs::LineTypes()
 	duration = ( std::clock() - start ) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 /**
 	Find areas that can potentially be real tables.
 	Such areas include consequential type-2 and type-3 lines.
@@ -718,7 +718,7 @@ void ocr_tabs::TableAreas()
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 /**
 	Assign Rows to tables. Each table must start with a type-2 line. 
 	So if there are initially type-3 without a type-2 line over them, 
@@ -756,7 +756,7 @@ void ocr_tabs::TableRows()
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 // Assign Columns to each table
 void ocr_tabs::TableColumns()
 {
@@ -1130,8 +1130,8 @@ void ocr_tabs::TableColumns()
 		}
 	}
 }
-//////////////////////////////////////////////////////////////
-// create table rows that include more than one lines
+
+// Create table rows that include more than one lines
 void ocr_tabs::TableMultiRows()
 {
 	cout << "Find table multiple-rows...";
@@ -1280,7 +1280,7 @@ void ocr_tabs::TableMultiRows()
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in "<<duration<< "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 /**
 	Find the sizes of the columns. 
 	Each columns spans from the leftest single segment to the rightest
@@ -1356,11 +1356,11 @@ void ocr_tabs::ColumnSize()
 	duration = (std::clock() - start) / CLOCKS_PER_SEC;
 	std::cout << " Done in " << duration << "s \n";
 }
-//////////////////////////////////////////////////////////////
+
 /** 
-find the final rowand column sizes in order to create the table
-merge cells that contain multi segments
-widen columns and rows so that there is no white space between them
+	Find the final row and column sizes in order to create the table
+	merge cells that contain multi segments
+	widen columns and rows so that there is no white space between them
 */ 
 void ocr_tabs::FinalizeGrid()
 {
@@ -1642,6 +1642,7 @@ void ocr_tabs::DrawGridlessImage()
 
 }*/
 
+// Resets the image to initial state.
 void ocr_tabs::ResetImage()
 {
 	test = initial.clone();
