@@ -547,10 +547,10 @@ void ocr_tabs::HeadersFooters()
 }
 
 /**
-	Create text Segments for each line.
-	If the horizontal distance between two word boxes is smaller than a threshold,
-	they will be considered as a single text segment
-*/
+ * Create text Segments for each line.
+ * If the horizontal distance between two word boxes is smaller than a threshold,
+ * they will be considered as a single text segment
+ */
 void ocr_tabs::LineSegments()
 {
 	std::cout << "Find line segments...";
@@ -597,10 +597,10 @@ void ocr_tabs::LineSegments()
 }
 
 /**
-	Type 1 - TEXT : Lines with a single long segment (longer than half of the length of the line)
-	Type 2 - TABLE : Lines with multiple segments
-	Type 3 - UNKNOWN : Lines with a single short segment
-*/
+ * Type 1 - TEXT : Lines with a single long segment (longer than half of the length of the line)
+ * Type 2 - TABLE : Lines with multiple segments
+ * Type 3 - UNKNOWN : Lines with a single short segment
+ */
 void ocr_tabs::LineTypes()
 {
 	std::cout <<"Find line types...";
@@ -682,9 +682,9 @@ void ocr_tabs::LineTypes()
 }
 
 /**
-	Find areas that can potentially be real tables.
-	Such areas include consequential type-2 and type-3 lines.
-*/
+ * Find areas that can potentially be real tables.
+ * Such areas include consequential type-2 and type-3 lines.
+ */
 void ocr_tabs::TableAreas()
 {
 	std::cout << "Find table areas...";
@@ -720,10 +720,10 @@ void ocr_tabs::TableAreas()
 }
 
 /**
-	Assign Rows to tables. Each table must start with a type-2 line. 
-	So if there are initially type-3 without a type-2 line over them, 
-	they are not assigned to the table, unless they are not left-aligned
-*/
+ * Assign Rows to tables. Each table must start with a type-2 line. 
+ * So if there are initially type-3 without a type-2 line over them, 
+ * they are not assigned to the table, unless they are not left-aligned
+ */
 void ocr_tabs::TableRows()
 {
 	std::cout << "Find table rows...";
@@ -1282,10 +1282,10 @@ void ocr_tabs::TableMultiRows()
 }
 
 /**
-	Find the sizes of the columns. 
-	Each columns spans from the leftest single segment to the rightest
-	single segment (single segment = assigned to only one column)
-*/
+ * Find the sizes of the columns. 
+ * Each columns spans from the leftest single segment to the rightest
+ * single segment (single segment = assigned to only one column)
+ */
 void ocr_tabs::ColumnSize()
 {
 	std::cout << "Find column sizes...";
@@ -1358,10 +1358,10 @@ void ocr_tabs::ColumnSize()
 }
 
 /** 
-	Find the final row and column sizes in order to create the table
-	merge cells that contain multi segments
-	widen columns and rows so that there is no white space between them
-*/ 
+ * Find the final row and column sizes in order to create the table
+ * merge cells that contain multi segments
+ * widen columns and rows so that there is no white space between them
+ */ 
 void ocr_tabs::FinalizeGrid()
 {
 	std::cout << "Finalize grid...";
@@ -2151,6 +2151,7 @@ bool ocr_tabs::img2html(const std::string& filename)
 	return true;
 }
 //////////////////////////////////////////////////////////////
+// Resets everything
 void ocr_tabs::resetAll()
 {
 	test = cv::Mat();
