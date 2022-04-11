@@ -42,9 +42,6 @@
     <ClInclude Include="ocr_tables\drawingHandler.h">
       <Filter>Header Files\ocr_tables</Filter>
     </ClInclude>
-    <ClInclude Include="ocr_tables\FileHandler.h">
-      <Filter>Header Files\ocr_tables</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ocr_tables\imgProcessor.cpp">
@@ -60,9 +57,6 @@
       <Filter>Source Files\App</Filter>
     </ClCompile>
     <ClCompile Include="ocr_tables\drawingHandler.cpp">
-      <Filter>Source Files\ocr_tables</Filter>
-    </ClCompile>
-    <ClCompile Include="ocr_tables\FileHandler.cpp">
       <Filter>Source Files\ocr_tables</Filter>
     </ClCompile>
   </ItemGroup>
