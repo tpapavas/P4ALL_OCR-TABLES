@@ -39,6 +39,9 @@
     <ClInclude Include="App\gui.h">
       <Filter>Header Files\App</Filter>
     </ClInclude>
+    <ClInclude Include="drawingHandler.h">
+      <Filter>Header Files\ocr_tables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ocr_tables\imgProcessor.cpp">
@@ -52,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="App\ocrApp.cpp">
       <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="drawingHandler.cpp">
+      <Filter>Source Files\ocr_tables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

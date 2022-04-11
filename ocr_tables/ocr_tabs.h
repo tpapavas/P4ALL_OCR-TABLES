@@ -4,6 +4,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <ctime>
 
+#include "drawingHandler.h"
 
 
  #define TESSDLL_IMPORTS
@@ -95,4 +96,7 @@ private:
 			std::vector<std::vector<bool>> underscore_;
 			std::vector<int> page_height,page_width;
 			bool fail;
+
+			//trying something new
+			drawingHandler drawing_handler;
 };

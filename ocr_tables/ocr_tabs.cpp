@@ -1397,7 +1397,7 @@ void ocr_tabs::FinalizeGrid()
 //////////////////////////////////////////////////////////////
 void ocr_tabs::DrawBoxes()
 {
-	namedWindow("img", 0);
+	/*namedWindow("img", 0);
 	float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 	resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 	for (int i = 0; i < boxes.size(); i++)
@@ -1419,7 +1419,8 @@ void ocr_tabs::DrawBoxes()
 		std::cout << "\n";
 		imshow("img", test);
 		char c = waitKey(0);
-	}
+	}*/
+	drawing_handler.DrawBoxes(test, boxes, words, confs, font_size, bold, italic, underscore, dict);
 }
 //////////////////////////////////////////////////////////////
 void ocr_tabs::DrawLines()
