@@ -4,7 +4,6 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <ctime>
 
-#include "drawingHandler.h"
 
 
  #define TESSDLL_IMPORTS

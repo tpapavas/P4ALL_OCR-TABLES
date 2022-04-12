@@ -3,6 +3,7 @@
 #include <fstream>
 #include "ocr_tabs.h"
 #include "imgProcessor.h"
+#include "drawingHandler.h"
 extern "C" {
 	#include <mupdf/fitz.h>
 }

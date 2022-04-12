@@ -13,42 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\ocr_tables">
-      <UniqueIdentifier>{daa43f62-7302-455e-834a-30115eac35f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ocr_tables">
-      <UniqueIdentifier>{d81b3b98-b8e1-4ed9-b743-eca4f9dead28}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\App">
       <UniqueIdentifier>{ba2432ad-c1a5-449b-add7-5a4be9074f1b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\App">
       <UniqueIdentifier>{d59fc6e3-379a-44e9-b1c6-5cd5cbe3952a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\OCR_Tables">
+      <UniqueIdentifier>{daa43f62-7302-455e-834a-30115eac35f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OCR_Tables">
+      <UniqueIdentifier>{d81b3b98-b8e1-4ed9-b743-eca4f9dead28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ocr_tables\dll_config.h">
-      <Filter>Header Files\ocr_tables</Filter>
+      <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
     <ClInclude Include="ocr_tables\imgProcessor.h">
-      <Filter>Header Files\ocr_tables</Filter>
+      <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
     <ClInclude Include="ocr_tables\ocr_tabs.h">
-      <Filter>Header Files\ocr_tables</Filter>
+      <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
     <ClInclude Include="App\gui.h">
       <Filter>Header Files\App</Filter>
     </ClInclude>
     <ClInclude Include="ocr_tables\drawingHandler.h">
-      <Filter>Header Files\ocr_tables</Filter>
+      <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ocr_tables\imgProcessor.cpp">
-      <Filter>Source Files\ocr_tables</Filter>
+      <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
     <ClCompile Include="ocr_tables\ocr_tabs.cpp">
-      <Filter>Source Files\ocr_tables</Filter>
+      <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
     <ClCompile Include="App\main.cpp">
       <Filter>Source Files\App</Filter>
@@ -57,7 +57,7 @@
       <Filter>Source Files\App</Filter>
     </ClCompile>
     <ClCompile Include="ocr_tables\drawingHandler.cpp">
-      <Filter>Source Files\ocr_tables</Filter>
+      <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

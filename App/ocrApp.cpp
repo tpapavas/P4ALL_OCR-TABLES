@@ -17,7 +17,7 @@ ocrApp::ocrApp(QWidget *parent)
 	connect(ui.buttonShow, SIGNAL(clicked(bool)), this, SLOT(showBt()));
 
 	tab = NULL;
-	tab = new ocr_tabs();
+	tab = new ocr_tabs::OCRTabsEngine();
 
 }
 //////////////////////////////////////////////

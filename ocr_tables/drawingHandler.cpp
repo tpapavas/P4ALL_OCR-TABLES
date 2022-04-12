@@ -17,11 +17,11 @@ using namespace cv;
 #pragma warning( disable : 4244 )
 
 namespace ocr_tabs {
-	OCRTABS_API drawingHandler::drawingHandler() {
+	drawingHandler::drawingHandler() {
 
 	}
 
-	OCRTABS_API drawingHandler::~drawingHandler() {
+	drawingHandler::~drawingHandler() {
 
 	}
 

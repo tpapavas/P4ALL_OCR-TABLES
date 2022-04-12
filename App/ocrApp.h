@@ -19,7 +19,7 @@ private slots:
 private:
 
 	Ui::MainWindow ui;
-	ocr_tabs* tab;
+	ocr_tabs::OCRTabsEngine* tab;
 	QString filename;
 
 };
