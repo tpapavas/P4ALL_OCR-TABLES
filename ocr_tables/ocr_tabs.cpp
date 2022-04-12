@@ -135,16 +135,22 @@ namespace ocr_tabs {
 		std::cout << "\nPROCESSING OVERALL DOCUMENT\n\n";
 	}
 
-	//Remove grid lines, because tesseract has a problem recognizing words when there are dark, dense gridlines
+	/**
+     * Removes grid lines, because tesseract has a problem recognizing words when there are dark, dense gridlines
+	 * @param ratio: ratio of the input image
+	 */
 	void OCRTabsEngine::RemoveGridLines(float ratio /*=1*/) {
 		Mat dst;
 		std::cout << "Remove Grid Lines...";
 		start = clock();
 		//threshold( test, dst, 100, 255,1 );
-		threshold(test, dst, 200, 255, 0);
+		////threshold(test, dst, 200, 255, 0);////prev cmd
+		threshold(test, dst, 200, 255, cv::THRESH_BINARY);  //creates binary img
 		//erode(dst,dst,Mat(),Point(-1,-1),2);
 		uchar* data = (uchar*)dst.data;
 		//cvtColor(test,test,CV_GRAY2BGR);
+
+		//check columns for black lines and remove them
 		for (int i = 0; i < dst.cols; i++) {
 			for (int j = 0; j < dst.rows; j++) {
 				int counter = 0;
@@ -159,6 +165,7 @@ namespace ocr_tabs {
 				}
 			}
 		}
+		//check rows (?) for black lines and remove them
 		for (int i = 0; i < dst.rows * dst.cols; i++) {
 			int counter = 0;
 			if (data[i] == 0) {
@@ -167,7 +174,7 @@ namespace ocr_tabs {
 					i++;
 				}
 			}
-			if (counter>60*ratio) {
+			if (counter > 60 * ratio) {
 				line(test, Point((i - counter) % (dst.cols), (int)(i - counter) / dst.cols), Point((i) % (dst.cols), (int)(i) / dst.cols), Scalar(255, 255, 255), 3);
 			}
 		}
@@ -1550,11 +1557,9 @@ namespace ocr_tabs {
 
 		if (((std::max(img.size().width, img.size().height)) < 4200) && ((std::max(img.size().width, img.size().height)) > 2800)) {
 			ratio = 1;
-		}
-		else if (img.size().width > img.size().height) {
+		} else if (img.size().width > img.size().height) {
 			ratio = (float)img.size().width / 3500;
-		}
-		else {
+		} else {
 			ratio = (float)img.size().height / 3500;
 		}
 		RemoveGridLines(ratio);
