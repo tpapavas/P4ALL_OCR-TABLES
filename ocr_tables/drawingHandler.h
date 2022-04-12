@@ -12,8 +12,8 @@
 #include "tesseract/baseapi.h"
 
 //typedef std::vector<std::vector<std::vector<std::vector<int>>>> vec3d_int;
-
-class drawingHandler {
+namespace ocr_tabs {
+	class drawingHandler {
 	public:
 		OCRTABS_API drawingHandler();
 		OCRTABS_API ~drawingHandler();
@@ -28,5 +28,5 @@ class drawingHandler {
 		void DrawGrid(cv::Mat test, std::vector<std::vector<int>> boxes, std::vector<std::vector<int*>> row_dims, std::vector<std::vector<int*>> col_dims, std::vector<std::vector<std::vector<int>>> multi_Rows, std::vector<std::vector<std::vector<int>>> Lines_segments);
 		void DrawGridlessImage(cv::Mat test);
 		void DrawFootHead(cv::Mat test, int* Lines_type, std::vector<std::vector<int>> Lines, std::vector<int*> Line_dims, int page_left, int page_right);
-};
-
+	};
+}
