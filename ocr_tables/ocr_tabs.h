@@ -98,6 +98,6 @@ namespace ocr_tabs {
 		bool fail;
 
 		//trying something new
-		drawingHandler drawing_handler;
+		//drawingHandler drawing_handler;
 	};
 }

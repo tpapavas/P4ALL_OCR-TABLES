@@ -1180,46 +1180,46 @@ namespace ocr_tabs {
 	}
 
 	void OCRTabsEngine::DrawBoxes() {
-		drawing_handler.DrawBoxes(test, boxes, words, confs, font_size, bold, italic, underscore, dict);
+		drawingHandler::DrawBoxes(test, boxes, words, confs, font_size, bold, italic, underscore, dict);
 	}
 
 	void OCRTabsEngine::DrawLines() {
-		drawing_handler.DrawLines(test, Lines, page_left, page_right, page_top, page_bottom, Line_dims);
+		drawingHandler::DrawLines(test, Lines, page_left, page_right, page_top, page_bottom, Line_dims);
 	}
 
 	void OCRTabsEngine::DrawSegments() {
-		drawing_handler.DrawSegments(test, Lines, Lines_segments, Line_dims, boxes);
+		drawingHandler::DrawSegments(test, Lines, Lines_segments, Line_dims, boxes);
 	}
 
 	void OCRTabsEngine::DrawAreas() {
-		drawing_handler.DrawAreas(test, table_area, Line_dims, page_left, page_right);
+		drawingHandler::DrawAreas(test, table_area, Line_dims, page_left, page_right);
 	}
 
 	/**
 	 * Draw rows on a cv window
 	 */
 	void OCRTabsEngine::DrawRows() {
-		drawing_handler.DrawRows(test, multi_Rows, Line_dims, page_left, page_right);
+		drawingHandler::DrawRows(test, multi_Rows, Line_dims, page_left, page_right);
 	}
 
 	void OCRTabsEngine::DrawColsPartial() {
-		drawing_handler.DrawColsPartial(test, boxes, tmp_col);
+		drawingHandler::DrawColsPartial(test, boxes, tmp_col);
 	}
 
 	void OCRTabsEngine::DrawCols() {
-		drawing_handler.DrawCols(test, boxes, tmp_col, table_Columns);
+		drawingHandler::DrawCols(test, boxes, tmp_col, table_Columns);
 	}
 
 	void OCRTabsEngine::DrawGrid() {
-		drawing_handler.DrawGrid(test, boxes, row_dims, col_dims, multi_Rows, Lines_segments);
+		drawingHandler::DrawGrid(test, boxes, row_dims, col_dims, multi_Rows, Lines_segments);
 	}
 
 	void OCRTabsEngine::DrawGridlessImage() {
-		drawing_handler.DrawGridlessImage(test);
+		drawingHandler::DrawGridlessImage(test);
 	}
 
 	//void ocr_tabs::DrawFootHead() {
-	//	drawing_handler.DrawFootHead(test, Lines_type, Lines, Line_dims, page_left, page_right);
+	//	drawingHandler::DrawFootHead(test, Lines_type, Lines, Line_dims, page_left, page_right);
 	//} 
 
 	// Resets the image to initial state.

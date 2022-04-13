@@ -3,26 +3,23 @@
 #include "imgProcessor.h"
 
 
-bool imgProcessor::thresholdImg (cv::Mat& input, cv::Mat& output, double k, double dR)
-{
-	 if ((input.rows<=0) || (input.cols<=0)) 
-	 {
+bool imgProcessor::thresholdImg (cv::Mat& input, cv::Mat& output, double k, double dR) {
+	if ((input.rows <= 0) || (input.cols <= 0)) {
 		cerr << "*** ERROR: Invalid input Image " << endl;
 		return false;
 	 }
     
-	int win = (int) (2.0 * input.rows-1)/3;
-	win = std::min(win, input.cols-1);
+	int win = (int)(2.0 * input.rows - 1) / 3;
+	win = std::min(win, input.cols - 1);
 
     // Threshold
     output = cv::Mat(input.rows, input.cols, CV_8U);
     NiblackSauvolaWolfJolion (input, output, SAUVOLA, win, win, k, dR);
-	output = 255*output;
+	output = 255 * output;
 	return true;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
-l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
-{
+l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks) {
 	l_int32      zero;
 	BOXA        *boxatm, *boxahm;
 	PIX         *pixr;   /* image reduced to 150 ppi */
@@ -183,67 +180,83 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
 
     return 0;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-double  imgProcessor::calcLocalStats (cv::Mat &im, cv::Mat &map_m, cv::Mat &map_s, int winx, int winy)
-{
-	cv::Mat im_sum, im_sum_sq;
-    cv::integral(im,im_sum,im_sum_sq,CV_64F);
 
-	double m,s,max_s,sum,sum_sq;	
-	int wxh	= winx/2;
-	int wyh	= winy/2;
-	int x_firstth= wxh;
-	int y_lastth = im.rows-wyh-1;
-	int y_firstth= wyh;
-	double winarea = winx*winy;
+/**
+ * @brief Calculate stats for local neighborhood
+ * @param im: input image
+ * @param map_m 
+ * @param map_s 
+ * @param winx 
+ * @param winy 
+ * @return 
+*/
+double imgProcessor::calcLocalStats (cv::Mat &im, cv::Mat &map_m, cv::Mat &map_s, int winx, int winy) {
+	cv::Mat im_sum, im_sum_sq;
+	cv::integral(im, im_sum, im_sum_sq, CV_64F);
+
+	double m, s, max_s, sum, sum_sq; 
+	int wxh = winx / 2;
+	int wyh = winy / 2;
+	int x_firstth = wxh;
+	int y_lastth = im.rows - wyh - 1;
+	int y_firstth = wyh;
+	double winarea = winx * winy;
 
 	max_s = 0;
-	for	(int j = y_firstth ; j<=y_lastth; j++){   
+	for	(int j = y_firstth ; j<=y_lastth; j++) {   
 		sum = sum_sq = 0;
 
-        sum = im_sum.at<double>(j-wyh+winy,winx) - im_sum.at<double>(j-wyh,winx) - im_sum.at<double>(j-wyh+winy,0) + im_sum.at<double>(j-wyh,0);
-        sum_sq = im_sum_sq.at<double>(j-wyh+winy,winx) - im_sum_sq.at<double>(j-wyh,winx) - im_sum_sq.at<double>(j-wyh+winy,0) + im_sum_sq.at<double>(j-wyh,0);
+		sum = im_sum.at<double>(j - wyh + winy, winx) - im_sum.at<double>(j - wyh, winx) - im_sum.at<double>(j - wyh + winy, 0) + im_sum.at<double>(j - wyh, 0);
+		sum_sq = im_sum_sq.at<double>(j - wyh + winy, winx) - im_sum_sq.at<double>(j - wyh, winx) - im_sum_sq.at<double>(j - wyh + winy, 0) + im_sum_sq.at<double>(j - wyh, 0);
 
 		m  = sum / winarea;
-		s  = sqrt ((sum_sq - m*sum)/winarea);
+		s = sqrt((sum_sq - m * sum) / winarea);
 		if (s > max_s) max_s = s;
 
 		map_m.fset(x_firstth, j, m);
 		map_s.fset(x_firstth, j, s);
 
 		// Shift the window, add and remove	new/old values to the histogram
-		for	(int i=1 ; i <= im.cols-winx; i++) {
-
+		for (int i = 1; i <= im.cols - winx; i++) {
 			// Remove the left old column and add the right new column
 			sum -= im_sum.at<double>(j-wyh+winy,i) - im_sum.at<double>(j-wyh,i) - im_sum.at<double>(j-wyh+winy,i-1) + im_sum.at<double>(j-wyh,i-1);
 			sum += im_sum.at<double>(j-wyh+winy,i+winx) - im_sum.at<double>(j-wyh,i+winx) - im_sum.at<double>(j-wyh+winy,i+winx-1) + im_sum.at<double>(j-wyh,i+winx-1);
 
-			sum_sq -= im_sum_sq.at<double>(j-wyh+winy,i) - im_sum_sq.at<double>(j-wyh,i) - im_sum_sq.at<double>(j-wyh+winy,i-1) + im_sum_sq.at<double>(j-wyh,i-1);
-			sum_sq += im_sum_sq.at<double>(j-wyh+winy,i+winx) - im_sum_sq.at<double>(j-wyh,i+winx) - im_sum_sq.at<double>(j-wyh+winy,i+winx-1) + im_sum_sq.at<double>(j-wyh,i+winx-1);
+			sum_sq -= im_sum_sq.at<double>(j - wyh + winy, i) - im_sum_sq.at<double>(j - wyh, i) - im_sum_sq.at<double>(j - wyh + winy, i - 1) + im_sum_sq.at<double>(j - wyh, i - 1);
+			sum_sq += im_sum_sq.at<double>(j - wyh + winy, i + winx) - im_sum_sq.at<double>(j - wyh, i + winx) - im_sum_sq.at<double>(j - wyh + winy, i + winx - 1) + im_sum_sq.at<double>(j - wyh, i + winx - 1);
 
-			m  = sum / winarea;
-			s  = sqrt ((sum_sq - m*sum)/winarea);
+			m = sum / winarea;
+			s = sqrt((sum_sq - m * sum) / winarea);
 			if (s > max_s) max_s = s;
 
-			map_m.fset(i+wxh, j, m);
-			map_s.fset(i+wxh, j, s);
+			map_m.fset(i + wxh, j, m);
+			map_s.fset(i + wxh, j, s);
 		}
 	}
 
 	return max_s;
 }
-//////////////////////////////////////////////////////////////////////////////////////////
-void  imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, NiblackVersion version, int winx, int winy, double k, double dR)
-{
+
+/**
+ * @brief Creates binary image based on a threshold
+ * @param im 
+ * @param output 
+ * @param version 
+ * @param winx 
+ * @param winy 
+ * @param k 
+ * @param dR 
+*/
+void imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, NiblackVersion version, int winx, int winy, double k, double dR) {
 	double m, s, max_s;
-	double th=0;
+	double th = 0;
 	double min_I, max_I;
-	int wxh	= winx/2;
-	int wyh	= winy/2;
-	int x_firstth= wxh;
-	int x_lastth = im.cols-wxh-1;
-	int y_lastth = im.rows-wyh-1;
-	int y_firstth= wyh;
+	int wxh = winx / 2;
+	int wyh = winy / 2;
+	int x_firstth = wxh;
+	int x_lastth = im.cols - wxh - 1;
+	int y_lastth = im.rows - wyh - 1;
+	int y_firstth = wyh;
 	//int mx, my;
 
 	// Create local statistics and store them in a double matrices
@@ -257,27 +270,24 @@ void  imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, Niblac
 			
 	// Create the threshold surface, including border processing
 	// ----------------------------------------------------
-	for	(int j = y_firstth ; j<=y_lastth; j++) {
-
+	for (int j = y_firstth; j <= y_lastth; j++) {
 		// NORMAL, NON-BORDER AREA IN THE MIDDLE OF THE WINDOW:
-		for	(int i=0 ; i <= im.cols-winx; i++) {
-
-			m  = map_m.fget(i+wxh, j);
-    		s  = map_s.fget(i+wxh, j);
+		for (int i = 0; i <= im.cols - winx; i++) {
+			m = map_m.fget(i + wxh, j);
+			s = map_s.fget(i + wxh, j);
 
     		// Calculate the threshold
     		switch (version) {
-
     			case NIBLACK:
-    				th = m + k*s;
+					th = m + k * s;
     				break;
 
     			case SAUVOLA:
-	    			th = m * (1 + k*(s/dR-1));
+					th = m * (1 + k * (s / dR - 1));
 	    			break;
 
     			case WOLFJOLION:
-    				th = m + k * (s/max_s-1) * (m-min_I);
+					th = m + k * (s / max_s - 1) * (m - min_I);
     				break;
     				
     			default:
@@ -285,168 +295,147 @@ void  imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, Niblac
     				exit (1);
     		}
     		
-    		thsurf.fset(i+wxh,j,th);
+			thsurf.fset(i + wxh, j, th);
 
-    		if (i==0) {
+			if (i == 0) {
         		// LEFT BORDER
-        		for (int i=0; i<=x_firstth; ++i)
-                	thsurf.fset(i,j,th);
+				for (int i = 0; i <= x_firstth; ++i)
+					thsurf.fset(i, j, th);
 
         		// LEFT-UPPER CORNER
-        		if (j==y_firstth)
-        			for (int u=0; u<y_firstth; ++u)
-        			for (int i=0; i<=x_firstth; ++i)
-        				thsurf.fset(i,u,th);
+				if (j == y_firstth)
+					for (int u = 0; u < y_firstth; ++u)
+						for (int i = 0; i <= x_firstth; ++i)
+							thsurf.fset(i, u, th);
 
         		// LEFT-LOWER CORNER
-        		if (j==y_lastth)
-        			for (int u=y_lastth+1; u<im.rows; ++u)
-        			for (int i=0; i<=x_firstth; ++i)
-        				thsurf.fset(i,u,th);
+				if (j == y_lastth)
+					for (int u = y_lastth + 1; u < im.rows; ++u)
+						for (int i = 0; i <= x_firstth; ++i)
+							thsurf.fset(i, u, th);
     		}
 
 			// UPPER BORDER
-			if (j==y_firstth)
-				for (int u=0; u<y_firstth; ++u)
-					thsurf.fset(i+wxh,u,th);
+			if (j == y_firstth)
+				for (int u = 0; u < y_firstth; ++u)
+					thsurf.fset(i + wxh, u, th);
 
 			// LOWER BORDER
-			if (j==y_lastth)
-				for (int u=y_lastth+1; u<im.rows; ++u)
-					thsurf.fset(i+wxh,u,th);
+			if (j == y_lastth)
+				for (int u = y_lastth + 1; u < im.rows; ++u)
+					thsurf.fset(i + wxh, u, th);
 		}
 
 		// RIGHT BORDER
-		for (int i=x_lastth; i<im.cols; ++i)
-        	thsurf.fset(i,j,th);
+		for (int i = x_lastth; i < im.cols; ++i)
+			thsurf.fset(i, j, th);
 
   		// RIGHT-UPPER CORNER
-		if (j==y_firstth)
-			for (int u=0; u<y_firstth; ++u)
-			for (int i=x_lastth; i<im.cols; ++i)
-				thsurf.fset(i,u,th);
+		if (j == y_firstth)
+			for (int u = 0; u < y_firstth; ++u)
+				for (int i = x_lastth; i < im.cols; ++i)
+					thsurf.fset(i, u, th);
 
 		// RIGHT-LOWER CORNER
-		if (j==y_lastth)
-			for (int u=y_lastth+1; u<im.rows; ++u)
-			for (int i=x_lastth; i<im.cols; ++i)
-				thsurf.fset(i,u,th);
+		if (j == y_lastth)
+			for (int u = y_lastth + 1; u < im.rows; ++u)
+				for (int i = x_lastth; i < im.cols; ++i)
+					thsurf.fset(i, u, th);
 	}
 	//cerr << "surface created" << endl;
 	
-	for	(int y=0; y<im.rows; ++y) 
-	for	(int x=0; x<im.cols; ++x) 
-	{
-    	if (im.uget(x,y) >= thsurf.fget(x,y))
-    	{
-    		output.uset(x,y,255);
-    	}
-    	else
-    	{
-    	    output.uset(x,y,0);
-    	}
-    }
+	for (int y = 0; y < im.rows; ++y)
+		for (int x = 0; x < im.cols; ++x) {
+			if (im.uget(x, y) >= thsurf.fget(x, y)) {
+				output.uset(x, y, 255);
+			} else {
+				output.uset(x, y, 0);
+			}
+		}
 }
-//////////////////////////////////////////////////////////////////////////////////////////
-bool imgProcessor::mat2pix (cv::Mat& mat, Pix** px)
-{
+
+bool imgProcessor::mat2pix (cv::Mat& mat, Pix** px) {
 	if ((mat.type() !=CV_8UC1) || (mat.empty())) return false;
 
 	*px = pixCreate(mat.cols, mat.rows, 8);
 	uchar* data = mat.data;
 	
-	for(int i=0; i<mat.rows; i++)
-	{
-		unsigned idx = i*mat.cols;
-		for(int j=0; j<mat.cols; j++) 
-		{
-			pixSetPixel(*px, j,i, (l_uint32)data[idx+j]) ;
+	for (int i = 0; i < mat.rows; i++) {
+		unsigned idx = i * mat.cols;
+		for (int j = 0; j < mat.cols; j++) {
+			pixSetPixel(*px, j, i, (l_uint32)data[idx + j]);
 		}
 	}
 	return true;
 }
-//////////////////////////////////////////////////////////////////////////////////////////
-bool imgProcessor::mat2pixBinary (cv::Mat& mat, Pix** px)
-{
-	if ((mat.type() !=CV_8UC1) || (mat.empty())) return false;
+
+bool imgProcessor::mat2pixBinary (cv::Mat& mat, Pix** px) {
+	if ((mat.type() != CV_8UC1) || (mat.empty())) return false;
 
 	*px = pixCreate(mat.cols, mat.rows, 1);
 	uchar* data = mat.data;
 	
-	for(int i=0; i<mat.rows; i++)
-	{
-		unsigned idx = i*mat.cols;
-		for(int j=0; j<mat.cols; j++) 
-		{
-			pixSetPixel(*px, j,i, 1-(l_uint32)(data[idx+j]/255)) ;
+	for (int i = 0; i < mat.rows; i++) {
+		unsigned idx = i * mat.cols;
+		for (int j = 0; j < mat.cols; j++) {
+			pixSetPixel(*px, j, i, 1 - (l_uint32)(data[idx + j] / 255));
 		}
 	}
 	return true;
 }
-//////////////////////////////////////////////////////////////////////////////////////////
-bool imgProcessor::pix2mat (Pix** px, cv::Mat& mat)
-{
-	if (	((*px)->d != 8 && (*px)->d != 1) 
-		||	((*px)->w < 1)) return false;
+
+bool imgProcessor::pix2mat (Pix** px, cv::Mat& mat) {
+	if (((*px)->d != 8 && (*px)->d != 1)
+		|| ((*px)->w < 1)) return false;
 	
-	mat = cv::Mat((*px)->h,(*px)->w, CV_8UC1);
+	mat = cv::Mat((*px)->h, (*px)->w, CV_8UC1);
 	uchar* data = mat.data;
 
-	if ((*px)->d == 8)
-	{
-		for(int i=0; i<mat.rows; i++)
-		{
-			unsigned idx = i*mat.cols;
-			for(int j=0; j<mat.cols; j++) 
-			{
+	if ((*px)->d == 8) {
+		for (int i = 0; i < mat.rows; i++) {
+			unsigned idx = i * mat.cols;
+			for (int j = 0; j < mat.cols; j++) {
 				l_uint32 val;
 				pixGetPixel(*px, j, i, &val);
 				data[idx+j] = (uchar) val;
 			}
 		}
-	}
-	else
-	{
-		for(int i=0; i<mat.rows; i++)
-		{
-			unsigned idx = i*mat.cols;
-			for(int j=0; j<mat.cols; j++) 
-			{
+	} else {
+		for (int i = 0; i < mat.rows; i++) {
+			unsigned idx = i * mat.cols;
+			for (int j = 0; j < mat.cols; j++) {
 				l_uint32 val;
 				pixGetPixel(*px, j, i, &val);
-				data[idx+j] = (uchar) (255-val*255);
+				data[idx + j] = (uchar)(255 - val * 255);
 			}
 		}
 	}
 	return true;
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-bool imgProcessor::pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat)
-{
-	if ( (*fzpxmap)->w <1) return false;
+
+bool imgProcessor::pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat) {
+	if ((*fzpxmap)->w < 1) return false;
 	mat = cv::Mat((*fzpxmap)->h, (*fzpxmap)->w, CV_8UC1);
 	uchar* data = mat.data;
 
-	for (unsigned i=0;i< (*fzpxmap)->h;i++)
-	{
-		unsigned idxMat = i*mat.cols;
-		unsigned idxPixmap = i*4*mat.cols;
-		for (unsigned j=0;j<(*fzpxmap)->w;j++)
-		{
-			data[idxMat + j] = ((*fzpxmap)->samples[idxPixmap + 4*j ] + (*fzpxmap)->samples[idxPixmap + 4*j + 1] + (*fzpxmap)->samples[idxPixmap + 4*j + 2])/3;
+	for (unsigned i = 0; i < (*fzpxmap)->h; i++) {
+		unsigned idxMat = i * mat.cols;
+		unsigned idxPixmap = i * 4 * mat.cols;
+		for (unsigned j = 0; j < (*fzpxmap)->w; j++) {
+			data[idxMat + j] = ((*fzpxmap)->samples[idxPixmap + 4 * j] + (*fzpxmap)->samples[idxPixmap + 4 * j + 1] + (*fzpxmap)->samples[idxPixmap + 4 * j + 2]) / 3;
 		}
 	}
 	return true;
 }
-/////////////////////////////////////////////////////////////////////////////////////////
+
 void imgProcessor::prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks& blocks)
 {
 	std::cout << "Thresholding Image...";
 	
 	cv::Mat tr,tr2;
-	cv::erode(input,tr2,cv::Mat(), cv::Point(-1,-1), 1);
+	cv::erode(input, tr2, cv::Mat(), cv::Point(-1, -1), 1);
 	imgProcessor::thresholdImg(tr2, thres);
-	cv::erode(thres,tr,cv::Mat(), cv::Point(-1,-1), 3);
+	cv::erode(thres, tr, cv::Mat(), cv::Point(-1, -1), 3);
 	std::cout << "Done!\n";
 	Pix* px = NULL;
 	imgProcessor::mat2pixBinary(tr, &px);
@@ -456,36 +445,32 @@ void imgProcessor::prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks
 	pixDestroy(&px);
 	imgProcessor::thresholdImg(input, thres);
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-void imgProcessor::prepareAll(fz_pixmap** fzpxmap, cv::Mat& thres, segmentationBlocks& blocks)
-{
+
+void imgProcessor::prepareAll(fz_pixmap** fzpxmap, cv::Mat& thres, segmentationBlocks& blocks) {
 	cv::Mat input;
 	pixmap2mat(fzpxmap, input);
 	prepareAll(input, thres, blocks);
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-void imgProcessor::prepareAll(Pix** px, cv::Mat& thres, segmentationBlocks& blocks)
-{
+
+void imgProcessor::prepareAll(Pix** px, cv::Mat& thres, segmentationBlocks& blocks) {
 	cv::Mat input;
 	pix2mat(px, input);
 	prepareAll(input, thres, blocks);
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-void imgProcessor::getTextImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output)
-{
-	blk.text.setTo(0, blk.figures==255);
-	blk.text.setTo(0, blk.vert==255);
-	cv::dilate(blk.text,blk.text,cv::Mat(),cv::Point(-1,-1),5);
-	cv::dilate(blk.figures,blk.figures,cv::Mat(),cv::Point(-1,-1),10);
-	output=input.clone();
-	output.setTo(255, blk.figures==255);
-	output.setTo(255, blk.text==0);
+
+void imgProcessor::getTextImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output) {
+	blk.text.setTo(0, blk.figures == 255);
+	blk.text.setTo(0, blk.vert == 255);
+	cv::dilate(blk.text, blk.text, cv::Mat(), cv::Point(-1, -1), 5);
+	cv::dilate(blk.figures, blk.figures, cv::Mat(), cv::Point(-1, -1), 10);
+	output = input.clone();
+	output.setTo(255, blk.figures == 255);
+	output.setTo(255, blk.text == 0);
 	//output.setTo(255, blk.other==255);
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output)
-{
-	cv::Mat mask (blk.text>100);
+
+void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output) {
+	cv::Mat mask(blk.text > 100);
 
 	cv::Mat vertSpaces;
 	cv::reduce(mask, vertSpaces, 0, CV_REDUCE_SUM, CV_32FC1);  //CV_REDUCE_SUM
@@ -494,54 +479,47 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	std::vector<int> emptyCols, trueEmptyCols;
 
 	emptyCols.push_back(0);
-	for (unsigned i=1;i<vertSpaces.cols-1;i++)
-	{
-		if (data[i]==0 && data[i+1]!=0) emptyCols.push_back(i);
+	for (unsigned i = 1; i < vertSpaces.cols - 1; i++) {
+		if (data[i] == 0 && data[i + 1] != 0) emptyCols.push_back(i);
 	}
-	emptyCols.push_back(vertSpaces.cols-1);
+	emptyCols.push_back(vertSpaces.cols - 1);
 
-	for (unsigned i=0;i<emptyCols.size()-1;i++)
-	{
-		if (emptyCols[i]!=emptyCols[i+1])
-		{
-			cv::Rect rct(emptyCols[i],0,emptyCols[i+1]-emptyCols[i],1);
-			if (cv::sum(vertSpaces(rct))[0]!=0)
-			{
+	for (unsigned i = 0; i < emptyCols.size() - 1; i++)	{
+		if (emptyCols[i] != emptyCols[i + 1]) {
+			cv::Rect rct(emptyCols[i], 0, emptyCols[i + 1] - emptyCols[i], 1);
+			if (cv::sum(vertSpaces(rct))[0] != 0) {
 				if (trueEmptyCols.empty()) trueEmptyCols.push_back(emptyCols[i]);
-				trueEmptyCols.push_back(emptyCols[i+1]);
+				trueEmptyCols.push_back(emptyCols[i + 1]);
 			}
 		}
 	}
 
-	if (trueEmptyCols.size()>5) //too many columns, probably full page matrix
-	{
+	//too many columns, probably full page matrix
+	if (trueEmptyCols.size()>5) {
 		output = input.clone();
 		return;
 	}
 
-	if (trueEmptyCols.size()>2) //if columns are uniform then possibly tey are text columns. else either matrix or simply formatted text
-	{
-		float avg_width=0,var_width=0;
-		for (unsigned i=0;i<trueEmptyCols.size()-1;i++)
-		{
-			avg_width+=trueEmptyCols[i+1]-trueEmptyCols[i];
+	//if columns are uniform then possibly they are text columns. else either matrix or simply formatted text
+	if (trueEmptyCols.size() > 2) {
+		float avg_width = 0, var_width = 0;
+		for (unsigned i = 0; i < trueEmptyCols.size() - 1; i++) {
+			avg_width += trueEmptyCols[i + 1] - trueEmptyCols[i];
 		}
-		avg_width/=trueEmptyCols.size()-1;
-		for (unsigned i=0;i<trueEmptyCols.size()-1;i++)
-		{
-			var_width+= std::pow((trueEmptyCols[i+1]-trueEmptyCols[i] - avg_width),2);
+		avg_width /= trueEmptyCols.size() - 1;
+		for (unsigned i = 0; i < trueEmptyCols.size() - 1; i++) {
+			var_width += std::pow((trueEmptyCols[i + 1] - trueEmptyCols[i] - avg_width), 2);
 		}
-		var_width/=trueEmptyCols.size()-1;
-		var_width=std::sqrt(var_width);
+		var_width /= trueEmptyCols.size() - 1;
+		var_width = std::sqrt(var_width);
 
-		if (var_width<100) //probably multi column text
-		{
-			output = cv::Mat((input.rows+10)*(trueEmptyCols.size()-1),input.cols, CV_8UC1);
+		//probably multi column text
+		if (var_width < 100) {
+			output = cv::Mat((input.rows + 10) * (trueEmptyCols.size() - 1), input.cols, CV_8UC1);
 			output.setTo(255);
-			for (unsigned i=0;i<trueEmptyCols.size()-1;i++)
-			{
-				cv::Rect rt(0, i*(input.rows+10), trueEmptyCols[i+1]-trueEmptyCols[i], input.rows);
-				cv::Rect rt2(trueEmptyCols[i], 0, trueEmptyCols[i+1]-trueEmptyCols[i], input.rows);
+			for (unsigned i = 0; i < trueEmptyCols.size() - 1; i++) {
+				cv::Rect rt(0, i * (input.rows + 10), trueEmptyCols[i + 1] - trueEmptyCols[i], input.rows);
+				cv::Rect rt2(trueEmptyCols[i], 0, trueEmptyCols[i + 1] - trueEmptyCols[i], input.rows);
 				cv::Mat tmp2 = input(rt2);
 				tmp2.copyTo(output(rt));
 			}
@@ -552,7 +530,6 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	}
 
 	//if non of the above works, check for subareas between empty rows
-
 	cv::Mat horSpaces;
 	cv::reduce(mask, horSpaces, 1, CV_REDUCE_SUM, CV_32FC1);
 	data = (float*)horSpaces.data;
@@ -560,105 +537,86 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	std::vector<int> emptyRows, trueEmptyRows;
 
 	emptyRows.push_back(0);
-	for (unsigned i=1;i<horSpaces.rows-1;i++)
-	{
-		if (data[i]==0 && data[i+1]!=0) emptyRows.push_back(i);
+	for (unsigned i = 1; i < horSpaces.rows - 1; i++) {
+		if (data[i] == 0 && data[i + 1] != 0) emptyRows.push_back(i);
 	}
-	emptyRows.push_back(horSpaces.rows-1);
+	emptyRows.push_back(horSpaces.rows - 1);
 
-	for (unsigned i=0;i<emptyRows.size()-1;i++)
-	{
-		if (emptyRows[i]!=emptyRows[i+1])
-		{
-			cv::Rect rct(0, emptyRows[i],1,emptyRows[i+1]-emptyRows[i]);
-			if (cv::sum(horSpaces(rct))[0]!=0)
-			{
+	for (unsigned i = 0; i < emptyRows.size() - 1; i++) {
+		if (emptyRows[i] != emptyRows[i + 1]) {
+			cv::Rect rct(0, emptyRows[i], 1, emptyRows[i + 1] - emptyRows[i]);
+			if (cv::sum(horSpaces(rct))[0] != 0) {
 				if (trueEmptyRows.empty()) trueEmptyRows.push_back(emptyRows[i]);
-				trueEmptyRows.push_back(emptyRows[i+1]);
+				trueEmptyRows.push_back(emptyRows[i + 1]);
 			}
 		}
 	}
 
-	if (trueEmptyRows.size()>6) //too many rows, probably full page matrix
-	{
+	//too many rows, probably full page matrix
+	if (trueEmptyRows.size() > 6) {
 		output = input.clone();
 		return;
 	}
 
-	if (trueEmptyRows.size()<2) // no page segmentation available. single column text
-	{
+	// no page segmentation available. single column text
+	if (trueEmptyRows.size() < 2) {
 		output = input.clone();
 		return;
 	}
 
 	// search for columned text between empty lines
 	std::vector <cv::Mat> outputParts;
-	for (unsigned s=0;s<trueEmptyRows.size()-1;s++)
-	{
-		bool hasColumns=false;
-		cv::Rect rcts(0,trueEmptyRows[s], input.cols, trueEmptyRows[s+1]-trueEmptyRows[s]);
+	for (unsigned s = 0; s < trueEmptyRows.size() - 1; s++) {
+		bool hasColumns = false;
+		cv::Rect rcts(0, trueEmptyRows[s], input.cols, trueEmptyRows[s + 1] - trueEmptyRows[s]);
 		cv::Mat part = mask(rcts);
 		std::vector<int> localEmptyCols, localTrueEmptyCols;
-		if ( rcts.height > (float)input.rows/10)
-		{
+		if (rcts.height > (float)input.rows / 10) {
 			cv::Mat localVertSpaces;
 			cv::reduce(part, localVertSpaces, 0, CV_REDUCE_SUM, CV_32FC1);
 			data = (float*)localVertSpaces.data;
-				
 
 			localEmptyCols.push_back(0);
-			for (unsigned i=1;i<localVertSpaces.cols-1;i++)
-			{
-				if (data[i]==0 && data[i+1]!=0) localEmptyCols.push_back(i);
+			for (unsigned i = 1; i < localVertSpaces.cols - 1; i++) {
+				if (data[i] == 0 && data[i + 1] != 0) localEmptyCols.push_back(i);
 			}
-			localEmptyCols.push_back(localVertSpaces.cols-1);
+			localEmptyCols.push_back(localVertSpaces.cols - 1);
 
-			for (unsigned i=0;i<localEmptyCols.size()-1;i++)
-			{
-				if (localEmptyCols[i]!=localEmptyCols[i+1])
-				{
-					cv::Rect rct(localEmptyCols[i],0,localEmptyCols[i+1]-localEmptyCols[i],1);
-					if (cv::sum(localVertSpaces(rct))[0]!=0)
-					{
+			for (unsigned i = 0; i < localEmptyCols.size() - 1; i++) {
+				if (localEmptyCols[i] != localEmptyCols[i + 1]) {
+					cv::Rect rct(localEmptyCols[i], 0, localEmptyCols[i + 1] - localEmptyCols[i], 1);
+					if (cv::sum(localVertSpaces(rct))[0] != 0); {
 						if (localTrueEmptyCols.empty()) localTrueEmptyCols.push_back(localEmptyCols[i]);
-						localTrueEmptyCols.push_back(localEmptyCols[i+1]);
+						localTrueEmptyCols.push_back(localEmptyCols[i + 1]);
 					}
 				}
 			}
 
-			if (localTrueEmptyCols.size()>2 && localTrueEmptyCols.size()<5)
-			{
-				float avg_width=0,var_width=0;
-				for (unsigned i=0;i<localTrueEmptyCols.size()-1;i++)
-				{
-					avg_width+=localTrueEmptyCols[i+1]-localTrueEmptyCols[i];
+			if (localTrueEmptyCols.size() > 2 && localTrueEmptyCols.size() < 5) {
+				float avg_width = 0, var_width = 0;
+				for (unsigned i = 0; i < localTrueEmptyCols.size() - 1; i++) {
+					avg_width += localTrueEmptyCols[i + 1] - localTrueEmptyCols[i];
 				}
-				avg_width/=localTrueEmptyCols.size()-1;
-				for (unsigned i=0;i<localTrueEmptyCols.size()-1;i++)
-				{
-					var_width+= std::pow((localTrueEmptyCols[i+1]-localTrueEmptyCols[i] - avg_width),2);
+				avg_width /= localTrueEmptyCols.size() - 1;
+				for (unsigned i = 0; i < localTrueEmptyCols.size() - 1; i++) {
+					var_width += std::pow((localTrueEmptyCols[i + 1] - localTrueEmptyCols[i] - avg_width), 2);
 				}
-				var_width/=localTrueEmptyCols.size()-1;
-				var_width=std::sqrt(var_width);
+				var_width /= localTrueEmptyCols.size() - 1;
+				var_width = std::sqrt(var_width);
 
-				if (var_width<100)
-				{
-					hasColumns=true;
+				if (var_width < 100) {
+					hasColumns = true;
 				}
 			}
 		}
 
-		if (!hasColumns)
-		{
+		if (!hasColumns) {
 			outputParts.push_back(input(rcts).clone());
-		}
-		else
-		{
-			cv::Mat prt((part.rows+10)*(localTrueEmptyCols.size()-1),input.cols, CV_8UC1);
+		} else {
+			cv::Mat prt((part.rows + 10)* (localTrueEmptyCols.size() - 1), input.cols, CV_8UC1);
 			prt.setTo(255);
-			for (unsigned i=0;i<localTrueEmptyCols.size()-1;i++)
-			{
-				cv::Rect rt(0, i*(part.rows+10), localTrueEmptyCols[i+1]-localTrueEmptyCols[i], part.rows);
+			for (unsigned i = 0; i < localTrueEmptyCols.size() - 1; i++) {
+				cv::Rect rt(0, i* (part.rows + 10), localTrueEmptyCols[i + 1] - localTrueEmptyCols[i], part.rows);
 				cv::Rect rt2(localTrueEmptyCols[i], 0, localTrueEmptyCols[i+1]-localTrueEmptyCols[i], part.rows);
 				cv::Mat tmp2 =(input(rcts))(rt2);
 				tmp2.copyTo(prt(rt));
@@ -667,8 +625,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 		}
 	}
 	output = outputParts[0].clone();
-	for (unsigned i=1;i<outputParts.size();i++)
-	{
+	for (unsigned i = 1; i < outputParts.size(); i++) {
 		cv::vconcat(output,outputParts[i],output);
 	}
 }

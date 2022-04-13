@@ -17,13 +17,13 @@ using namespace cv;
 #pragma warning( disable : 4244 )
 
 namespace ocr_tabs {
-	drawingHandler::drawingHandler() {
+	/*drawingHandler::drawingHandler() {
 
 	}
 
 	drawingHandler::~drawingHandler() {
 
-	}
+	}*/
 
 	void drawingHandler::DrawBoxes(cv::Mat test, std::vector<std::vector<int>> boxes, std::vector<char*> words, std::vector<float> confs, std::vector<int> font_size, std::vector<bool> bold, std::vector<bool> italic, std::vector<bool> underscore, std::vector<bool> dict) {
 		namedWindow("img", 0);

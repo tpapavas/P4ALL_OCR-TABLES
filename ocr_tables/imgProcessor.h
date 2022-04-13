@@ -36,21 +36,17 @@ using namespace std;
 #define fget(x,y)    at<float>(y,x)
 #define fset(x,y,v)  at<float>(y,x)=v;
 
-namespace imgProcessor
-{
-	enum NiblackVersion 
-	{
+namespace imgProcessor {
+	enum NiblackVersion {
 		NIBLACK=0,
 		SAUVOLA,
 		WOLFJOLION,
 	};
 
-	struct segmentationBlocks
-	{
+	struct segmentationBlocks {
 		cv::Mat text, figures, other, vert;
 
-		void resize(cv::Size& siz)
-		{
+		void resize(cv::Size& siz) {
 			if (siz.width == 0 || siz.height == 0) return;
 			if (text.size() != siz) cv::resize(text, text, siz,0,0,4);
 			if (figures.size() != siz) cv::resize(figures, figures, siz,0,0,4);
@@ -58,8 +54,7 @@ namespace imgProcessor
 			if (vert.size() != siz) cv::resize(vert, vert, siz,0,0,4);
 		}
 
-		void invertColors()
-		{
+		void invertColors() {
 			text = 255-text;
 			figures=255-figures;
 			other=255-other;
@@ -67,15 +62,14 @@ namespace imgProcessor
 		}
 	};
 
-	struct contour_sorter // 'less' for contours
-	{
-		bool operator ()( const std::vector<cv::Point>& a, const std::vector<cv::Point>& b )
-		{
+	// 'less' for contours
+	struct contour_sorter {
+		bool operator ()(const std::vector<cv::Point>& a, const std::vector<cv::Point>& b) {
 			cv::Rect ra(cv::boundingRect(a));
 			cv::Rect rb(cv::boundingRect(b));
 
-			if (ra.x<=rb.x && ra.y<=rb.y) return true;
-			if (ra.y<=rb.y && ra.x<=(rb.x + rb.width)) return true;
+			if (ra.x <= rb.x && ra.y <= rb.y) return true;
+			if (ra.y <= rb.y && ra.x <= (rb.x + rb.width)) return true;
 			return false;
 		}
 	};	

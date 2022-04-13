@@ -53,11 +53,11 @@
     <ClCompile Include="App\main.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
-    <ClCompile Include="App\ocrApp.cpp">
-      <Filter>Source Files\App</Filter>
-    </ClCompile>
     <ClCompile Include="ocr_tables\drawingHandler.cpp">
       <Filter>Source Files\OCR_Tables</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ocrApp.cpp">
+      <Filter>Source Files\App</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
