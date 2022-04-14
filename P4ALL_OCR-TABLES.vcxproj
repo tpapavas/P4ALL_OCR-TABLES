@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="App\gui.h" />
     <QtMoc Include="App\ocrApp.h" />
+    <ClInclude Include="ocr_tables\Auxiliary.h" />
     <ClInclude Include="ocr_tables\dll_config.h" />
     <ClInclude Include="ocr_tables\drawingHandler.h" />
     <ClInclude Include="ocr_tables\imgProcessor.h" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClCompile Include="App\main.cpp" />
     <ClCompile Include="App\ocrApp.cpp" />
+    <ClCompile Include="ocr_tables\Auxiliary.cpp" />
     <ClCompile Include="ocr_tables\drawingHandler.cpp" />
     <ClCompile Include="ocr_tables\imgProcessor.cpp" />
     <ClCompile Include="ocr_tables\ocr_tabs.cpp" />

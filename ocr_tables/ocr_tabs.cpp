@@ -2,11 +2,13 @@
 #include <iostream>
 #include <fstream>
 #include "ocr_tabs.h"
+#include "Auxiliary.h"
 #include "imgProcessor.h"
 #include "drawingHandler.h"
 extern "C" {
 	#include <mupdf/fitz.h>
 }
+
 
 using namespace cv;
 //using namespace std;
@@ -14,6 +16,7 @@ using namespace cv;
 #pragma warning( disable : 4018 )
 #pragma warning( disable : 4305 )
 #pragma warning( disable : 4244 )
+
 
 namespace ocr_tabs {
 	OCRTabsEngine::OCRTabsEngine() {
@@ -27,6 +30,10 @@ namespace ocr_tabs {
 		resetAll();
 	}
 
+	/**
+	 * @brief Creates a Mat clone from input img (Mat)
+	 * @param img: img (Mat) to be cloned
+	*/
 	void OCRTabsEngine::SetImage(Mat img) {
 		//test=ImgSeg(img);
 		test = img.clone();
@@ -136,13 +143,15 @@ namespace ocr_tabs {
 	}
 
 	/**
-     * Removes grid lines, because tesseract has a problem recognizing words when there are dark, dense gridlines
+     * @brief Removes grid lines, because tesseract has a problem recognizing words when there are dark, dense gridlines
 	 * @param ratio: ratio of the input image
 	 */
 	void OCRTabsEngine::RemoveGridLines(float ratio /*=1*/) {
 		Mat dst;
 		std::cout << "Remove Grid Lines...";
-		start = clock();
+		//start = clock();
+		aux::startClock();
+
 		//threshold( test, dst, 100, 255,1 );
 		////threshold(test, dst, 200, 255, 0);////prev cmd
 		threshold(test, dst, 200, 255, cv::THRESH_BINARY);  //creates binary img
@@ -179,26 +188,29 @@ namespace ocr_tabs {
 			}
 		}
 
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-	
 		//cv::namedWindow("asd",CV_WINDOW_NORMAL);
 		//cv::imshow("asd", test);
 		//cv::waitKey(0);
 
-		std::cout << " Done in " << duration << "s \n";
+		//duration = (std::clock() - start) / CLOCKS_PER_SEC;
+		//std::cout << " Done in " << duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
-	// Tesseract recognizes all data in the image
+	/**
+	 * @brief Tesseract recognizes all data in the image
+	 * 
+	 */
 	void OCRTabsEngine::OCR_Recognize() {
 		//resize(test,test,Size(test.size().width*2,test.size().height*2));
 		//tess.Init("..\\tessdata", "eng");
 		tess.SetImage((uchar*)test.data, test.size().width, test.size().height, test.channels(), test.step1());
 		//tess.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-*()");
 		std::cout << "Recognizing...";
-		start = clock();
+		aux::startClock();
+
 		tess.Recognize(NULL);
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	// Retrieve all the recognized words and their bounding boxes from tesseract
@@ -208,7 +220,7 @@ namespace ocr_tabs {
 		tesseract::ResultIterator* ri = tess.GetIterator();
 
 		std::cout << "Get bounding Boxes...";
-		start = clock();
+		aux::startClock();
 		do {
 			int left, top, right, bottom;
 			left = 0; top = 0; right = 0; bottom = 0;
@@ -279,14 +291,14 @@ namespace ocr_tabs {
 				}
 			}
 		}
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	// Find the text boundaries of the whole image
 	void OCRTabsEngine::TextBoundaries() {
 		std::cout << "Find text boundaries...";
-		start = clock();
+		aux::startClock();
 
 		page_bottom = page_right = 0;
 		page_left = test.size().width;
@@ -298,14 +310,15 @@ namespace ocr_tabs {
 			if (boxes[i][2] >= page_right) { page_right = boxes[i][2]; }
 			if (boxes[i][3] >= page_bottom) { page_bottom = boxes[i][3]; }
 		}
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	// Create lines by assigning vertically-overlapping word boxes to the same unique line
 	void OCRTabsEngine::TextLines() {
 		std::cout << "Find lines...";
-		start = clock();
+		aux::startClock();
+
 		for (int i = 0; i < boxes.size(); i++) {
 			vector<int> tmp;
 			tmp.push_back(i);
@@ -334,8 +347,7 @@ namespace ocr_tabs {
 			Line_dims.push_back(tmp);
 		}
 
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in "<< duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	void OCRTabsEngine::HeadersFooters() {
@@ -471,7 +483,7 @@ namespace ocr_tabs {
 	 */
 	void OCRTabsEngine::LineSegments() {
 		std::cout << "Find line segments...";
-		start = clock();
+		aux::startClock();
 
 		float ratio = 0.6 * 2; //1.2
 
@@ -501,8 +513,8 @@ namespace ocr_tabs {
 				Lines_segments.push_back(segments);
 			}
 		}
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	/**
@@ -512,7 +524,7 @@ namespace ocr_tabs {
 	 */
 	void OCRTabsEngine::LineTypes() {
 		std::cout << "Find line types...";
-		start = clock();
+		aux::startClock();
 		Lines_type = new int[Lines.size()];
 
 		float sum = 0;
@@ -581,8 +593,8 @@ namespace ocr_tabs {
 			}
 		}
 		*/
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	/**
@@ -591,7 +603,7 @@ namespace ocr_tabs {
 	 */
 	void OCRTabsEngine::TableAreas() {
 		std::cout << "Find table areas...";
-		start = clock();
+		aux::startClock();
 		vector<int> tmp;
 
 		if (Lines_type[0] != 1) { tmp.push_back(0); }
@@ -613,8 +625,8 @@ namespace ocr_tabs {
 			table_area.push_back(tmp);
 		}
 		tmp.clear();
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	/**
@@ -624,7 +636,7 @@ namespace ocr_tabs {
 	 */
 	void OCRTabsEngine::TableRows() {
 		std::cout << "Find table rows...";
-		start = clock();
+		aux::startClock();
 		for (int i = 0; i < table_area.size(); i++) {
 			bool t_flag = false;
 			vector<int> tmp;
@@ -645,14 +657,13 @@ namespace ocr_tabs {
 			}
 		}
 
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	// Assign Columns to each table
 	void OCRTabsEngine::TableColumns() {
 		std::cout << "Find table columns...";
-		start = clock();
+		aux::startClock();
 		for (int i = 0; i < table_Rows.size(); i++) {
 			// Find a segment to initalize columns
 			// First we select the left-most segment
@@ -964,7 +975,7 @@ namespace ocr_tabs {
 	// Create table rows that include more than one lines
 	void OCRTabsEngine::TableMultiRows() {
 		cout << "Find table multiple-rows...";
-		start = clock();
+		aux::startClock();
 		// if a table line does not have a segment in the first column, and there is one-to-one column correspondence 
 		// with the line above it, 
 		// it is merged with the one above it
@@ -1080,8 +1091,7 @@ namespace ocr_tabs {
 			}
 		}
 
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	/**
@@ -1091,7 +1101,7 @@ namespace ocr_tabs {
 	 */
 	void OCRTabsEngine::ColumnSize() {
 		std::cout << "Find column sizes...";
-		start = clock();
+		aux::startClock();
 		for (int i = 0; i < table_Columns.size(); i++) {
 			vector<int*> dims;
 			for (int j = 0; j < table_Columns[i].size(); j++) {
@@ -1141,8 +1151,7 @@ namespace ocr_tabs {
 			}
 		}
 
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	/** 
@@ -1152,7 +1161,7 @@ namespace ocr_tabs {
 	 */ 
 	void OCRTabsEngine::FinalizeGrid() {
 		std::cout << "Finalize grid...";
-		start = clock();
+		aux::startClock();
 		for (int i = 0; i < col_dims.size(); i++) {
 			for (int j = 1; j < col_dims[i].size(); j++) {
 				col_dims[i][j][0] = (col_dims[i][j][0] + col_dims[i][j - 1][1]) / 2;
@@ -1175,8 +1184,7 @@ namespace ocr_tabs {
 			row_dims.push_back(dims);
 		}
 
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
 	void OCRTabsEngine::DrawBoxes() {
@@ -1231,7 +1239,7 @@ namespace ocr_tabs {
 	Mat OCRTabsEngine::ImgSeg(Mat img) {
 		//Search for multi column text
 		std::cout << "Segment Image...";
-		start = clock();
+		aux::startClock();
 		Mat dst;
 		threshold(img, img, 200, 255, 0);
 		namedWindow("img", 0);
@@ -1371,19 +1379,18 @@ namespace ocr_tabs {
 				Mat tmp2(dst, Rect(text_columns[i], 0, text_columns[i + 1] - text_columns[i], dst.rows));
 				tmp2.copyTo(tmp);
 			}
-			duration = (std::clock() - start) / CLOCKS_PER_SEC;
-			std::cout << " Done in " << duration << "s \n";
+
+			std::cout << " Done in " << aux::endClock() << "s \n";
 			return single_col;
 		}
 
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
 		return dst;
 	}
 
 	void OCRTabsEngine::WriteHTML(std::string& filename) {
 		std::cout << "Create HTML...";
-		start = clock();
+		aux::startClock();
 
 		//find average font size
 		vector<int> tmp_size;
@@ -1539,8 +1546,8 @@ namespace ocr_tabs {
 			}
 			file << "\n</p>\n</body>\n</html>";
 			file.close();
-			duration = (std::clock() - start) / CLOCKS_PER_SEC;
-			cout << " Done in " << duration << "s \n";
+
+			cout << " Done in " << aux::endClock() << "s \n";
 		}
 		else {
 			std::cout << "Unable to open file";
@@ -1549,7 +1556,7 @@ namespace ocr_tabs {
 
 	Mat OCRTabsEngine::ImagePreproccesing(Mat img) {
 		std::cout << "Process Image...";
-		start = clock();
+		aux::startClock();
 
 		test = cv::Mat(img);
 
@@ -1576,8 +1583,7 @@ namespace ocr_tabs {
 		imgProcessor::reorderImage(clean2, blk, img);
 
 		if (((std::max(orgSiz.width, orgSiz.height)) < 4200) && ((std::max(orgSiz.width, orgSiz.height)) > 2800)) {
-			duration = (std::clock() - start) / CLOCKS_PER_SEC;
-			std::cout << " Done in " << duration << "s \n";
+			std::cout << " Done in " << aux::endClock() << "s \n";
 			return (img);
 		}
 		if (orgSiz.width > orgSiz.height) {
@@ -1586,8 +1592,8 @@ namespace ocr_tabs {
 		else {
 			resize(img, img, cv::Size(img.size().width / ((float)orgSiz.height / 3500), 3500 * (float)img.size().height / orgSiz.height));
 		}
-		duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		std::cout << " Done in " << duration << "s \n";
+
+		std::cout << " Done in " << aux::endClock() << "s \n";
 		return (img);
 	}
 
