@@ -681,7 +681,7 @@ namespace ocr_tabs {
 
 			//FIND COLUMN GENERATORS
 			while (!end_of_table) {
-				duration = (std::clock() - start) / CLOCKS_PER_SEC;
+				duration = aux::endClock(); /*(std::clock() - start) / CLOCKS_PER_SEC;*/
 				if (duration > 30) {
 					end_of_table = true;
 					i = table_Rows.size();
@@ -966,8 +966,9 @@ namespace ocr_tabs {
 					}
 				}
 
-				duration = (std::clock() - start) / CLOCKS_PER_SEC;
-				std::cout << " Done in " << duration << "s \n";
+				//duration = (std::clock() - start) / CLOCKS_PER_SEC;
+				//std::cout << " Done in " << duration << "s \n";
+				std::cout << " Done in " << aux::endClock() << "s \n";
 			}
 		}
 	}

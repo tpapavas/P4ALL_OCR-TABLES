@@ -2,7 +2,7 @@
 #include "dll_config.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-#include <ctime>
+//#include <ctime>
 
 
 
