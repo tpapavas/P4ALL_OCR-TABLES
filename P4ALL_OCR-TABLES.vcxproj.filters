@@ -42,7 +42,7 @@
     <ClInclude Include="ocr_tables\drawingHandler.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
-    <ClInclude Include="ocr_tables\Auxiliary.h">
+    <ClInclude Include="ocr_tables\auxiliary.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClCompile Include="App\ocrApp.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
-    <ClCompile Include="ocr_tables\Auxiliary.cpp">
+    <ClCompile Include="ocr_tables\auxiliary.cpp">
       <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
   </ItemGroup>

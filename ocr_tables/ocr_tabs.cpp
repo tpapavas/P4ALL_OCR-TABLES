@@ -2,13 +2,12 @@
 #include <iostream>
 #include <fstream>
 #include "ocr_tabs.h"
-#include "Auxiliary.h"
+#include "auxiliary.h"
 #include "imgProcessor.h"
 #include "drawingHandler.h"
 extern "C" {
 	#include <mupdf/fitz.h>
 }
-
 
 using namespace cv;
 //using namespace std;
@@ -17,12 +16,12 @@ using namespace cv;
 #pragma warning( disable : 4305 )
 #pragma warning( disable : 4244 )
 
-
 namespace ocr_tabs {
 	OCRTabsEngine::OCRTabsEngine() {
 		fail = false;
 		Lines_type = NULL;
 		//tess.Init("..\\tessdata", "eng");
+		//tess.Init("tessdata", "Greek");
 		tess.Init("tessdata", "eng");
 	}
 
@@ -144,7 +143,7 @@ namespace ocr_tabs {
 
 	/**
      * @brief Removes grid lines, because tesseract has a problem recognizing words when there are dark, dense gridlines
-	 * @param ratio: ratio of the input image
+	 * @param ratio: ratio of input image resize
 	 */
 	void OCRTabsEngine::RemoveGridLines(float ratio /*=1*/) {
 		Mat dst;
@@ -153,7 +152,6 @@ namespace ocr_tabs {
 		aux::startClock();
 
 		//threshold( test, dst, 100, 255,1 );
-		////threshold(test, dst, 200, 255, 0);////prev cmd
 		threshold(test, dst, 200, 255, cv::THRESH_BINARY);  //creates binary img
 		//erode(dst,dst,Mat(),Point(-1,-1),2);
 		uchar* data = (uchar*)dst.data;
@@ -199,7 +197,6 @@ namespace ocr_tabs {
 
 	/**
 	 * @brief Tesseract recognizes all data in the image
-	 * 
 	 */
 	void OCRTabsEngine::OCR_Recognize() {
 		//resize(test,test,Size(test.size().width*2,test.size().height*2));
@@ -213,7 +210,9 @@ namespace ocr_tabs {
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
-	// Retrieve all the recognized words and their bounding boxes from tesseract
+	/**
+	 * @brief Retrieve all the recognized words and their bounding boxes from tesseract
+	 */
 	void OCRTabsEngine::BoxesAndWords() {
 		//tess.SetPageSegMode( tesseract::PSM_AUTO_OSD);
 		//tesseract::PageIterator* ri = tess.AnalyseLayout();
@@ -229,17 +228,17 @@ namespace ocr_tabs {
 			// Try to discard "noise" recognized as letters
 		//	if ((right-left>=10)/*&&(bottom-top>=3)*/&&(ri->Confidence(tesseract::RIL_WORD)>30))
 		//	{
-			bool boldword, italicword, underline, b, c, d;
+			bool is_bold, is_italic, is_underlined, b, c, d;
 			int point_size, id;
-			ri->WordFontAttributes(&boldword, &italicword, &underline, &b, &c, &d, &point_size, &id);
+			ri->WordFontAttributes(&is_bold, &is_italic, &is_underlined, &b, &c, &d, &point_size, &id);
 			//		if (point_size>=2)
 			//		{
 			confs.push_back(ri->Confidence(tesseract::RIL_WORD));
 			words.push_back(ri->GetUTF8Text(tesseract::RIL_WORD));
 			font_size.push_back(point_size);
-			bold.push_back(boldword);
-			italic.push_back(italicword);
-			underscore.push_back(underline);
+			bold.push_back(is_bold);
+			italic.push_back(is_italic);
+			underscore.push_back(is_underlined);
 
 			vector <int> tmp;
 			tmp.push_back(left);
@@ -252,45 +251,7 @@ namespace ocr_tabs {
 			//	}
 		} while (ri->Next(tesseract::RIL_WORD));
 
-		// remove possible figures
-		// Search for word "figure". When found check the words above. if the previous 4 words are not "in dictionary" then they are
-		//  part of images that have been recognised as text, and they are removed. The line with the word
-		// "figure" is also removed as it is probably a caption of the figure.
-		for (int i = boxes.size() - 1; i >= 0; i--) {
-			string tmp = words[i];
-			std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
-			if (tmp.find("figure") != std::string::npos) {
-				for (int j = i - 1; j >= 3; j--) {
-					bool image = (dict[j] && dict[j - 1] && dict[j - 2] && dict[j - 3]);
-					if (image) {
-						if (j >= (i - 5)) {
-							j = 0;
-						} else {
-							int ln_index = i;
-							for (int k = i + 1; k < boxes.size(); k++) {
-								if (!(((boxes[k][1] <= boxes[i][1]) && (boxes[i][1] <= boxes[k][3])) ||
-									((boxes[i][1] <= boxes[k][1]) && (boxes[k][1] <= boxes[i][3])))) {
-									ln_index = k - 1;
-									k = boxes.size();
-								}
-							}
-							for (int k = ln_index; k >= j + 1; k--) {
-								boxes.erase(boxes.begin() + k);
-								words.erase(words.begin() + k);
-								confs.erase(confs.begin() + k);
-								font_size.erase(font_size.begin() + k);
-								bold.erase(bold.begin() + k);
-								italic.erase(italic.begin() + k);
-								underscore.erase(underscore.begin() + k);
-								dict.erase(dict.begin() + k);
-							}
-							i = j;
-							j = 0;
-						}
-					}
-				}
-			}
-		}
+		removeFigures();
 
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
@@ -324,8 +285,8 @@ namespace ocr_tabs {
 			tmp.push_back(i);
 			int j;
 			for (j = i + 1; j < boxes.size(); j++) {
-				if (((boxes[j - 1][1] <= boxes[j][1]) && (boxes[j][1] <= boxes[j - 1][3])) ||
-					((boxes[j][1] <= boxes[j - 1][1]) && (boxes[j - 1][1] <= boxes[j][3]))) {
+				if (((boxes[j - 1][bTop] <= boxes[j][bTop]) && (boxes[j][bTop] <= boxes[j - 1][bBottom])) ||
+					((boxes[j][bTop] <= boxes[j - 1][bTop]) && (boxes[j - 1][bTop] <= boxes[j][bBottom]))) {
 					tmp.push_back(j);
 				} else {
 					break;
@@ -341,8 +302,8 @@ namespace ocr_tabs {
 			tmp[0] = page_bottom;
 			tmp[1] = page_top;
 			for (int j = 0; j < Lines[i].size(); j++) {
-				if (boxes[Lines[i][j]][1] <= tmp[0]) { tmp[0] = boxes[Lines[i][j]][1]; }
-				if (boxes[Lines[i][j]][3] >= tmp[1]) { tmp[1] = boxes[Lines[i][j]][3]; }
+				if (boxes[Lines[i][j]][bTop] <= tmp[0]) { tmp[0] = boxes[Lines[i][j]][bTop]; }
+				if (boxes[Lines[i][j]][bBottom] >= tmp[1]) { tmp[1] = boxes[Lines[i][j]][bBottom]; }
 			}
 			Line_dims.push_back(tmp);
 		}
@@ -477,7 +438,7 @@ namespace ocr_tabs {
 	}
 
 	/**
-	 * Create text Segments for each line.
+	 * @brief Create text Segments for each line.
 	 * If the horizontal distance between two word boxes is smaller than a threshold,
 	 * they will be considered as a single text segment
 	 */
@@ -1562,14 +1523,21 @@ namespace ocr_tabs {
 		test = cv::Mat(img);
 
 		float ratio;
+		int max_width_height = std::max(img.size().width, img.size().height);
 
-		if (((std::max(img.size().width, img.size().height)) < 4200) && ((std::max(img.size().width, img.size().height)) > 2800)) {
+		/*if (((std::max(img.size().width, img.size().height)) < 4200) && ((std::max(img.size().width, img.size().height)) > 2800)) {
 			ratio = 1;
 		} else if (img.size().width > img.size().height) {
 			ratio = (float)img.size().width / 3500;
 		} else {
 			ratio = (float)img.size().height / 3500;
+		}*/
+		if (max_width_height < 4200 && max_width_height > 2800) {
+			ratio = 1;
+		} else {
+			ratio = (float)max_width_height / 3500;
 		}
+
 		RemoveGridLines(ratio);
 		imgProcessor::segmentationBlocks blk;
 		cv::Mat clean, clean2;
@@ -1581,17 +1549,29 @@ namespace ocr_tabs {
 		imgProcessor::getTextImage(clean, blk, clean2);
 		//imgProcessor::getTextImage(img, blk, clean2);
 		cv::Size orgSiz = img.size();
+		int max_org_width_height = std::max(orgSiz.width, orgSiz.height);
+		int min_org_width_height = std::min(orgSiz.width, orgSiz.height);
+		int min_max_wh_ratio = min_org_width_height / (float)max_org_width_height;
+
 		imgProcessor::reorderImage(clean2, blk, img);
 
-		if (((std::max(orgSiz.width, orgSiz.height)) < 4200) && ((std::max(orgSiz.width, orgSiz.height)) > 2800)) {
+		/*if (((std::max(orgSiz.width, orgSiz.height)) < 4200) && ((std::max(orgSiz.width, orgSiz.height)) > 2800)) {
 			std::cout << " Done in " << aux::endClock() << "s \n";
 			return (img);
 		}
 		if (orgSiz.width > orgSiz.height) {
 			resize(img, img, cv::Size(3500, img.size().height / ((float)img.size().width / 3500)));
-		}
-		else {
+		} else {
 			resize(img, img, cv::Size(img.size().width / ((float)orgSiz.height / 3500), 3500 * (float)img.size().height / orgSiz.height));
+		}*/
+		if ((max_org_width_height < UPPER_DOTS_LIM) && (max_org_width_height > LOWER_DOTS_LIM)) {
+			std::cout << " Done in " << aux::endClock() << "s \n";
+			return (img);
+		}
+		if (orgSiz.width > orgSiz.height) {
+			resize(img, img, cv::Size(STD_DOTS_SIZE, (img.size().height / (float)img.size().width) * STD_DOTS_SIZE));
+		} else {
+			resize(img, img, cv::Size((img.size().width / (float)orgSiz.height) * STD_DOTS_SIZE, STD_DOTS_SIZE * (float)img.size().height / orgSiz.height));
 		}
 
 		std::cout << " Done in " << aux::endClock() << "s \n";
@@ -1646,7 +1626,7 @@ namespace ocr_tabs {
 
 	bool OCRTabsEngine::img2html(const std::string& filename) {
 		resetAll();
-		Mat test = imread(filename, 0);
+		Mat test = imread(filename, IMREAD_GRAYSCALE);
 		if (test.empty()) { cout << "File not available\n"; return false; }
 		test = ImagePreproccesing(test);
 		SetImage(test);
@@ -1670,6 +1650,7 @@ namespace ocr_tabs {
 		std::string outputFilename = filename;
 		outputFilename.append(".html");
 		WriteHTML(outputFilename);
+
 		return true;
 	}
 
@@ -1875,5 +1856,50 @@ namespace ocr_tabs {
 		outputFilename.append("XML.html");
 		WriteHTML(outputFilename);
 		return true;
+	}
+
+	/**
+	 * @brief Removes possible figures
+	 * Search for word "figure". When found check the words above. if the previous 4 words are not "in dictionary", 
+	 * then they are part of images that have been recognised as text, and they are removed. 
+	 * The line with the word "figure" is also removed as it is probably a caption of the figure.
+	 */
+	void OCRTabsEngine::removeFigures() {
+		for (int i = boxes.size() - 1; i >= 0; i--) {
+			string tmp = words[i];
+			std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+			if (tmp.find("figure") != std::string::npos) {
+				for (int j = i - 1; j >= 3; j--) {
+					bool image = (dict[j] && dict[j - 1] && dict[j - 2] && dict[j - 3]);
+					if (image) {
+						if (j >= (i - 5)) {
+							j = 0;
+						}
+						else {
+							int ln_index = i;
+							for (int k = i + 1; k < boxes.size(); k++) {
+								if (!(((boxes[k][bTop] <= boxes[i][bTop]) && (boxes[i][bTop] <= boxes[k][bBottom])) ||
+									((boxes[i][bTop] <= boxes[k][bTop]) && (boxes[k][bTop] <= boxes[i][bBottom])))) {
+									ln_index = k - 1;
+									k = boxes.size();
+								}
+							}
+							for (int k = ln_index; k >= j + 1; k--) {
+								boxes.erase(boxes.begin() + k);
+								words.erase(words.begin() + k);
+								confs.erase(confs.begin() + k);
+								font_size.erase(font_size.begin() + k);
+								bold.erase(bold.begin() + k);
+								italic.erase(italic.begin() + k);
+								underscore.erase(underscore.begin() + k);
+								dict.erase(dict.begin() + k);
+							}
+							i = j;
+							j = 0;
+						}
+					}
+				}
+			}
+		}
 	}
 }

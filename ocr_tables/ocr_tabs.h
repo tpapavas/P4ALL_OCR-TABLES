@@ -6,7 +6,10 @@
 
 
 
- #define TESSDLL_IMPORTS
+#define TESSDLL_IMPORTS
+#define STD_DOTS_SIZE 3500
+#define LOWER_DOTS_LIM 2800 
+#define UPPER_DOTS_LIM 4200
 
 #include "tesseract/baseapi.h"
 
@@ -96,6 +99,15 @@ namespace ocr_tabs {
 		std::vector<std::vector<bool>> underscore_;
 		std::vector<int> page_height, page_width;
 		bool fail;
+
+		void removeFigures();
+
+		enum BoxSide {
+			bLeft=0,
+			bTop=1,
+			bRight=2,
+			bBottom=3
+		};
 
 		//trying something new
 		//drawingHandler drawing_handler;

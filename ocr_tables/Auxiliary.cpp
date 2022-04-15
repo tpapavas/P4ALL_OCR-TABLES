@@ -1,6 +1,6 @@
 #pragma once
 #include <chrono>
-#include "Auxiliary.h"
+#include "auxiliary.h"
 
 #define SEC_IN_MSECS 1000.0
 

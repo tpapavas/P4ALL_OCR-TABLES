@@ -94,7 +94,6 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
     /* Get proto (early processed) text line mask. */
     /* First close the characters and words in the textlines */
     pixtm1 = pixCloseSafeBrick(NULL, pixnht, 30, 1);
- 
 
 	/* Next open back up the vertical whitespace corridors */
     pixtm2 = pixSubtract(NULL, pixtm1, pixvws);
@@ -369,6 +368,12 @@ bool imgProcessor::mat2pix (cv::Mat& mat, Pix** px) {
 	return true;
 }
 
+/**
+ * @brief Creates a binary pix from mat
+ * @param mat: input mat
+ * @param px: output pix
+ * @return 
+ */
 bool imgProcessor::mat2pixBinary (cv::Mat& mat, Pix** px) {
 	if ((mat.type() != CV_8UC1) || (mat.empty())) return false;
 
@@ -428,8 +433,7 @@ bool imgProcessor::pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat) {
 	return true;
 }
 
-void imgProcessor::prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks& blocks)
-{
+void imgProcessor::prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks& blocks) {
 	std::cout << "Thresholding Image...";
 	
 	cv::Mat tr,tr2;
@@ -495,7 +499,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	}
 
 	//too many columns, probably full page matrix
-	if (trueEmptyCols.size()>5) {
+	if (trueEmptyCols.size() > 5) {
 		output = input.clone();
 		return;
 	}
