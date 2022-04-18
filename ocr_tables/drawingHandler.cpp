@@ -25,7 +25,7 @@ namespace ocr_tabs {
 
 	}*/
 
-	void drawingHandler::DrawBoxes(cv::Mat test, std::vector<std::vector<int>> boxes, std::vector<char*> words, std::vector<float> confs, std::vector<int> font_size, std::vector<bool> bold, std::vector<bool> italic, std::vector<bool> underscore, std::vector<bool> dict) {
+	void drawingHandler::DrawBoxes(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<char*>& words, std::vector<float>& confs, std::vector<int>& font_size, std::vector<bool>& bold, std::vector<bool>& italic, std::vector<bool>& underscore, std::vector<bool>& dict) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -55,7 +55,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawLines(cv::Mat test, std::vector<std::vector<int>> Lines, int page_left, int page_right, int page_top, int page_bottom, std::vector<int*> Line_dims) {
+	void drawingHandler::DrawLines(cv::Mat& test, std::vector<std::vector<int>>& Lines, int page_left, int page_right, int page_top, int page_bottom, std::vector<int*>& Line_dims) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -69,7 +69,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawSegments(cv::Mat test, std::vector<std::vector<int>> Lines, std::vector<std::vector<std::vector<int>>> Lines_segments, std::vector<int*> Line_dims, std::vector<std::vector<int>> boxes) {
+	void drawingHandler::DrawSegments(cv::Mat& test, std::vector<std::vector<int>>& Lines, std::vector<std::vector<std::vector<int>>>& Lines_segments, std::vector<int*>& Line_dims, std::vector<std::vector<int>>& boxes) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -89,7 +89,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawAreas(cv::Mat test, std::vector<std::vector<int>> table_area, std::vector<int*> Line_dims, int page_left, int page_right) {
+	void drawingHandler::DrawAreas(cv::Mat& test, std::vector<std::vector<int>>& table_area, std::vector<int*>& Line_dims, int page_left, int page_right) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -108,7 +108,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawRows(cv::Mat test, std::vector<std::vector<std::vector<int>>> multi_Rows, std::vector<int*> Line_dims, int page_left, int page_right) {
+	void drawingHandler::DrawRows(cv::Mat& test, std::vector<std::vector<std::vector<int>>>& multi_Rows, std::vector<int*>& Line_dims, int page_left, int page_right) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -130,7 +130,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawColsPartial(cv::Mat test, std::vector<std::vector<int>> boxes, std::vector<std::vector<std::vector<int>>> tmp_col) {
+	void drawingHandler::DrawColsPartial(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<std::vector<int>>>& tmp_col) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -151,7 +151,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawCols(cv::Mat test, std::vector<std::vector<int>> boxes, std::vector<std::vector<std::vector<int>>> tmp_col, std::vector<std::vector<std::vector<std::vector<int>>>> table_Columns) {
+	void drawingHandler::DrawCols(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<std::vector<int>>>& tmp_col, std::vector<std::vector<std::vector<std::vector<int>>>>& table_Columns) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -176,7 +176,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawGrid(cv::Mat test, std::vector<std::vector<int>> boxes, std::vector<std::vector<int*>> row_dims, std::vector<std::vector<int*>> col_dims, std::vector<std::vector<std::vector<int>>> multi_Rows, std::vector<std::vector<std::vector<int>>> Lines_segments) {
+	void drawingHandler::DrawGrid(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<int*>>& row_dims, std::vector<std::vector<int*>>& col_dims, std::vector<std::vector<std::vector<int>>>& multi_Rows, std::vector<std::vector<std::vector<int>>>& Lines_segments) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -224,7 +224,7 @@ namespace ocr_tabs {
 		char c = waitKey(0);
 	}
 
-	void drawingHandler::DrawGridlessImage(cv::Mat test) {
+	void drawingHandler::DrawGridlessImage(cv::Mat& test) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -232,7 +232,7 @@ namespace ocr_tabs {
 		waitKey(0);
 	}
 
-	void drawingHandler::DrawFootHead(cv::Mat test, int* Lines_type, std::vector<std::vector<int>> Lines, std::vector<int*> Line_dims, int page_left, int page_right) {
+	void drawingHandler::DrawFootHead(cv::Mat& test, int* Lines_type, std::vector<std::vector<int>>& Lines, std::vector<int*>& Line_dims, int page_left, int page_right) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);

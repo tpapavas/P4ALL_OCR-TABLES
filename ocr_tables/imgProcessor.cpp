@@ -589,7 +589,7 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 			for (unsigned i = 0; i < localEmptyCols.size() - 1; i++) {
 				if (localEmptyCols[i] != localEmptyCols[i + 1]) {
 					cv::Rect rct(localEmptyCols[i], 0, localEmptyCols[i + 1] - localEmptyCols[i], 1);
-					if (cv::sum(localVertSpaces(rct))[0] != 0); {
+					if (cv::sum(localVertSpaces(rct))[0] != 0) {
 						if (localTrueEmptyCols.empty()) localTrueEmptyCols.push_back(localEmptyCols[i]);
 						localTrueEmptyCols.push_back(localEmptyCols[i + 1]);
 					}

@@ -109,6 +109,12 @@ namespace ocr_tabs {
 			bBottom=3
 		};
 
+		enum LineType {
+			TEXT=1,
+			TABLE=2,
+			UNKNOWN=3
+		};
+
 		//trying something new
 		//drawingHandler drawing_handler;
 	};

@@ -13,14 +13,14 @@ bool clockStarted = false;
 namespace ocr_tabs {
 	namespace aux {
 		/**
-		 * @brief Starts the clock; Checks now timestamp
+		 * @brief "Starts the clock"; Save current time.
 		 */
 		void startClock() {
 			startTime = high_res_clock::now();
 		}
 
 		/**
-		 * @brief Counts time units passed since last call of startClock()
+		 * @brief Counts time units passed since last call of startClock().
 		 * @return (endTime - startTime)
 		 */
 		double endClock() {
