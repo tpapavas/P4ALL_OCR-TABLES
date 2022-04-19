@@ -19,7 +19,8 @@ using namespace cv;
 namespace ocr_tabs {
 	OCRTabsEngine::OCRTabsEngine() {
 		fail = false;
-		Lines_type = NULL;
+		fail_msg = "";
+		lines_type = NULL;
 		//tess.Init("..\\tessdata", "eng");
 		//tess.Init("tessdata", "Greek");
 		tess.Init("tessdata", "eng");
@@ -251,7 +252,7 @@ namespace ocr_tabs {
 			//	}
 		} while (ri->Next(tesseract::RIL_WORD));
 
-		removeFigures();
+		RemoveFigures();
 
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
@@ -305,7 +306,7 @@ namespace ocr_tabs {
 				if (boxes[Lines[i][j]][bTop] <= tmp[0]) { tmp[0] = boxes[Lines[i][j]][bTop]; }
 				if (boxes[Lines[i][j]][bBottom] >= tmp[1]) { tmp[1] = boxes[Lines[i][j]][bBottom]; }
 			}
-			Line_dims.push_back(tmp);
+			line_dims.push_back(tmp);
 		}
 
 		std::cout << " Done in " << aux::endClock() << "s \n";
@@ -456,7 +457,7 @@ namespace ocr_tabs {
 				segments.push_back(tmp);
 				Lines_segments.push_back(segments);
 			} else {*/
-			float hor_thresh = (Line_dims[i][1] - Line_dims[i][0]) * ratio;
+			float hor_thresh = (line_dims[i][1] - line_dims[i][0]) * ratio;
 			vector<vector<int>> segments;
 			vector<int> tmp;
 			tmp.push_back(Lines[i][0]);
@@ -470,7 +471,7 @@ namespace ocr_tabs {
 				}
 			}
 			segments.push_back(tmp);
-			Lines_segments.push_back(segments);
+			line_segments.push_back(segments);
 			//}s
 		}
 
@@ -485,21 +486,21 @@ namespace ocr_tabs {
 	void OCRTabsEngine::LineTypes() {
 		std::cout << "Find line types...";
 		aux::startClock();
-		Lines_type = new int[Lines.size()];
+		lines_type = new int[Lines.size()];
 
 		float sum = 0;
 		for (int i = 0; i < Lines.size(); i++) {
-			if (Lines_segments[i].size() > 1) { Lines_type[i] = LineType::TABLE; }
+			if (line_segments[i].size() > 1) { lines_type[i] = LineType::TABLE; }
 			else {
-				int seg_left = boxes[Lines_segments[i][0][0]][bLeft];
-				int seg_right = boxes[Lines_segments[i][0][Lines_segments[i][0].size() - 1]][bRight];
+				int seg_left = boxes[line_segments[i][0][0]][bLeft];
+				int seg_right = boxes[line_segments[i][0][line_segments[i][0].size() - 1]][bRight];
 				//if ((seg_right-seg_left)>=(page_right-page_left)/2){Lines_type[i]=1;}
-				if ((seg_right - seg_left) >= (float)(page_right - page_left) / 2.5) { Lines_type[i] = LineType::TEXT; }
-				else if (seg_left >= (page_right - page_left) / 4) { Lines_type[i] = LineType::TABLE; }
-				else { Lines_type[i] = LineType::UNKNOWN; }
+				if ((seg_right - seg_left) >= (float)(page_right - page_left) / 2.5) { lines_type[i] = LineType::TEXT; }
+				else if (seg_left >= (page_right - page_left) / 4) { lines_type[i] = LineType::TABLE; }
+				else { lines_type[i] = LineType::UNKNOWN; }
 			}
 
-			if (i > 1 && Lines_type[i] == LineType::TABLE && Lines_type[i - 2] == LineType::TABLE) { Lines_type[i - 1] = LineType::TABLE; }
+			if (i > 1 && lines_type[i] == LineType::TABLE && lines_type[i - 2] == LineType::TABLE) { lines_type[i - 1] = LineType::TABLE; }
 
 			/*if (Lines_segments[i].size()==2)
 			{
@@ -511,7 +512,7 @@ namespace ocr_tabs {
 					((seg_right2-seg_left2)>=(page_right-page_left)/2))
 				{Lines_type[i]=3;}
 			}*/
-			sum = sum + Line_dims[i][1] - Line_dims[i][0];
+			sum = sum + line_dims[i][1] - line_dims[i][0];
 		}
 		sum = (float)sum / Lines.size();
 
@@ -566,13 +567,13 @@ namespace ocr_tabs {
 		aux::startClock();
 		vector<int> tmp;
 
-		if (Lines_type[0] != LineType::TEXT) { tmp.push_back(0); }
+		if (lines_type[0] != LineType::TEXT) { tmp.push_back(0); }
 		for (int i = 1; i < Lines.size(); i++) {
-			if ((Lines_type[i] != LineType::TEXT) && (Lines_type[i] != 4)) {
-				if ((Lines_type[i - 1] != LineType::TEXT) && (Lines_type[i - 1] != 4) && ((Line_dims[i][0] - Line_dims[i - 1][1]) <= 3 * (Line_dims[i][1] - Line_dims[i][0]))) {
+			if ((lines_type[i] != LineType::TEXT) && (lines_type[i] != 4)) {
+				if ((lines_type[i - 1] != LineType::TEXT) && (lines_type[i - 1] != 4) && ((line_dims[i][0] - line_dims[i - 1][1]) <= 3 * (line_dims[i][1] - line_dims[i][0]))) {
 					tmp.push_back(i);
 				} else {
-					if ((tmp.size() > 1) || ((tmp.size() == 1) && (Lines_type[tmp[0]] == LineType::TABLE))) {
+					if ((tmp.size() > 1) || ((tmp.size() == 1) && (lines_type[tmp[0]] == LineType::TABLE))) {
 						table_area.push_back(tmp);
 					}
 					tmp.clear();
@@ -580,7 +581,7 @@ namespace ocr_tabs {
 				}
 			}
 		}
-		if ((tmp.size() > 1) || ((tmp.size() == 1) && (Lines_type[tmp[0]] == LineType::TABLE))) {
+		if ((tmp.size() > 1) || ((tmp.size() == 1) && (lines_type[tmp[0]] == LineType::TABLE))) {
 			table_area.push_back(tmp);
 		}
 		tmp.clear();
@@ -601,19 +602,19 @@ namespace ocr_tabs {
 			bool t_flag = false;
 			vector<int> tmp;
 			for (int j = 0; j < table_area[i].size(); j++) {
-				if ((Lines_type[table_area[i][j]] == LineType::TABLE) || t_flag) {
+				if ((lines_type[table_area[i][j]] == LineType::TABLE) || t_flag) {
 					t_flag = true;
 					tmp.push_back(table_area[i][j]);
 				}
 			}
-			if (tmp.size() > 0) { table_Rows.push_back(tmp); }
+			if (tmp.size() > 0) { table_rows.push_back(tmp); }
 		}
 
 		// Tables that end up with just one Row are dismissed
-		for (int i = 0; i < table_Rows.size(); i++) {
-			if (table_Rows[i].size() < 2) {
-				Lines_type[table_Rows[i][0]] = LineType::TEXT;
-				table_Rows.erase(table_Rows.begin() + i);
+		for (int i = 0; i < table_rows.size(); i++) {
+			if (table_rows[i].size() < 2) {
+				lines_type[table_rows[i][0]] = LineType::TEXT;
+				table_rows.erase(table_rows.begin() + i);
 			}
 		}
 
@@ -625,7 +626,7 @@ namespace ocr_tabs {
 		std::cout << "Find table columns...";
 		aux::startClock();
 
-		for (int i = 0; i < table_Rows.size(); i++) {
+		for (int i = 0; i < table_rows.size(); i++) {
 			// Find a segment to initalize columns
 			// First we select the left-most segment
 			// Then we find all the segments that almost vertically align (on the left) with this segment, and we find their average length
@@ -634,42 +635,56 @@ namespace ocr_tabs {
 			// Next we select the left-most segment that is not a part of the previous columns 
 			// and we repeat the same process to create the next column
 			// Some large segments can be assigned to more than one columns
-			vector<vector<int>> column_creator;
+			vector<vector<int>> column_creator;  //segment used as column generator
 			int limit = -1;
 			vector<int> min;
-			min = Lines_segments[table_Rows[0][0]][0];
+			min = line_segments[table_rows[0][0]][0];  //left-most segment
 			bool end_of_table = false;
 
 			//FIND COLUMN GENERATORS
 			while (!end_of_table) {
 				duration = aux::endClock(); /*(std::clock() - start) / CLOCKS_PER_SEC;*/
+				
 				if (duration > 30) {
 					end_of_table = true;
-					i = table_Rows.size();
+					i = table_rows.size();
 					fail = true;
-					cout << "TASK FAILED\n";
+					fail_msg = "Find Table Columns task failed";
+					//cout << "TASK FAILED\n";
 					break;
 				}
 
-				for (int j = 0; j < table_Rows[i].size(); j++) {
-					for (int k = 0; k < Lines_segments[table_Rows[i][j]].size(); k++) {
-						int left = boxes[Lines_segments[table_Rows[i][j]][k][0]][bLeft];
-						int right = boxes[Lines_segments[table_Rows[i][j]][k][Lines_segments[table_Rows[i][j]][k].size() - 1]][bRight];
+				for (int j = 0; j < table_rows[i].size(); j++) {
+					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
+						int line_id = table_rows[i][j];
+						int left_box_id = line_segments[line_id][k][0];
+						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
+						//int left = boxes[line_segments[table_rows[i][j]][k][0]][bLeft];
+						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][bRight];
+						int left = boxes[left_box_id][bLeft];
+						int right = boxes[right_box_id][bRight];
 
 						if ((left <= boxes[min[0]][bLeft]) && (left > limit)) {
-							min = Lines_segments[table_Rows[i][j]][k];
+							//min = line_segments[table_rows[i][j]][k];
+							min = line_segments[line_id][k];
 						}
 					}
 				}
 				//cout<<"\n\n"<<words[min[0]]<<"\n\n";
 				float avg = 0;
 				int counter = 0;
-				int hor_thresh = (Line_dims[table_Rows[i][(int)table_Rows[i].size() / 2]][1] - Line_dims[table_Rows[i][(int)table_Rows[i].size() / 2]][0]) * 2.6;
-				for (int j = 0; j < table_Rows[i].size(); j++) {
-					for (int k = 0; k < Lines_segments[table_Rows[i][j]].size(); k++) {
-						int left = boxes[Lines_segments[table_Rows[i][j]][k][0]][bLeft];
-						int right = boxes[Lines_segments[table_Rows[i][j]][k][Lines_segments[table_Rows[i][j]][k].size() - 1]][bRight];
+				int hor_thresh = (line_dims[table_rows[i][(int)table_rows[i].size() / 2]][1] - line_dims[table_rows[i][(int)table_rows[i].size() / 2]][0]) * 2.6;
+				for (int j = 0; j < table_rows[i].size(); j++) {
+					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
+						int line_id = table_rows[i][j];
+						int left_box_id = line_segments[line_id][k][0];
+						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
+						//int left = boxes[line_segments[table_rows[i][j]][k][0]][bLeft];
+						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][bRight];
+						int left = boxes[left_box_id][bLeft];
+						int right = boxes[right_box_id][bRight];
 
+						// calc avg length of segments horizontally-aligned with min
 						if ((abs(left - boxes[min[0]][bLeft]) <= hor_thresh) &&
 							/*((right-left)<=(boxes[min[min.size()-1]][2]-boxes[min[0]][0]))&&*/
 							(left > limit)) {
@@ -682,17 +697,23 @@ namespace ocr_tabs {
 				}
 				int fin_left = boxes[min[0]][bLeft];
 				avg = (float)avg / counter;
-				float overlap_ratio = 1.2; //1.2
+				float overlap_ratio = 1.2;
 				avg = avg * overlap_ratio;
-				for (int j = 0; j < table_Rows[i].size(); j++) {
-					for (int k = 0; k < Lines_segments[table_Rows[i][j]].size(); k++) {
-						int left = boxes[Lines_segments[table_Rows[i][j]][k][0]][bLeft];
-						int right = boxes[Lines_segments[table_Rows[i][j]][k][Lines_segments[table_Rows[i][j]][k].size() - 1]][bRight];
+				for (int j = 0; j < table_rows[i].size(); j++) {
+					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
+						int line_id = table_rows[i][j];
+						int left_box_id = line_segments[line_id][k][0];
+						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
+						//int left = boxes[line_segments[table_rows[i][j]][k][0]][bLeft];
+						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][bRight];
+						int left = boxes[left_box_id][bLeft];
+						int right = boxes[right_box_id][bRight];
 
+						// Select the segment that is closest to the avg length
 						if ((abs(left - fin_left) <= hor_thresh) &&
 							(abs(right - left - avg) <= abs(boxes[min[min.size() - 1]][bRight] - boxes[min[0]][bLeft] - avg)) &&
 							(left > limit)) {
-							min = Lines_segments[table_Rows[i][j]][k];
+							min = line_segments[line_id][k];
 						}
 					}
 				}
@@ -700,17 +721,18 @@ namespace ocr_tabs {
 				//int aas;
 				//cin>>aas;
 				column_creator.push_back(min);
-				limit = boxes[min[min.size() - 1]][bRight];
+				limit = boxes[min[min.size() - 1]][bRight];  //set left-most limit for remaining segments
 				min.clear();
-				for (int j = 0; j < table_Rows[i].size(); j++) {
-					for (int k = 0; k < Lines_segments[table_Rows[i][j]].size(); k++) {
-						int left = boxes[Lines_segments[table_Rows[i][j]][k][0]][bLeft];
+				for (int j = 0; j < table_rows[i].size(); j++) {
+					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
+						int left = boxes[line_segments[table_rows[i][j]][k][0]][bLeft];
 						if (left > limit) {
-							min = Lines_segments[table_Rows[i][j]][k];
+							min = line_segments[table_rows[i][j]][k];
 							break;
 						}
 					}
 				}
+
 				if (min.size() == 0) { end_of_table = true; }
 			}
 			tmp_col.push_back(column_creator);
@@ -724,210 +746,24 @@ namespace ocr_tabs {
 					int col_left = boxes[tmp_col[i][j][0]][bLeft];
 					int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][bRight];
 					vector<vector<int>> t_seg;
-					for (int k = 0; k < table_Rows[i].size(); k++) {
-						for (int z = 0; z < Lines_segments[table_Rows[i][k]].size(); z++) {
-							int seg_left = boxes[Lines_segments[table_Rows[i][k]][z][0]][bLeft];
-							int seg_right = boxes[Lines_segments[table_Rows[i][k]][z][Lines_segments[table_Rows[i][k]][z].size() - 1]][bRight];
+					for (int k = 0; k < table_rows[i].size(); k++) {
+						for (int z = 0; z < line_segments[table_rows[i][k]].size(); z++) {
+							int seg_left = boxes[line_segments[table_rows[i][k]][z][0]][bLeft];
+							int seg_right = boxes[line_segments[table_rows[i][k]][z][line_segments[table_rows[i][k]][z].size() - 1]][bRight];
 							if (((seg_right >= col_left) && (seg_right <= col_right)) ||
 								((seg_left >= col_left) && (seg_left <= col_right)) ||
 								((seg_left <= col_left) && (seg_right >= col_right))) {
-								t_seg.push_back(Lines_segments[table_Rows[i][k]][z]);
+								t_seg.push_back(line_segments[table_rows[i][k]][z]);
 							}
 						}
 					}
 
 					t_col.push_back(t_seg);
 				}
-				table_Columns.push_back(t_col);
+				table_columns.push_back(t_col);
 			}
 
-			if (!fail) {
-				for (int i = 0; i < table_Columns.size(); i++) {
-					for (int j = 0; j < table_Columns[i].size(); j++) {
-						if (table_Columns[i][j].size() == 0) {
-							table_Columns[i].erase(table_Columns[i].begin() + j);
-							j--;
-						}
-					}
-				}
-
-				// If we find a column where the unique segments  (segments that are assigned to only one column)
-				// are less than the multiple segemnts (segments assigned to more than 1 column), we merge this column with
-				// the immediatelly previous one
-				for (int i = 0; i < table_Columns.size(); i++) {
-					for (int j = 1; j < table_Columns[i].size(); j++) {
-						int counter_single = 0;
-						int counter_multi = 0;
-						for (int k = 0; k < table_Columns[i][j].size(); k++) {
-							bool multi = false;
-							if (std::find(table_Columns[i][j - 1].begin(), table_Columns[i][j - 1].end(), table_Columns[i][j][k]) != table_Columns[i][j - 1].end()) {
-								multi = true;
-							}
-							if (multi) {
-								counter_multi++;
-							} else {
-								counter_single++;
-							}
-						}
-						if (counter_multi >= 1 * counter_single) {
-							for (int k = 0; k < table_Columns[i][j].size(); k++) {
-								bool multi = false;
-								if (std::find(table_Columns[i][j - 1].begin(), table_Columns[i][j - 1].end(), table_Columns[i][j][k]) != table_Columns[i][j - 1].end()) {
-									multi = true;
-								}
-								if (!multi) { table_Columns[i][j - 1].push_back(table_Columns[i][j][k]); }
-							}
-							table_Columns[i].erase(table_Columns[i].begin() + j);
-							j--;
-						}
-					}
-				}
-
-				// Type-3 lines that are in the end of a table, and their single segment is assigned to more than one columns,
-				// are removed from the table
-				for (int i = 0; i < table_Rows.size(); i++) {
-					for (int j = table_Rows[i].size() - 1; j >= 0; j--) {
-						//cout << table_Rows[0].size()<<"     "<<table_Rows[1].size()<<"\n";
-						//cout << i<<"     "<<j<<"\n";
-						if (Lines_type[table_Rows[i][j]] == 3) {
-							vector<int> xcol;
-							for (int k = 0; k < table_Columns[i].size(); k++) {
-								if (table_Columns[i][k].size() > 0) {
-									if (Lines_segments[table_Rows[i][j]][0] == table_Columns[i][k][table_Columns[i][k].size() - 1]) {
-										xcol.push_back(k);
-									}
-								}
-							}
-							if (xcol.size() > 1) {
-								Lines_type[table_Rows[i][j]] = 1;
-								table_Rows[i].erase(table_Rows[i].begin() + j);
-								for (int k = 0; k < xcol.size(); k++) {
-									table_Columns[i][xcol[k]].erase(table_Columns[i][xcol[k]].begin() + table_Columns[i][xcol[k]].size() - 1);
-								}
-							} else {
-								j = -1;
-							}
-						} else {
-							j = -1;
-						}
-					}
-				}
-
-				//If a column has only one segment, which is on the 1st row (possibly missaligned table header) and the column on its left doesnot have a segment
-				// in the same row, then merge these columns
-				for (int i = 0; i < table_Columns.size(); i++) {
-					for (int j = 1; j < table_Columns[i].size(); j++) {
-						if (table_Columns[i][j].size() == 1) {
-							bool found1 = false;
-							bool found2 = false;
-							if (std::find(Lines_segments[table_Rows[i][0]].begin(), Lines_segments[table_Rows[i][0]].end(), table_Columns[i][j][0]) != Lines_segments[table_Rows[i][0]].end()) {
-								found1 = true;
-							}
-							if (std::find(Lines_segments[table_Rows[i][0]].begin(), Lines_segments[table_Rows[i][0]].end(), table_Columns[i][j - 1][0]) != Lines_segments[table_Rows[i][0]].end()) {
-								found2 = true;
-							}
-							if ((found1) && (!found2)) {
-								for (int k = 0; k < table_Columns[i][j - 1].size(); k++) {
-									table_Columns[i][j].push_back(table_Columns[i][j - 1][k]);
-								}
-								table_Columns[i].erase(table_Columns[i].begin() + j - 1);
-							}
-						}
-					}
-				}
-
-				// Tables that end up having only one column, are discarded and treated as simple text
-				for (int i = table_Columns.size() - 1; i >= 0; i--) {
-					if (table_Columns[i].size() < 2) {
-						table_Columns.erase(table_Columns.begin() + i);
-						for (int j = 0; j < table_Rows[i].size(); j++) {
-							Lines_type[table_Rows[i][j]] = 1;
-						}
-						table_Rows.erase(table_Rows.begin() + i);
-					}
-				}
-
-				//Check and remove scrambled tables i.e tables that seem to have a table format but in reality are random segments generated by
-				// big white spaces bwtween words (justified text aligment)
-
-				//bool scrambled_table=false;
-				//int scramLim = 0;
-				//for (int i=table_Columns.size()-1;i>=0;i--)
-				//{
-				//	if (scrambled_table)
-				//	{	
-				//		table_Columns.erase(table_Columns.begin()+i+1);
-				//		for (int k=0;k<table_Rows[i+1].size();k++)
-				//		{
-				//			Lines_type[table_Rows[i+1][k]]=1;
-				//		}
-				//		table_Rows.erase(table_Rows.begin()+i+1);
-				//	}
-				//	scrambled_table=false;
-				//	for (int j=0;j<table_Columns[i].size();j++)
-				//	{
-				//		bool scrambled_col=false;
-				//		for (int k=0;k<table_Columns[i][j].size()-1;k++)
-				//		{
-				//			int left1=boxes[table_Columns[i][j][k][0]][0];
-				//			int left2=boxes[table_Columns[i][j][k+1][0]][0];
-				//			int right1=boxes[table_Columns[i][j][k][table_Columns[i][j][k].size()-1]][2];
-				//			int right2=boxes[table_Columns[i][j][k+1][table_Columns[i][j][k+1].size()-1]][2];	
-				//			if ((abs(left1-left2)<=scramLim)||(abs(right1-right2)<=scramLim))
-				//			{
-				//				scrambled_col=true;
-				//			}
-				//			if (k<table_Columns[i][j].size()-2){
-				//			left2=boxes[table_Columns[i][j][k+2][0]][0];
-				//			right2=boxes[table_Columns[i][j][k+2][table_Columns[i][j][k+2].size()-1]][2];	
-				//			if ((abs(left1-left2)<=scramLim)||(abs(right1-right2)<=scramLim))
-				//			{
-				//				scrambled_col=true;
-				//			}
-				//			}
-				//		}
-				//		if (!scrambled_col)
-				//		{
-				//			scrambled_table=true;
-				//			j=table_Columns[i].size();
-				//		}
-				//	}
-				//}
-				//if (scrambled_table)
-				//{	
-				//	table_Columns.erase(table_Columns.begin()+0);
-				//	for (int k=0;k<table_Rows[0].size();k++)
-				//	{
-				//		Lines_type[table_Rows[0][k]]=1;
-				//	}
-				//	table_Rows.erase(table_Rows.begin()+0);
-				//}
-
-				//If all the columns of a table (besides the 1st one) have more empty cells than cells with data then
-				//this table is discarded (simple formatted text)
-				for (int i = table_Columns.size() - 1; i >= 0; i--) {
-					bool almost_empty = false;
-					for (int j = 1; j < table_Columns[i].size(); j++) {
-						if (table_Columns[i][j].size() < table_Rows[i].size() / 2) {
-							almost_empty = true;
-						} else {
-							almost_empty = false;
-							j = table_Columns[i].size();
-						}
-					}
-					if (almost_empty) {
-						table_Columns.erase(table_Columns.begin() + i);
-						for (int k = 0; k < table_Rows[i].size(); k++) {
-							Lines_type[table_Rows[i][k]] = 1;
-						}
-						table_Rows.erase(table_Rows.begin() + i);
-					}
-				}
-
-				//duration = (std::clock() - start) / CLOCKS_PER_SEC;
-				//std::cout << " Done in " << duration << "s \n";
-				std::cout << " Done in " << aux::endClock() << "s \n";
-			}
+			ProcessGeneratedColumns();
 		}
 	}
 
@@ -939,111 +775,111 @@ namespace ocr_tabs {
 		// with the line above it, 
 		// it is merged with the one above it
 		// this does not apply for the first line of the table
-		for (int i = 0; i < table_Rows.size(); i++) {
+		for (int i = 0; i < table_rows.size(); i++) {
 			vector<vector<int>> tmp_multi_row;
 			vector<int> tmp_multi_lines;
-			tmp_multi_lines.push_back(table_Rows[i][0]);
-			for (int j = 1; j < table_Rows[i].size(); j++) {
+			tmp_multi_lines.push_back(table_rows[i][0]);
+			for (int j = 1; j < table_rows[i].size(); j++) {
 				bool found = false;
-				if (std::find(table_Columns[i][0].begin(), table_Columns[i][0].end(), Lines_segments[table_Rows[i][j]][0]) != table_Columns[i][0].end()) {
+				if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[table_rows[i][j]][0]) != table_columns[i][0].end()) {
 					found = true;
 				}
 				if (!found) {
 					bool exist_all = true;
-					for (int k = 0; k < Lines_segments[table_Rows[i][j]].size(); k++) {
+					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						bool exist = false;
-						for (int s = 0; s < table_Columns[i].size(); s++) {
+						for (int s = 0; s < table_columns[i].size(); s++) {
 							bool exist1 = false; bool exist0 = false;
-							for (int h = 0; h < table_Columns[i][s].size(); h++) {
-								if (Lines_segments[table_Rows[i][j]][k] == table_Columns[i][s][h]) {
+							for (int h = 0; h < table_columns[i][s].size(); h++) {
+								if (line_segments[table_rows[i][j]][k] == table_columns[i][s][h]) {
 									exist1 = true;
 								}
-								for (int z = 0; z < Lines_segments[table_Rows[i][j - 1]].size(); z++) {
-									if (Lines_segments[table_Rows[i][j - 1]][z] == table_Columns[i][s][h]) {
+								for (int z = 0; z < line_segments[table_rows[i][j - 1]].size(); z++) {
+									if (line_segments[table_rows[i][j - 1]][z] == table_columns[i][s][h]) {
 										exist0 = true;
-										if ((k < Lines_segments[table_Rows[i][j]].size() - 1) &&
-											(boxes[Lines_segments[table_Rows[i][j - 1]][z][Lines_segments[table_Rows[i][j - 1]][z].size() - 1]][bRight] >= boxes[Lines_segments[table_Rows[i][j]][k + 1][0]][bLeft])) {
+										if ((k < line_segments[table_rows[i][j]].size() - 1) &&
+											(boxes[line_segments[table_rows[i][j - 1]][z][line_segments[table_rows[i][j - 1]][z].size() - 1]][bRight] >= boxes[line_segments[table_rows[i][j]][k + 1][0]][bLeft])) {
 											exist0 = false;
 										}
 									}
 								}
 							}
-							if ((exist1) && (exist0)) { s = table_Columns[i].size(); exist = true; }
+							if ((exist1) && (exist0)) { s = table_columns[i].size(); exist = true; }
 						}
 						exist_all = (exist_all) && (exist);
 					}
 					if (exist_all) {
-						tmp_multi_lines.push_back(table_Rows[i][j]);
+						tmp_multi_lines.push_back(table_rows[i][j]);
 					} else {
 						tmp_multi_row.push_back(tmp_multi_lines);
 						tmp_multi_lines.clear();
-						tmp_multi_lines.push_back(table_Rows[i][j]);
+						tmp_multi_lines.push_back(table_rows[i][j]);
 					}
 				} else {
 					tmp_multi_row.push_back(tmp_multi_lines);
 					tmp_multi_lines.clear();
-					tmp_multi_lines.push_back(table_Rows[i][j]);
+					tmp_multi_lines.push_back(table_rows[i][j]);
 				}
 			}
 			tmp_multi_row.push_back(tmp_multi_lines);
-			multi_Rows.push_back(tmp_multi_row);
+			multi_rows.push_back(tmp_multi_row);
 			tmp_multi_lines.clear();
 			tmp_multi_row.clear();
 
 			// if a line is type-3, its segment is assigned ONLY to the first column,
 			// the line below it is type-2, and it has a segment in the fist column which is more to the
 			// right than the segment of the first line THEN these two lines are merged together
-			for (int j = 0; j < multi_Rows[i].size() - 1; j++) {
-				if ((multi_Rows[i][j].size() == 1) &&
-					(Lines_type[multi_Rows[i][j][0]] == 3) && (Lines_segments[multi_Rows[i][j][0]].size() == 1) &&
-					(Lines_type[multi_Rows[i][j + 1][0]] == 2)) {
+			for (int j = 0; j < multi_rows[i].size() - 1; j++) {
+				if ((multi_rows[i][j].size() == 1) &&
+					(lines_type[multi_rows[i][j][0]] == 3) && (line_segments[multi_rows[i][j][0]].size() == 1) &&
+					(lines_type[multi_rows[i][j + 1][0]] == 2)) {
 					bool found1 = false;
 					bool found2 = false;
-					if (std::find(table_Columns[i][0].begin(), table_Columns[i][0].end(), Lines_segments[multi_Rows[i][j][0]][0]) != table_Columns[i][0].end()) {
+					if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[multi_rows[i][j][0]][0]) != table_columns[i][0].end()) {
 						found1 = true;
 					}
-					if (std::find(table_Columns[i][0].begin(), table_Columns[i][0].end(), Lines_segments[multi_Rows[i][j + 1][0]][0]) != table_Columns[i][0].end()) {
+					if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[multi_rows[i][j + 1][0]][0]) != table_columns[i][0].end()) {
 						found2 = true;
 					}
-					int tmp = Lines_segments[multi_Rows[i][j][0]][0][0];
+					int tmp = line_segments[multi_rows[i][j][0]][0][0];
 					float lft1 = boxes[tmp][bLeft];
-					tmp = Lines_segments[multi_Rows[i][j + 1][0]][0][0];
+					tmp = line_segments[multi_rows[i][j + 1][0]][0][0];
 					float lft2 = boxes[tmp][bLeft];
-					if ((found1) && (found2) && (lft2 >= lft1 + 0.6 * (Line_dims[multi_Rows[i][j + 1][0]][1] - Line_dims[multi_Rows[i][j + 1][0]][0]))) {
-						for (int z = 0; z < multi_Rows[i][j + 1].size(); z++) {
-							multi_Rows[i][j].push_back(multi_Rows[i][j + 1][z]);
+					if ((found1) && (found2) && (lft2 >= lft1 + 0.6 * (line_dims[multi_rows[i][j + 1][0]][1] - line_dims[multi_rows[i][j + 1][0]][0]))) {
+						for (int z = 0; z < multi_rows[i][j + 1].size(); z++) {
+							multi_rows[i][j].push_back(multi_rows[i][j + 1][z]);
 						}
-						multi_Rows[i].erase(multi_Rows[i].begin() + j + 1);
+						multi_rows[i].erase(multi_rows[i].begin() + j + 1);
 					}
 				}
 			}
-			if ((multi_Rows[i][multi_Rows[i].size() - 1].size() == 1) &&
-				(Lines_type[multi_Rows[i][multi_Rows[i].size() - 1][0]] == 3) && (Lines_segments[multi_Rows[i][multi_Rows[i].size() - 1][0]].size() == 1) &&
-				(Lines_segments[multi_Rows[i][multi_Rows[i].size() - 1][0]][0] == table_Columns[i][0][table_Columns[i][0].size() - 1])) {
-				Lines_type[multi_Rows[i][multi_Rows[i].size() - 1][0]] = 1;
-				multi_Rows[i].erase(multi_Rows[i].begin() + multi_Rows[i].size() - 1);
-				table_Columns[i][0].erase(table_Columns[i][0].begin() + table_Columns[i][0].size() - 1);
+			if ((multi_rows[i][multi_rows[i].size() - 1].size() == 1) &&
+				(lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] == 3) && (line_segments[multi_rows[i][multi_rows[i].size() - 1][0]].size() == 1) &&
+				(line_segments[multi_rows[i][multi_rows[i].size() - 1][0]][0] == table_columns[i][0][table_columns[i][0].size() - 1])) {
+				lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] = 1;
+				multi_rows[i].erase(multi_rows[i].begin() + multi_rows[i].size() - 1);
+				table_columns[i][0].erase(table_columns[i][0].begin() + table_columns[i][0].size() - 1);
 			}
 
 			//Finalize Line Types. Change all Lines within the table to type-2
-			for (int j = 0; j < multi_Rows[i].size(); j++) {
-				for (int k = 0; k < multi_Rows[i][j].size(); k++) {
-					Lines_type[multi_Rows[i][j][k]] = 2;
+			for (int j = 0; j < multi_rows[i].size(); j++) {
+				for (int k = 0; k < multi_rows[i][j].size(); k++) {
+					lines_type[multi_rows[i][j][k]] = 2;
 				}
 			}
 		}
 
 		//Recheck and discard single and double row tables 
-		for (int i = multi_Rows.size() - 1; i >= 0; i--) {
-			if ((multi_Rows[i].size() < 2) && (multi_Rows[i][0].size() < 2 || table_Columns[i][0].size() < 2)) {
-				for (unsigned s = 0; s < multi_Rows[i][0].size(); s++) { Lines_type[multi_Rows[i][0][s]] = 1; }
-				multi_Rows.erase(multi_Rows.begin() + i);
-				table_Columns.erase(table_Columns.begin() + i);
-			} else if ((multi_Rows[i].size() < 3) && (multi_Rows[i][0].size() < 2) && (multi_Rows[i][1].size() < 2)) {
-				for (unsigned s = 0; s < multi_Rows[i][0].size(); s++) { Lines_type[multi_Rows[i][0][s]] = 1; }
-				for (unsigned s = 0; s < multi_Rows[i][1].size(); s++) { Lines_type[multi_Rows[i][1][s]] = 1; }
-				multi_Rows.erase(multi_Rows.begin() + i);
-				table_Columns.erase(table_Columns.begin() + i);
+		for (int i = multi_rows.size() - 1; i >= 0; i--) {
+			if ((multi_rows[i].size() < 2) && (multi_rows[i][0].size() < 2 || table_columns[i][0].size() < 2)) {
+				for (unsigned s = 0; s < multi_rows[i][0].size(); s++) { lines_type[multi_rows[i][0][s]] = 1; }
+				multi_rows.erase(multi_rows.begin() + i);
+				table_columns.erase(table_columns.begin() + i);
+			} else if ((multi_rows[i].size() < 3) && (multi_rows[i][0].size() < 2) && (multi_rows[i][1].size() < 2)) {
+				for (unsigned s = 0; s < multi_rows[i][0].size(); s++) { lines_type[multi_rows[i][0][s]] = 1; }
+				for (unsigned s = 0; s < multi_rows[i][1].size(); s++) { lines_type[multi_rows[i][1][s]] = 1; }
+				multi_rows.erase(multi_rows.begin() + i);
+				table_columns.erase(table_columns.begin() + i);
 			}
 		}
 
@@ -1051,37 +887,38 @@ namespace ocr_tabs {
 	}
 
 	/**
-	 * Find the sizes of the columns.
+	 * @brief Find the sizes of the columns.
 	 * Each columns spans from the leftest single segment to the rightest
 	 * single segment (single segment = assigned to only one column)
 	 */
 	void OCRTabsEngine::ColumnSize() {
 		std::cout << "Find column sizes...";
 		aux::startClock();
-		for (int i = 0; i < table_Columns.size(); i++) {
+
+		for (int i = 0; i < table_columns.size(); i++) {
 			vector<int*> dims;
-			for (int j = 0; j < table_Columns[i].size(); j++) {
+			for (int j = 0; j < table_columns[i].size(); j++) {
 				int* tmp = new int[2];
 				tmp[0] = page_right;
 				tmp[1] = page_left;
-				for (int k = 0; k < table_Columns[i][j].size(); k++) {
+				for (int k = 0; k < table_columns[i][j].size(); k++) {
 					bool flag_left = true;
 					bool flag_right = true;
 					if (j >= 1) {
-						if (std::find(table_Columns[i][j - 1].begin(), table_Columns[i][j - 1].end(), table_Columns[i][j][k]) != table_Columns[i][j - 1].end()) {
+						if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) != table_columns[i][j - 1].end()) {
 							flag_left = false;
 						}
 					}
-					if (j < table_Columns[i].size() - 1) {
-						if (std::find(table_Columns[i][j + 1].begin(), table_Columns[i][j + 1].end(), table_Columns[i][j][k]) != table_Columns[i][j + 1].end()) {
+					if (j < table_columns[i].size() - 1) {
+						if (std::find(table_columns[i][j + 1].begin(), table_columns[i][j + 1].end(), table_columns[i][j][k]) != table_columns[i][j + 1].end()) {
 							flag_right = false;
 						}
 					}
-					if ((boxes[table_Columns[i][j][k][0]][0] <= tmp[0]) && (flag_left)) {
-						tmp[0] = boxes[table_Columns[i][j][k][0]][0];
+					if ((boxes[table_columns[i][j][k][0]][0] <= tmp[0]) && (flag_left)) {
+						tmp[0] = boxes[table_columns[i][j][k][0]][0];
 					}
-					if ((boxes[table_Columns[i][j][k][table_Columns[i][j][k].size() - 1]][2] >= tmp[1]) && (flag_right)) {
-						tmp[1] = boxes[table_Columns[i][j][k][table_Columns[i][j][k].size() - 1]][2];
+					if ((boxes[table_columns[i][j][k][table_columns[i][j][k].size() - 1]][2] >= tmp[1]) && (flag_right)) {
+						tmp[1] = boxes[table_columns[i][j][k][table_columns[i][j][k].size() - 1]][2];
 					}
 				}
 				dims.push_back(tmp);
@@ -1089,19 +926,19 @@ namespace ocr_tabs {
 			col_dims.push_back(dims);
 		}
 
-		for (int i = table_Columns.size() - 1; i >= 0; i--) {
-			if (table_Columns[i].size() == 2) {
+		for (int i = table_columns.size() - 1; i >= 0; i--) {
+			if (table_columns[i].size() == 2) {
 				int colSizeA = col_dims[i][0][1] - col_dims[i][0][0];
 				int colSizeB = col_dims[i][1][1] - col_dims[i][1][0];
 				if (colSizeB >= 10 * colSizeA) {
-					table_Columns.erase(table_Columns.begin() + i);
-					for (int j = 0; j < multi_Rows[i].size(); j++) {
-						for (int k = 0; k < multi_Rows[i][j].size(); k++) {
-							Lines_type[multi_Rows[i][j][k]] = 1;
+					table_columns.erase(table_columns.begin() + i);
+					for (int j = 0; j < multi_rows[i].size(); j++) {
+						for (int k = 0; k < multi_rows[i][j].size(); k++) {
+							lines_type[multi_rows[i][j][k]] = 1;
 						}
 					}
 					//table_Rows.erase(table_Rows.begin()+i);
-					multi_Rows.erase(multi_Rows.begin() + i);
+					multi_rows.erase(multi_rows.begin() + i);
 					col_dims.erase(col_dims.begin() + i);
 				}
 			}
@@ -1124,12 +961,12 @@ namespace ocr_tabs {
 				col_dims[i][j - 1][1] = col_dims[i][j][0];
 			}
 		}
-		for (int i = 0; i < multi_Rows.size(); i++) {
+		for (int i = 0; i < multi_rows.size(); i++) {
 			vector<int*> dims;
-			for (int j = 0; j < multi_Rows[i].size(); j++) {
+			for (int j = 0; j < multi_rows[i].size(); j++) {
 				int* tmp = new int[2];
-				tmp[0] = Line_dims[multi_Rows[i][j][0]][0];
-				tmp[1] = Line_dims[multi_Rows[i][j][multi_Rows[i][j].size() - 1]][1];
+				tmp[0] = line_dims[multi_rows[i][j][0]][0];
+				tmp[1] = line_dims[multi_rows[i][j][multi_rows[i][j].size() - 1]][1];
 				dims.push_back(tmp);
 				if (j > 0) {
 					dims[j][0] = (dims[j][0] + dims[j - 1][1]) / 2;
@@ -1148,22 +985,22 @@ namespace ocr_tabs {
 	}
 
 	void OCRTabsEngine::DrawLines() {
-		drawingHandler::DrawLines(test, Lines, page_left, page_right, page_top, page_bottom, Line_dims);
+		drawingHandler::DrawLines(test, Lines, page_left, page_right, page_top, page_bottom, line_dims);
 	}
 
 	void OCRTabsEngine::DrawSegments() {
-		drawingHandler::DrawSegments(test, Lines, Lines_segments, Line_dims, boxes);
+		drawingHandler::DrawSegments(test, Lines, line_segments, line_dims, boxes);
 	}
 
 	void OCRTabsEngine::DrawAreas() {
-		drawingHandler::DrawAreas(test, table_area, Line_dims, page_left, page_right);
+		drawingHandler::DrawAreas(test, table_area, line_dims, page_left, page_right);
 	}
 
 	/**
 	 * Draw rows on a cv window
 	 */
 	void OCRTabsEngine::DrawRows() {
-		drawingHandler::DrawRows(test, multi_Rows, Line_dims, page_left, page_right);
+		drawingHandler::DrawRows(test, multi_rows, line_dims, page_left, page_right);
 	}
 
 	void OCRTabsEngine::DrawColsPartial() {
@@ -1171,11 +1008,11 @@ namespace ocr_tabs {
 	}
 
 	void OCRTabsEngine::DrawCols() {
-		drawingHandler::DrawCols(test, boxes, tmp_col, table_Columns);
+		drawingHandler::DrawCols(test, boxes, tmp_col, table_columns);
 	}
 
 	void OCRTabsEngine::DrawGrid() {
-		drawingHandler::DrawGrid(test, boxes, row_dims, col_dims, multi_Rows, Lines_segments);
+		drawingHandler::DrawGrid(test, boxes, row_dims, col_dims, multi_rows, line_segments);
 	}
 
 	void OCRTabsEngine::DrawGridlessImage() {
@@ -1422,11 +1259,11 @@ namespace ocr_tabs {
 		if (file.is_open()) {
 			file << "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<html>\n<body>\n";
 			file << "<p>\n";
-			for (int x = 0; x < Lines_segments.size(); x++) {
-				if (Lines_type[x] != 2) {
-					for (int j = 0; j < Lines_segments[x].size(); j++) {
-						for (int k = 0; k < Lines_segments[x][j].size(); k++) {
-							file << font[Lines_segments[x][j][k]][0] << words[Lines_segments[x][j][k]] << " " << font[Lines_segments[x][j][k]][1];
+			for (int x = 0; x < line_segments.size(); x++) {
+				if (lines_type[x] != 2) {
+					for (int j = 0; j < line_segments[x].size(); j++) {
+						for (int k = 0; k < line_segments[x][j].size(); k++) {
+							file << font[line_segments[x][j][k]][0] << words[line_segments[x][j][k]] << " " << font[line_segments[x][j][k]][1];
 						}
 					}
 					file << "<br>";
@@ -1434,30 +1271,30 @@ namespace ocr_tabs {
 				else {
 					file << "\n</p>\n";
 					file << "<table border=\"1\">\n";
-					for (int i = 0; i < multi_Rows[table_num].size(); i++) {
+					for (int i = 0; i < multi_rows[table_num].size(); i++) {
 						file << "<tr>\n";
 						vector<vector<vector<int>>> col_tmp;
-						for (int j = 0; j < table_Columns[table_num].size(); j++) {
+						for (int j = 0; j < table_columns[table_num].size(); j++) {
 							vector<vector<int>> ctmp;
 							col_tmp.push_back(ctmp);
 						}
-						for (int j = 0; j < multi_Rows[table_num][i].size(); j++) {
-							for (int k = 0; k < Lines_segments[multi_Rows[table_num][i][j]].size(); k++) {
-								for (int s = 0; s < table_Columns[table_num].size(); s++) {
-									if (std::find(table_Columns[table_num][s].begin(), table_Columns[table_num][s].end(), Lines_segments[multi_Rows[table_num][i][j]][k]) != table_Columns[table_num][s].end()) {
-										col_tmp[s].push_back(Lines_segments[multi_Rows[table_num][i][j]][k]);
+						for (int j = 0; j < multi_rows[table_num][i].size(); j++) {
+							for (int k = 0; k < line_segments[multi_rows[table_num][i][j]].size(); k++) {
+								for (int s = 0; s < table_columns[table_num].size(); s++) {
+									if (std::find(table_columns[table_num][s].begin(), table_columns[table_num][s].end(), line_segments[multi_rows[table_num][i][j]][k]) != table_columns[table_num][s].end()) {
+										col_tmp[s].push_back(line_segments[multi_rows[table_num][i][j]][k]);
 									}
 								}
 							}
 						}
-						for (int j = 0; j < table_Columns[table_num].size(); j++) {
+						for (int j = 0; j < table_columns[table_num].size(); j++) {
 							file << "<td";
 							int colspan = 1;
 							if (col_tmp[j].size() == 0) {
 								file << ">";
 							}
 							else {
-								for (int h = j + 1; h < table_Columns[table_num].size(); h++) {
+								for (int h = j + 1; h < table_columns[table_num].size(); h++) {
 									if (col_tmp[h].size() != 0) {
 										for (int aa = 0; aa < col_tmp[j].size(); aa++) {
 											if (std::find(col_tmp[h].begin(), col_tmp[h].end(), col_tmp[j][aa]) != col_tmp[h].end()) {
@@ -1495,7 +1332,7 @@ namespace ocr_tabs {
 						file << "</tr>\n";
 					}
 					file << "</table>\n<p>\n";
-					while (Lines_type[x] == 2) { x++; }
+					while (lines_type[x] == 2) { x++; }
 					x--;
 					table_num++;
 				}
@@ -1577,7 +1414,7 @@ namespace ocr_tabs {
 	}
 
 	bool OCRTabsEngine::pdf2html(const std::string& filename) {
-		resetAll();
+		resetAll();		
 		std::vector<cv::Mat> pages;
 		if (!parsePDF(filename, pages)) return false;
 		if (pages.size() == 1) //if (pages.size()!=1)
@@ -1606,7 +1443,8 @@ namespace ocr_tabs {
 		TableRows();
 		TableColumns(); ////
 		if (fail_condition()) {
-			std::cout << "\nfailCondition\n";
+			std::cout << "\nfailCondition\n" << std::endl; 
+			std::cout << fail_msg << std::endl;
 			return false;
 		}
 		TableMultiRows();
@@ -1635,7 +1473,7 @@ namespace ocr_tabs {
 		TableRows();
 		TableColumns(); ////
 		if (fail_condition()) {
-			cout << "\nfailCondition\n";
+			std::cout << "\nfailCondition: " << fail_msg << std::endl;
 			return false;
 		}
 		TableMultiRows();
@@ -1656,11 +1494,11 @@ namespace ocr_tabs {
 		boxes.clear();
 		Lines.clear();
 		table_area.clear();
-		table_Rows.clear();
-		multi_Rows.clear();
-		Line_dims.clear();
-		Lines_segments.clear();
-		table_Columns.clear();
+		table_rows.clear();
+		multi_rows.clear();
+		line_dims.clear();
+		line_segments.clear();
+		table_columns.clear();
 		col_dims.clear();
 		row_dims.clear();
 		tmp_col.clear();
@@ -1670,7 +1508,7 @@ namespace ocr_tabs {
 		italic.clear();
 		underscore.clear();
 		font_size.clear();
-		if (Lines_type != NULL) delete Lines_type;
+		if (lines_type != NULL) delete lines_type;
 		words_.clear();
 		Lines_.clear();
 		boxes_.clear();
@@ -1853,12 +1691,12 @@ namespace ocr_tabs {
 	}
 
 	/**
-	 * @brief Removes possible figures
+	 * @brief Removes possible figures.
 	 * Search for word "figure". When found check the words above. if the previous 4 words are not "in dictionary", 
 	 * then they are part of images that have been recognised as text, and they are removed. 
 	 * The line with the word "figure" is also removed as it is probably a caption of the figure.
 	 */
-	void OCRTabsEngine::removeFigures() {
+	void OCRTabsEngine::RemoveFigures() {
 		for (int i = boxes.size() - 1; i >= 0; i--) {
 			string tmp = words[i];
 			std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
@@ -1894,6 +1732,203 @@ namespace ocr_tabs {
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * @brief Process generated columns.
+	 * Remove, merge etc
+	 */
+	void OCRTabsEngine::ProcessGeneratedColumns() {
+		if (!fail) {
+			// remove empty columns
+			for (int i = 0; i < table_columns.size(); i++) {
+				for (int j = 0; j < table_columns[i].size(); j++) {
+					if (table_columns[i][j].size() == 0) {
+						table_columns[i].erase(table_columns[i].begin() + j);
+						j--;
+					}
+				}
+			}
+
+			// If we find a column where the unique segments  (segments that are assigned to only one column)
+			// are less than the multiple segemnts (segments assigned to more than 1 column), we merge this column with
+			// the immediatelly previous one
+			for (int i = 0; i < table_columns.size(); i++) {
+				for (int j = 1; j < table_columns[i].size(); j++) {
+					int counter_single = 0;
+					int counter_multi = 0;
+					for (int k = 0; k < table_columns[i][j].size(); k++) {
+						bool multi = false;
+						if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) != table_columns[i][j - 1].end()) {
+							multi = true;
+						}
+						if (multi) {
+							counter_multi++;
+						}
+						else {
+							counter_single++;
+						}
+					}
+					if (counter_multi >= 1 * counter_single) {
+						for (int k = 0; k < table_columns[i][j].size(); k++) {
+							bool multi = false;
+							if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) != table_columns[i][j - 1].end()) {
+								multi = true;
+							}
+							if (!multi) { table_columns[i][j - 1].push_back(table_columns[i][j][k]); }
+						}
+						table_columns[i].erase(table_columns[i].begin() + j);
+						j--;
+					}
+				}
+			}
+
+			// Type-3 lines that are in the end of a table, and their single segment is assigned to more than one columns,
+			// are removed from the table
+			for (int i = 0; i < table_rows.size(); i++) {
+				for (int j = table_rows[i].size() - 1; j >= 0; j--) {
+					//cout << table_Rows[0].size()<<"     "<<table_Rows[1].size()<<"\n";
+					//cout << i<<"     "<<j<<"\n";
+					if (lines_type[table_rows[i][j]] == LineType::UNKNOWN) {
+						vector<int> xcol;
+						for (int k = 0; k < table_columns[i].size(); k++) {
+							if (table_columns[i][k].size() > 0) {
+								if (line_segments[table_rows[i][j]][0] == table_columns[i][k][table_columns[i][k].size() - 1]) {
+									xcol.push_back(k);
+								}
+							}
+						}
+						if (xcol.size() > 1) {
+							lines_type[table_rows[i][j]] = LineType::TEXT;
+							table_rows[i].erase(table_rows[i].begin() + j);
+							for (int k = 0; k < xcol.size(); k++) {
+								table_columns[i][xcol[k]].erase(table_columns[i][xcol[k]].begin() + table_columns[i][xcol[k]].size() - 1);
+							}
+						} else {
+							j = -1;
+						}
+					} else {
+						j = -1;
+					}
+				}
+			}
+
+			//If a column has only one segment, which is on the 1st row (possibly missaligned table header) and the column on its left doesnot have a segment
+			// in the same row, then merge these columns
+			for (int i = 0; i < table_columns.size(); i++) {
+				for (int j = 1; j < table_columns[i].size(); j++) {
+					if (table_columns[i][j].size() == 1) {
+						bool found1 = false;
+						bool found2 = false;
+						if (std::find(line_segments[table_rows[i][0]].begin(), line_segments[table_rows[i][0]].end(), table_columns[i][j][0]) != line_segments[table_rows[i][0]].end()) {
+							found1 = true;
+						}
+						if (std::find(line_segments[table_rows[i][0]].begin(), line_segments[table_rows[i][0]].end(), table_columns[i][j - 1][0]) != line_segments[table_rows[i][0]].end()) {
+							found2 = true;
+						}
+						if ((found1) && (!found2)) {
+							for (int k = 0; k < table_columns[i][j - 1].size(); k++) {
+								table_columns[i][j].push_back(table_columns[i][j - 1][k]);
+							}
+							table_columns[i].erase(table_columns[i].begin() + j - 1);
+						}
+					}
+				}
+			}
+
+			// Tables that end up having only one column, are discarded and treated as simple text
+			for (int i = table_columns.size() - 1; i >= 0; i--) {
+				if (table_columns[i].size() < 2) {
+					table_columns.erase(table_columns.begin() + i);
+					for (int j = 0; j < table_rows[i].size(); j++) {
+						lines_type[table_rows[i][j]] = LineType::TEXT;
+					}
+					table_rows.erase(table_rows.begin() + i);
+				}
+			}
+
+			//Check and remove scrambled tables i.e tables that seem to have a table format but in reality are random segments generated by
+			// big white spaces bwtween words (justified text aligment)
+
+			//bool scrambled_table=false;
+			//int scramLim = 0;
+			//for (int i=table_Columns.size()-1;i>=0;i--)
+			//{
+			//	if (scrambled_table)
+			//	{	
+			//		table_Columns.erase(table_Columns.begin()+i+1);
+			//		for (int k=0;k<table_Rows[i+1].size();k++)
+			//		{
+			//			Lines_type[table_Rows[i+1][k]]=1;
+			//		}
+			//		table_Rows.erase(table_Rows.begin()+i+1);
+			//	}
+			//	scrambled_table=false;
+			//	for (int j=0;j<table_Columns[i].size();j++)
+			//	{
+			//		bool scrambled_col=false;
+			//		for (int k=0;k<table_Columns[i][j].size()-1;k++)
+			//		{
+			//			int left1=boxes[table_Columns[i][j][k][0]][0];
+			//			int left2=boxes[table_Columns[i][j][k+1][0]][0];
+			//			int right1=boxes[table_Columns[i][j][k][table_Columns[i][j][k].size()-1]][2];
+			//			int right2=boxes[table_Columns[i][j][k+1][table_Columns[i][j][k+1].size()-1]][2];	
+			//			if ((abs(left1-left2)<=scramLim)||(abs(right1-right2)<=scramLim))
+			//			{
+			//				scrambled_col=true;
+			//			}
+			//			if (k<table_Columns[i][j].size()-2){
+			//			left2=boxes[table_Columns[i][j][k+2][0]][0];
+			//			right2=boxes[table_Columns[i][j][k+2][table_Columns[i][j][k+2].size()-1]][2];	
+			//			if ((abs(left1-left2)<=scramLim)||(abs(right1-right2)<=scramLim))
+			//			{
+			//				scrambled_col=true;
+			//			}
+			//			}
+			//		}
+			//		if (!scrambled_col)
+			//		{
+			//			scrambled_table=true;
+			//			j=table_Columns[i].size();
+			//		}
+			//	}
+			//}
+			//if (scrambled_table)
+			//{	
+			//	table_Columns.erase(table_Columns.begin()+0);
+			//	for (int k=0;k<table_Rows[0].size();k++)
+			//	{
+			//		Lines_type[table_Rows[0][k]]=1;
+			//	}
+			//	table_Rows.erase(table_Rows.begin()+0);
+			//}
+
+			//If all the columns of a table (besides the 1st one) have more empty cells than cells with data then
+			//this table is discarded (simple formatted text)
+			for (int i = table_columns.size() - 1; i >= 0; i--) {
+				bool almost_empty = false;
+				for (int j = 1; j < table_columns[i].size(); j++) {
+					if (table_columns[i][j].size() < table_rows[i].size() / 2) {
+						almost_empty = true;
+					}
+					else {
+						almost_empty = false;
+						j = table_columns[i].size();
+					}
+				}
+				if (almost_empty) {
+					table_columns.erase(table_columns.begin() + i);
+					for (int k = 0; k < table_rows[i].size(); k++) {
+						lines_type[table_rows[i][k]] = LineType::TEXT;
+					}
+					table_rows.erase(table_rows.begin() + i);
+				}
+			}
+
+			//duration = (std::clock() - start) / CLOCKS_PER_SEC;
+			//std::cout << " Done in " << duration << "s \n";
+			std::cout << " Done in " << aux::endClock() << "s \n";
 		}
 	}
 }

@@ -73,11 +73,11 @@ namespace ocr_tabs {
 		clock_t start;
 		double duration;
 		std::vector<char*> words;
-		std::vector<std::vector<int>> boxes, Lines, table_area, table_Rows;
-		std::vector<std::vector<std::vector<int>>> multi_Rows;
-		std::vector<int*> Line_dims;
-		std::vector<std::vector<std::vector<int>>> Lines_segments;
-		std::vector<std::vector<std::vector<std::vector<int>>>> table_Columns;
+		std::vector<std::vector<int>> boxes, Lines, table_area, table_rows;
+		std::vector<std::vector<std::vector<int>>> multi_rows;
+		std::vector<int*> line_dims;
+		std::vector<std::vector<std::vector<int>>> line_segments;
+		std::vector<std::vector<std::vector<std::vector<int>>>> table_columns;
 		std::vector<std::vector<int*>> col_dims, row_dims;
 		std::vector<std::vector<std::vector<int>>> tmp_col;
 		std::vector<float> confs;
@@ -87,7 +87,7 @@ namespace ocr_tabs {
 		std::vector<bool> underscore;
 		std::vector<int> font_size;
 		int page_left, page_right, page_top, page_bottom;
-		int* Lines_type;
+		int* lines_type;
 		std::vector<std::vector<char*>> words_;
 		std::vector<std::vector<std::vector<int>>> Lines_;
 		std::vector<std::vector<std::vector<int>>> boxes_;
@@ -99,8 +99,10 @@ namespace ocr_tabs {
 		std::vector<std::vector<bool>> underscore_;
 		std::vector<int> page_height, page_width;
 		bool fail;
+		std::string fail_msg;
 
-		void removeFigures();
+		void RemoveFigures();
+		void ProcessGeneratedColumns();
 
 		enum BoxSide {
 			bLeft=0,
