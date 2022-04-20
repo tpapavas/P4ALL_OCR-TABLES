@@ -771,6 +771,7 @@ namespace ocr_tabs {
 	void OCRTabsEngine::TableMultiRows() {
 		cout << "Find table multiple-rows...";
 		aux::startClock();
+
 		// if a table line does not have a segment in the first column, and there is one-to-one column correspondence 
 		// with the line above it, 
 		// it is merged with the one above it
@@ -831,8 +832,8 @@ namespace ocr_tabs {
 			// right than the segment of the first line THEN these two lines are merged together
 			for (int j = 0; j < multi_rows[i].size() - 1; j++) {
 				if ((multi_rows[i][j].size() == 1) &&
-					(lines_type[multi_rows[i][j][0]] == 3) && (line_segments[multi_rows[i][j][0]].size() == 1) &&
-					(lines_type[multi_rows[i][j + 1][0]] == 2)) {
+					(lines_type[multi_rows[i][j][0]] == LineType::UNKNOWN) && (line_segments[multi_rows[i][j][0]].size() == 1) &&
+					(lines_type[multi_rows[i][j + 1][0]] == LineType::TABLE)) {
 					bool found1 = false;
 					bool found2 = false;
 					if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[multi_rows[i][j][0]][0]) != table_columns[i][0].end()) {
@@ -856,7 +857,7 @@ namespace ocr_tabs {
 			if ((multi_rows[i][multi_rows[i].size() - 1].size() == 1) &&
 				(lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] == 3) && (line_segments[multi_rows[i][multi_rows[i].size() - 1][0]].size() == 1) &&
 				(line_segments[multi_rows[i][multi_rows[i].size() - 1][0]][0] == table_columns[i][0][table_columns[i][0].size() - 1])) {
-				lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] = 1;
+				lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] = LineType::TEXT;
 				multi_rows[i].erase(multi_rows[i].begin() + multi_rows[i].size() - 1);
 				table_columns[i][0].erase(table_columns[i][0].begin() + table_columns[i][0].size() - 1);
 			}
@@ -864,7 +865,7 @@ namespace ocr_tabs {
 			//Finalize Line Types. Change all Lines within the table to type-2
 			for (int j = 0; j < multi_rows[i].size(); j++) {
 				for (int k = 0; k < multi_rows[i][j].size(); k++) {
-					lines_type[multi_rows[i][j][k]] = 2;
+					lines_type[multi_rows[i][j][k]] = LineType::TABLE;
 				}
 			}
 		}
@@ -872,12 +873,12 @@ namespace ocr_tabs {
 		//Recheck and discard single and double row tables 
 		for (int i = multi_rows.size() - 1; i >= 0; i--) {
 			if ((multi_rows[i].size() < 2) && (multi_rows[i][0].size() < 2 || table_columns[i][0].size() < 2)) {
-				for (unsigned s = 0; s < multi_rows[i][0].size(); s++) { lines_type[multi_rows[i][0][s]] = 1; }
+				for (unsigned s = 0; s < multi_rows[i][0].size(); s++) { lines_type[multi_rows[i][0][s]] = LineType::TEXT; }
 				multi_rows.erase(multi_rows.begin() + i);
 				table_columns.erase(table_columns.begin() + i);
 			} else if ((multi_rows[i].size() < 3) && (multi_rows[i][0].size() < 2) && (multi_rows[i][1].size() < 2)) {
-				for (unsigned s = 0; s < multi_rows[i][0].size(); s++) { lines_type[multi_rows[i][0][s]] = 1; }
-				for (unsigned s = 0; s < multi_rows[i][1].size(); s++) { lines_type[multi_rows[i][1][s]] = 1; }
+				for (unsigned s = 0; s < multi_rows[i][0].size(); s++) { lines_type[multi_rows[i][0][s]] = LineType::TEXT; }
+				for (unsigned s = 0; s < multi_rows[i][1].size(); s++) { lines_type[multi_rows[i][1][s]] = LineType::TEXT; }
 				multi_rows.erase(multi_rows.begin() + i);
 				table_columns.erase(table_columns.begin() + i);
 			}
@@ -955,6 +956,7 @@ namespace ocr_tabs {
 	void OCRTabsEngine::FinalizeGrid() {
 		std::cout << "Finalize grid...";
 		aux::startClock();
+
 		for (int i = 0; i < col_dims.size(); i++) {
 			for (int j = 1; j < col_dims[i].size(); j++) {
 				col_dims[i][j][0] = (col_dims[i][j][0] + col_dims[i][j - 1][1]) / 2;
@@ -1549,7 +1551,7 @@ namespace ocr_tabs {
 			//fz_transform_rect(&bounds, &transform);
 			fz_irect bbox = fz_round_rect(bounds);
 			//fz_round_rect(&bbox, &bounds);
-			fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), bbox, NULL, 0);
+			fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), bbox, NULL, 1);
 			//fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), bbox);
 			fz_clear_pixmap_with_value(ctx, pix, 0xff);
 			//fz_device* dev = fz_new_draw_device(ctx, pix);

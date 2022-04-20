@@ -424,6 +424,7 @@ bool imgProcessor::pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat) {
 	uchar* data = mat.data;
 
 	for (unsigned i = 0; i < (*fzpxmap)->h; i++) {
+		cout << i << ", ";
 		unsigned idxMat = i * mat.cols;
 		unsigned idxPixmap = i * 4 * mat.cols;
 		for (unsigned j = 0; j < (*fzpxmap)->w; j++) {
