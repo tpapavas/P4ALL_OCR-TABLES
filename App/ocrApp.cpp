@@ -39,7 +39,7 @@ bool ocrApp::loadBt()
 	{
 		ui.browserDeb->append ("Processing PDF file, please wait\n");
 		QApplication::processEvents();
-		if (tab->pdf2html(filename.toStdString()) == false)
+		if (tab->doc2html(ocr_tabs::PDF, filename.toStdString(), "", false) == false)
 		{
 			ui.browserDeb->append ("Error - file processing failed\n");
 			return false;
@@ -56,7 +56,7 @@ bool ocrApp::loadBt()
 	{
 		ui.browserDeb->append ("Processing IMG file, please wait\n");
 		QApplication::processEvents();
-		if (tab->img2html(filename.toStdString()) == false)
+		if (tab->doc2html(ocr_tabs::IMG, filename.toStdString(), "", false) == false)
 		{
 			ui.browserDeb->append ("Error - file processing failed\n");
 			return false;

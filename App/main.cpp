@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 		//filename = currentPath + "\\" + filename;	//get path to input file "<path-to-project>\\<relative-path-to-file>"
 
 		ocr_tabs::OCRTabsEngine tab;
-		if (((filename.find(".pdf")!=std::string::npos) && (tab.pdf2html(filename))) ||  tab.img2html(filename) ) return 1;
+		if (((filename.find(".pdf")!=std::string::npos) && (tab.doc2html(ocr_tabs::PDF, filename, "", false))) ||  tab.doc2html(ocr_tabs::IMG, filename, "", false)) return 1;
 		else return -1;
 	}
 	return 0;

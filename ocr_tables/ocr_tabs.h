@@ -17,6 +17,11 @@
 
 //class ocr_tabs
 namespace ocr_tabs {
+	enum FileType {
+		IMG = 0,
+		PDF = 1
+	};
+
 	class OCRTabsEngine {
 	public:
 		OCRTABS_API OCRTabsEngine();
@@ -58,10 +63,11 @@ namespace ocr_tabs {
 		bool ImagePreproccesing_withXML(const std::string& fileXML, std::vector<cv::Mat>& imageRAW, std::vector<cv::Mat>& imageCLN);
 
 		bool fail_condition();
-		bool OCRTABS_API pdf2html(const std::string& filename);
-		bool OCRTABS_API img2html(const std::string& filename);
-		bool OCRTABS_API pdf2html_withXML(const std::string& filename, const std::string& filenameXML);
-		bool OCRTABS_API img2html_withXML(const std::string& filename, const std::string& filenameXML);
+		//bool OCRTABS_API pdf2html(const std::string& filename, const std::string& filenameXML, bool withXML);
+		//bool OCRTABS_API img2html(const std::string& filename, const std::string& filenameXML, bool withXML);
+		//bool OCRTABS_API pdf2html_withXML(const std::string& filename, const std::string& filenameXML);
+		//bool OCRTABS_API img2html_withXML(const std::string& filename, const std::string& filenameXML);
+		bool OCRTABS_API doc2html(FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML);
 		bool parsePDF(const std::string& filename, std::vector<cv::Mat>& imageList);
 		void resetAll();
 
@@ -114,5 +120,6 @@ namespace ocr_tabs {
 			TABLE=2,
 			UNKNOWN=3
 		};
+
 	};
 }

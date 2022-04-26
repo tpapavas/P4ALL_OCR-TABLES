@@ -49,8 +49,6 @@ namespace ocr_tabs {
 		//RemoveGridLines();
 		page_height.push_back(test.size().height);
 		page_width.push_back(test.size().width);
-		OCR_Recognize();
-		BoxesAndWords();
 
 		for (int i = 0; i < boxes.size(); i++) {
 			vector<int> tmp;
@@ -348,8 +346,7 @@ namespace ocr_tabs {
 					if ((i != 0) && (header_limit[i] < k)) {
 						header_limit[i] = k;
 					}	
-				}
-				else {
+				} else {
 					k = std::min(lines_[i].size(), lines_[i + 1].size());
 				}
 			}
@@ -1422,27 +1419,100 @@ namespace ocr_tabs {
 		return fail; 
 	}
 
-	bool OCRTabsEngine::pdf2html(const std::string& filename) {
-		resetAll();		
-		std::vector<cv::Mat> pages;
-		if (!parsePDF(filename, pages)) return false;
-		if (pages.size() == 1) /*if (pages.size() != 1)*/ {
-			test = ImagePreproccesing(pages[0]);
-			SetImage(test);
+	bool OCRTABS_API OCRTabsEngine::doc2html(FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML) {
+		resetAll();
+		std::vector<cv::Mat> pages, pages_clean;
+		//std::vector<cv::Mat> imageList, imageClean;
+		switch (filetype) {
+			case FileType::PDF:
+				if (!parsePDF(filename, pages)) return false;
+				break;
+
+			case FileType::IMG:
+				pages.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE	
+				if (pages[0].empty()) { cout << "File not available" << endl; return false; }
+				break;
+
+			default:
+				return false;
+		}
+		if (withXML) {
+			//// NOT WORKING ////
+			if (!ImagePreproccesing_withXML(filenameXML, pages, pages_clean)) { cout << "Preprocessing with XML failed" << endl; return false; }
+			pages.clear();
+			pages = pages_clean;  //not sure about that copying
+		}
+		for (int i = 0; i < pages.size(); i++) {
+			Mat tmp = ImagePreproccesing(pages[i]);
+			SetImage(tmp);
 			//RemoveGridLines();
 			OCR_Recognize();
 			BoxesAndWords();
-			TextBoundaries();
-		} else {
-			for (int i = 0; i < pages.size(); i++) {
-				Mat tmp = ImagePreproccesing(pages[i]);
-				SetImage(tmp);
-				//RemoveGridLines();
-				PrepareMulti1();
-			}
-			HeadersFooters();
-			PrepareMulti2();
+			PrepareMulti1();
 		}
+		HeadersFooters();
+		PrepareMulti2();
+		//TextBoundaries(); ////maybe is needed here////
+		TextLines();
+		LineSegments();
+		LineTypes();
+		TableAreas();
+		TableRows();
+		TableColumns(); ////
+		if (fail_condition()) {
+			std::cout << std::endl << "failCondition: " << fail_msg << std::endl;
+			return false;
+		}
+		TableMultiRows();
+		ColumnSize();	 ////
+		FinalizeGrid(); ////
+		std::string outputFilename = filename;
+		outputFilename.append(withXML ? "XML.html" : ".html");
+		WriteHTML(outputFilename);
+
+		return true;
+	}
+
+	/* bool OCRTabsEngine::pdf2html(const std::string& filename, const std::string& filenameXML, bool withXML) {
+		resetAll();
+		std::vector<cv::Mat> pages, pages_clean;
+		if (!parsePDF(filename, pages)) return false;
+		if (withXML) {
+			//// NOT WORKING ////
+			if (!ImagePreproccesing_withXML(filenameXML, pages, pages_clean)) { cout << "Preprocessing with XML failed\n"; return false; }
+			pages.clear();
+			pages = pages_clean;  //not sure about that copying
+		}
+		// if (pages.size() == 1) {
+		//	test = ImagePreproccesing(pages[0]);
+		//	SetImage(test);
+		//	//RemoveGridLines();
+		//	OCR_Recognize();
+		//	BoxesAndWords();
+		//	TextBoundaries();
+		//} else {
+		//	for (int i = 0; i < pages.size(); i++) {
+		//		Mat tmp = ImagePreproccesing(pages[i]);
+		//		SetImage(tmp);
+		//		//RemoveGridLines();
+		//		OCR_Recognize();
+		//		BoxesAndWords();
+		//		PrepareMulti1();
+		//	}
+		//	HeadersFooters();
+		//	PrepareMulti2();
+		//}
+		for (int i = 0; i < pages.size(); i++) {
+			Mat tmp = ImagePreproccesing(pages[i]);
+			SetImage(tmp);
+			//RemoveGridLines();
+			OCR_Recognize();
+			BoxesAndWords();
+			PrepareMulti1();
+		}
+		HeadersFooters();
+		PrepareMulti2();
+
 		TextLines();
 		LineSegments();
 		LineTypes();
@@ -1457,17 +1527,25 @@ namespace ocr_tabs {
 		ColumnSize();	 ////
 		FinalizeGrid(); ////
 		std::string outputFilename = filename;
-		outputFilename.append(".html");
+		outputFilename.append(withXML ? "XML.html" : ".html");
 		WriteHTML(outputFilename);
 
 		return true;
-	}
+	} */
 
-	bool OCRTabsEngine::img2html(const std::string& filename) {
+	/* bool OCRTabsEngine::img2html(const std::string& filename, const std::string& filenameXML, bool withXML) {
 		resetAll();
-		Mat test = imread(filename, IMREAD_GRAYSCALE);
-		if (test.empty()) { cout << "File not available\n"; return false; }
-		test = ImagePreproccesing(test);
+		//Mat test = imread(filename, IMREAD_GRAYSCALE);
+		//if (test.empty()) { cout << "File not available\n"; return false; }
+		std::vector<cv::Mat> imageList, imageClean;
+		imageList.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE
+		if (imageList[0].empty()) { cout << "File not available" << endl; return false; }
+		if (withXML) {
+			if (!ImagePreproccesing_withXML(filenameXML, imageList, imageClean)) { cout << "Preprocessing with XML failed\n"; return false; }
+			imageList.clear();
+			imageList = imageClean;  //not sure it's working.
+		}
+		Mat test = ImagePreproccesing(imageList[0]);
 		SetImage(test);
 		//RemoveGridLines();
 		OCR_Recognize();
@@ -1487,11 +1565,11 @@ namespace ocr_tabs {
 		ColumnSize();	 ////
 		FinalizeGrid(); ////
 		std::string outputFilename = filename;
-		outputFilename.append(".html");
+		outputFilename.append(withXML ? "XML.html" : ".html");
 		WriteHTML(outputFilename);
 
 		return true;
-	}
+	} */
 
 	// Resets everything
 	void OCRTabsEngine::resetAll() {
@@ -1587,6 +1665,7 @@ namespace ocr_tabs {
 			std::string str;
 			while (std::getline(file, str)) {
 				if (resiz == -1) {
+					cout << "here" << endl;
 					std::size_t foundW = str.find("<page width=");
 					if (foundW != std::string::npos) {
 						resiz = (float)imageRAW[i].cols / std::stoi(str.substr(foundW + 13, str.find("height=") - 2 - foundW - 13));
@@ -1594,6 +1673,7 @@ namespace ocr_tabs {
 					}
 				}
 				else if (str.find("<line baseline") != std::string::npos && inText) {
+					cout << "not here" << endl;
 					std::size_t found_l = str.find(" l=\"");
 					std::size_t found_t = str.find(" t=\"");
 					std::size_t found_r = str.find(" r=\"");
@@ -1606,14 +1686,14 @@ namespace ocr_tabs {
 					int bottom = std::stoi(str.substr(found_b + 4, found_f - found_b - 4));
 
 					mask(cv::Rect(left, top, right - left, bottom - top)).setTo(1);
-				}
-				else if (str.find("<block blockType=\"Text") != std::string::npos || str.find("<block blockType=\"Table") != std::string::npos) {
+				} else if (str.find("<block blockType=\"Text") != std::string::npos || str.find("<block blockType=\"Table") != std::string::npos) {
+					cout << "not here" << endl;
 					inText = true;
-				}
-				else if (str.find("</block>") != std::string::npos) {
+				} else if (str.find("</block>") != std::string::npos) {
+					cout << "not here" << endl;
 					inText = false;
-				}
-				else if (str.find("</page>") != std::string::npos) {
+				} else if (str.find("</page>") != std::string::npos) {
+					cout << "not here" << endl;
 					cv::resize(mask, mask, imageRAW[i].size());
 					imageRAW[i].copyTo(imageCLN[i], mask);
 
@@ -1628,19 +1708,19 @@ namespace ocr_tabs {
 		return true;
 	}
 
-	bool OCRTabsEngine::pdf2html_withXML(const std::string& filename, const std::string& filenameXML) {
+	/* bool OCRTabsEngine::pdf2html_withXML(const std::string& filename, const std::string& filenameXML) {
 		resetAll();
 		std::vector<cv::Mat> pages, pages_clean;
 		if (!parsePDF(filename, pages)) return false;
 		if (!ImagePreproccesing_withXML(filenameXML, pages, pages_clean)) { cout << "Preprocessing with XML failed\n"; return false; }
 		if (pages.size() == 1) {
+			cout << "in here " << endl;
 			SetImage(pages_clean[0]);
 			//RemoveGridLines();
 			OCR_Recognize();
 			BoxesAndWords();
 			TextBoundaries();
-		}
-		else {
+		} else {
 			for (int i = 0; i < pages.size(); i++) {
 				SetImage(pages_clean[i]);
 				//RemoveGridLines();
@@ -1666,9 +1746,9 @@ namespace ocr_tabs {
 		outputFilename.append("XML.html");
 		WriteHTML(outputFilename);
 		return true;
-	}
+	} */
 
-	bool OCRTabsEngine::img2html_withXML(const std::string& filename, const std::string& filenameXML) {
+	/* bool OCRTabsEngine::img2html_withXML(const std::string& filename, const std::string& filenameXML) {
 		resetAll();
 		std::vector<cv::Mat> imageList, imageClean;
 		imageList.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE	
@@ -1695,7 +1775,7 @@ namespace ocr_tabs {
 		outputFilename.append("XML.html");
 		WriteHTML(outputFilename);
 		return true;
-	}
+	} */
 
 	/**
 	 * @brief Removes possible figures.

@@ -27,7 +27,7 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 <tr>
 <td>BSEG </td>
 <td>Accounting Document Segment </td>
-<td>BUKRS / BELNR / GJAHR / BUZEI </td>
+<td>BRUKRS / BELNR / GJAHR / BUZEI </td>
 </tr>
 <tr>
 <td>BSIP </td>
@@ -51,7 +51,7 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 </tr>
 <tr>
 <td>KLPA </td>
-<td>Customer / vendor Linking </td>
+<td>Customer / Vendor Linking </td>
 <td>NKULI / NBUKR / NKOAR / PNTYP <br>/ VKULI / VBUKR / VKOAR </td>
 </tr>
 <tr>
@@ -60,7 +60,7 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 <td>KUNNR / BUKRS </td>
 </tr>
 <tr>
-<td>KNBS </td>
+<td>KNB5 </td>
 <td>Customer Master Dunning Data </td>
 <td>KUNNR / BUKRS / MABER </td>
 </tr>
@@ -70,14 +70,18 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 <td>KUNNR / BANKS / BANKL / BANKN </td>
 </tr>
 <tr>
-<td>KNCl </td>
+<td>KNC1 </td>
 <td>Customer Master Transaction Figures </td>
-<td></td>
+<td>KUNNR / BUKRS / GJHAR </td>
+</tr>
+<tr>
+<td>KNC3 </td>
+<td colspan="2">Customer Master Special GL Transactions KUNNR / BUKRS / GJAHR / SHBKZ <br>Figures </td>
 </tr>
 <tr>
 <td>LFB5 </td>
 <td>Vendor Master Dunning Data </td>
-<td>LIFNR / BUKRS / MABER </td>
+<td>LIFNR / BUKRS / MARER </td>
 </tr>
 <tr>
 <td>LFBK </td>
@@ -85,9 +89,14 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 <td>LIFNR / BANKS / BANKL / BANKN </td>
 </tr>
 <tr>
-<td>LFCl </td>
+<td>LFC1 </td>
 <td>Vendor Master Transaction Figures </td>
-<td></td>
+<td>LIFNR / BUKRS / GJHAR </td>
+</tr>
+<tr>
+<td>LFC3 </td>
+<td>Vendor Master Special GL Transactions <br>Figures </td>
+<td>LIFNR / BUKRS / GJHAR / SHBKZ </td>
 </tr>
 <tr>
 <td>VBKPF </td>
@@ -99,28 +108,28 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 <td colspan="2">Financial Accounting General Services “Basis” </td>
 </tr>
 <tr>
-<td>KNBl </td>
-<td>Customer Master (Company Code) </td>
+<td>KNB1 </td>
+<td>Customer Master {Company Code) </td>
 <td>KUNNR / BUKRS </td>
 </tr>
 <tr>
-<td>LFAl </td>
-<td>Vendor Master (General Section) </td>
+<td>LFALl </td>
+<td>Vendor Master {(General Section) </td>
 <td>LIFNR </td>
 </tr>
 <tr>
-<td>LFBl </td>
-<td>Vendor Master (company Code Section) </td>
+<td>LFB1 </td>
+<td>Vendor Master {company Code Section)} </td>
 <td>LIFNR / BUKRS </td>
 </tr>
 <tr>
-<td>SKAl </td>
-<td>G/L Account Master (Chart of Accounts) </td>
+<td>SKALl </td>
+<td>G/L Account Master (Chart of Accounts} </td>
 <td>KTOPL / SAKNR </td>
 </tr>
 <tr>
 <td>SKAT </td>
-<td colspan="2">G/L Account Master (Chart of Accounts — SPRAS / KTOPL / SAKNR <br>Description) </td>
+<td colspan="2">G/L Account Master (Chart of Accounts - SPRAS / KTOPL / SAKNR <br>Description) </td>
 </tr>
 <tr>
 <td>MAHNS </td>
@@ -129,7 +138,7 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 </tr>
 <tr>
 <td>MHNK </td>
-<td>Dunning Data (Account Entries) </td>
+<td>Dunning Data (Account Entries} </td>
 <td>LAUFD / LAUFI / KOART / BUKRS / <br>KUNNR / LIFNR / CPDKY / SKNRZE / <br>SMABER / SMAHSK / BUSAB </td>
 </tr>
 <tr>
@@ -138,16 +147,16 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 </tr>
 <tr>
 <td>SKAS </td>
-<td colspan="2">G/L Account Master (Chart of Accounts — SPRAS / KTOPL / SAKNR / SCHLW <br>Key Word list) </td>
+<td colspan="2">G/L Account Master (Chart of Accounts - SPRAS / KTOPL / SAKNR / SCHLW <br>Key Word list} </td>
 </tr>
 <tr>
-<td>SKBl </td>
+<td>SKB1 </td>
 <td>G/L Account Master (Company Code) </td>
 <td>BUKRS / SAKNR </td>
 </tr>
 <tr>
-<td>FI—GL—GL (FBSC) </td>
-<td colspan="2">General Ledger Accounting: Basic <br>Functions — R/3 Customizing for G/L Accounts </td>
+<td>FI-GL-GL (FBSC} </td>
+<td colspan="2">General Ledger Accounting: Basic <br>Functions - R/3 Customizing for G/L Accounts </td>
 </tr>
 <tr>
 <td>FIGLREP </td>
@@ -161,16 +170,16 @@ Important Tables in SAP FI <br>Financial Accounting <br>
 </tr>
 <tr>
 <td>FI-GL-GL (FFE) </td>
-<td>General Ledger Accounting: Basic <br>Functions — Fast Data Entry </td>
+<td>General Ledger Accounting: Basic <br>Functions - Fast Data Entry </td>
 <td></td>
 </tr>
 <tr>
 <td>KOMU </td>
 <td>Account Assignment Templates for G/L <br>Account items </td>
-<td>KMNAM / KMZEI </td>
+<td>KMNAM / KMZET </td>
 </tr>
 <tr>
-<td>FI-AR-AR (FED) </td>
+<td>FI-AR-AR (FBD) </td>
 <td colspan="2">Accounts Receivable: Basic Functions - Customers </td>
 </tr>
 </table>
