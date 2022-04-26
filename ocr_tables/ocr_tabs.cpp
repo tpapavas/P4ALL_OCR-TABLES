@@ -31,8 +31,8 @@ namespace ocr_tabs {
 	}
 
 	/**
-	 * @brief Creates a Mat clone from input img (Mat)
-	 * @param img: img (Mat) to be cloned
+	 * @brief Sets the Mat img we will work on from input img (Mat)
+	 * @param img: img (Mat) to be copied
 	*/
 	void OCRTabsEngine::SetImage(Mat img) {
 		//test=ImgSeg(img);
@@ -42,7 +42,7 @@ namespace ocr_tabs {
 
 	/**
 	 * Each input image is OCRed, in order to extract words and bounding boxes
-	 * Then we check for similar lines on the top and bottom of the images 
+	 * Then, we check for similar lines on the top and bottom of the images 
 	 * in order to remove headers/footers
 	 */
 	void OCRTabsEngine::PrepareMulti1() {
@@ -57,21 +57,22 @@ namespace ocr_tabs {
 			tmp.push_back(i);
 			int j;
 			for (j = i + 1; j < boxes.size(); j++) {
-				if (((boxes[j-1][1] <= boxes[j][1]) && (boxes[j][1] <= boxes[j-1][3])) ||
-					((boxes[j][1] <= boxes[j-1][1]) && (boxes[j-1][1] <= boxes[j][3]))) {
+				// check for vertically-overlapping bboxes
+				if (((boxes[j-1][BOX_TOP] <= boxes[j][BOX_TOP]) && (boxes[j][BOX_TOP] <= boxes[j-1][BOX_BOTTOM])) ||
+					((boxes[j][BOX_TOP] <= boxes[j-1][BOX_TOP]) && (boxes[j-1][BOX_TOP] <= boxes[j][BOX_BOTTOM]))) { 
 					tmp.push_back(j);
 				} else {
 					break;
 				}
 			}
 			i = j - 1;
-			Lines.push_back(tmp);
+			lines.push_back(tmp);
 		}
 		
 		boxes_.push_back(boxes);
 		words_.push_back(words);
 		confs_.push_back(confs);
-		Lines_.push_back(Lines);
+		lines_.push_back(lines);
 		font_size_.push_back(font_size);
 		bold_.push_back(bold);
 		italic_.push_back(italic);
@@ -82,7 +83,7 @@ namespace ocr_tabs {
 		confs.clear();
 		boxes.clear();
 		words.clear();
-		Lines.clear();
+		lines.clear();
 		font_size.clear();
 		bold.clear();
 		italic.clear();
@@ -90,6 +91,10 @@ namespace ocr_tabs {
 		dict.clear();
 	}
 
+	/**
+	 * @brief Preprocessing for multiple pages
+	 * Concatenate pages (boxes, lines etc) as if there was one large page
+	 */
 	void OCRTabsEngine::PrepareMulti2() {
 		for (int i = 1; i < boxes_.size(); i++) {
 			int move = 0;
@@ -97,8 +102,8 @@ namespace ocr_tabs {
 				move=move+page_height[j];
 			}
 			for (int j=0;j<boxes_[i].size();j++) {
-				boxes_[i][j][1] = boxes_[i][j][1] + move;
-				boxes_[i][j][3] = boxes_[i][j][3] + move;
+				boxes_[i][j][BOX_TOP] = boxes_[i][j][BOX_TOP] + move;
+				boxes_[i][j][BOX_BOTTOM] = boxes_[i][j][BOX_BOTTOM] + move;
 			}
 		}
 
@@ -117,7 +122,7 @@ namespace ocr_tabs {
 		confs_.clear();
 		boxes_.clear();
 		words_.clear();
-		Lines_.clear();
+		lines_.clear();
 		font_size_.clear();
 		bold_.clear();
 		italic_.clear();
@@ -133,12 +138,13 @@ namespace ocr_tabs {
 		for (int i = 0; i < page_height.size(); i++) {
 			page_top = page_top + page_height[i];
 		}
-		for (int i=0;i<boxes.size();i++) {
-			if (boxes[i][0] <= page_left) { page_left = boxes[i][0]; }
-			if (boxes[i][1] <= page_top) { page_top = boxes[i][1]; }
-			if (boxes[i][2] >= page_right) { page_right = boxes[i][2]; }
-			if (boxes[i][3] >= page_bottom) { page_bottom = boxes[i][3]; }
+		for (int i = 0; i < boxes.size(); i++) {
+			if (boxes[i][BOX_LEFT] <= page_left) { page_left = boxes[i][BOX_LEFT]; }
+			if (boxes[i][BOX_TOP] <= page_top) { page_top = boxes[i][BOX_TOP]; }
+			if (boxes[i][BOX_RIGHT] >= page_right) { page_right = boxes[i][BOX_RIGHT]; }
+			if (boxes[i][BOX_BOTTOM] >= page_bottom) { page_bottom = boxes[i][BOX_BOTTOM]; }
 		}
+
 		std::cout << "\nPROCESSING OVERALL DOCUMENT\n\n";
 	}
 
@@ -267,10 +273,10 @@ namespace ocr_tabs {
 		page_top = test.size().height;
 
 		for (int i = 0; i < boxes.size(); i++) {
-			if (boxes[i][bLeft] <= page_left) { page_left = boxes[i][bLeft]; }
-			if (boxes[i][bTop] <= page_top) { page_top = boxes[i][bTop]; }
-			if (boxes[i][bRight] >= page_right) { page_right = boxes[i][bRight]; }
-			if (boxes[i][bBottom] >= page_bottom) { page_bottom = boxes[i][bBottom]; }
+			if (boxes[i][BOX_LEFT] <= page_left) { page_left = boxes[i][BOX_LEFT]; }
+			if (boxes[i][BOX_TOP] <= page_top) { page_top = boxes[i][BOX_TOP]; }
+			if (boxes[i][BOX_RIGHT] >= page_right) { page_right = boxes[i][BOX_RIGHT]; }
+			if (boxes[i][BOX_BOTTOM] >= page_bottom) { page_bottom = boxes[i][BOX_BOTTOM]; }
 		}
 
 		std::cout << " Done in " << aux::endClock() << "s \n";
@@ -286,25 +292,26 @@ namespace ocr_tabs {
 			tmp.push_back(i);
 			int j;
 			for (j = i + 1; j < boxes.size(); j++) {
-				if (((boxes[j - 1][bTop] <= boxes[j][bTop]) && (boxes[j][bTop] <= boxes[j - 1][bBottom])) ||
-					((boxes[j][bTop] <= boxes[j - 1][bTop]) && (boxes[j - 1][bTop] <= boxes[j][bBottom]))) {
+				// check vetically-overlapping bboxes
+				if (((boxes[j - 1][BOX_TOP] <= boxes[j][BOX_TOP]) && (boxes[j][BOX_TOP] <= boxes[j - 1][BOX_BOTTOM])) ||
+					((boxes[j][BOX_TOP] <= boxes[j - 1][BOX_TOP]) && (boxes[j - 1][BOX_TOP] <= boxes[j][BOX_BOTTOM]))) {
 					tmp.push_back(j);
 				} else {
 					break;
 				}
 			}
 			i = j - 1;
-			Lines.push_back(tmp);
+			lines.push_back(tmp);  //assign them to the same line
 		}
 
 		// Find line dimensions (top, bottom, left, right)
-		for (int i = 0; i < Lines.size(); i++) {
+		for (int i = 0; i < lines.size(); i++) {
 			int* tmp = new int[2];
 			tmp[0] = page_bottom;
 			tmp[1] = page_top;
-			for (int j = 0; j < Lines[i].size(); j++) {
-				if (boxes[Lines[i][j]][bTop] <= tmp[0]) { tmp[0] = boxes[Lines[i][j]][bTop]; }
-				if (boxes[Lines[i][j]][bBottom] >= tmp[1]) { tmp[1] = boxes[Lines[i][j]][bBottom]; }
+			for (int j = 0; j < lines[i].size(); j++) {
+				if (boxes[lines[i][j]][BOX_TOP] <= tmp[0]) { tmp[0] = boxes[lines[i][j]][BOX_TOP]; }
+				if (boxes[lines[i][j]][BOX_BOTTOM] >= tmp[1]) { tmp[1] = boxes[lines[i][j]][BOX_BOTTOM]; }
 			}
 			line_dims.push_back(tmp);
 		}
@@ -313,22 +320,22 @@ namespace ocr_tabs {
 	}
 
 	void OCRTabsEngine::HeadersFooters() {
-		int* header_limit=new int [Lines_.size()];
-		int* footer_limit=new int [Lines_.size()];
-		for (int i = 0; i < Lines_.size(); i++) {
+		int* header_limit=new int [lines_.size()];
+		int* footer_limit=new int [lines_.size()];
+		for (int i = 0; i < lines_.size(); i++) {
 			header_limit[i] = -1;
 			footer_limit[i] = -1;
 		}
-		for (int i = 0; i < Lines_.size() - 1; i++) {
+		for (int i = 0; i < lines_.size() - 1; i++) {
 			//search for similar headers/footers in consecutive pages
-			for (int k = 0; k < std::min(Lines_[i].size(), Lines_[i + 1].size()); k++) {
+			for (int k = 0; k < std::min(lines_[i].size(), lines_[i + 1].size()); k++) {
 				string tmp1;
 				string tmp2;
-				for (int j = 0; j < Lines_[i][k].size(); j++) {
-					tmp1.append(words_[i][Lines_[i][k][j]]);
+				for (int j = 0; j < lines_[i][k].size(); j++) {
+					tmp1.append(words_[i][lines_[i][k][j]]);
 				}
-				for (int j = 0; j < Lines_[i + 1][k].size(); j++) {
-					tmp2.append(words_[i + 1][Lines_[i + 1][k][j]]);
+				for (int j = 0; j < lines_[i + 1][k].size(); j++) {
+					tmp2.append(words_[i + 1][lines_[i + 1][k][j]]);
 				}
 				int identical_counter = 0;
 				for (int s = 0; s < std::min(tmp1.length(), tmp2.length()); s++) {
@@ -343,16 +350,16 @@ namespace ocr_tabs {
 					}	
 				}
 				else {
-					k = std::min(Lines_[i].size(), Lines_[i + 1].size());
+					k = std::min(lines_[i].size(), lines_[i + 1].size());
 				}
 			}
 			string tmp1;
 			string tmp2;
-			for (int j = 0; j < Lines_[i][Lines_[i].size() - 1].size(); j++) {
-				tmp1.append(words_[i][Lines_[i][Lines_[i].size() - 1][j]]);
+			for (int j = 0; j < lines_[i][lines_[i].size() - 1].size(); j++) {
+				tmp1.append(words_[i][lines_[i][lines_[i].size() - 1][j]]);
 			}
-			for (int j = 0; j < Lines_[i + 1][Lines_[i + 1].size() - 1].size(); j++) {
-				tmp2.append(words_[i + 1][Lines_[i + 1][Lines_[i + 1].size() - 1][j]]);
+			for (int j = 0; j < lines_[i + 1][lines_[i + 1].size() - 1].size(); j++) {
+				tmp2.append(words_[i + 1][lines_[i + 1][lines_[i + 1].size() - 1][j]]);
 			}
 			int identical_counter = 0;
 			for (int s = 0; s < std::min(tmp1.length(), tmp2.length()); s++) {
@@ -361,18 +368,18 @@ namespace ocr_tabs {
 				}
 			}
 			if ((std::max(tmp1.length(), tmp2.length()) - identical_counter) <= 2) {
-				footer_limit[i] = Lines_[i].size() - 1;
-				footer_limit[i + 1] = Lines_[i + 1].size() - 1;
+				footer_limit[i] = lines_[i].size() - 1;
+				footer_limit[i + 1] = lines_[i + 1].size() - 1;
 			}
-			if (i < (Lines_.size() - 2)) {
-				for (int k = 0; k < std::min(Lines_[i].size(), Lines_[i + 2].size()); k++) {
+			if (i < (lines_.size() - 2)) {
+				for (int k = 0; k < std::min(lines_[i].size(), lines_[i + 2].size()); k++) {
 					tmp1.clear();
 					tmp2.clear();
-					for (int j = 0; j < Lines_[i][k].size(); j++) {
-						tmp1.append(words_[i][Lines_[i][k][j]]);
+					for (int j = 0; j < lines_[i][k].size(); j++) {
+						tmp1.append(words_[i][lines_[i][k][j]]);
 					}
-					for (int j = 0; j < Lines_[i + 2][k].size(); j++) {
-						tmp2.append(words_[i + 2][Lines_[i + 2][k][j]]);
+					for (int j = 0; j < lines_[i + 2][k].size(); j++) {
+						tmp2.append(words_[i + 2][lines_[i + 2][k][j]]);
 					}
 					identical_counter = 0;
 					for (int s = 0; s < std::min(tmp1.length(), tmp2.length()); s++) {
@@ -386,16 +393,16 @@ namespace ocr_tabs {
 							header_limit[i] = k;
 						}		
 					} else {
-						k = std::min(Lines_[i].size(), Lines_[i + 2].size());
+						k = std::min(lines_[i].size(), lines_[i + 2].size());
 					}
 				}
 				tmp1.clear();
 				tmp2.clear();
-				for (int j = 0; j < Lines_[i][Lines_[i].size() - 1].size(); j++) {
-					tmp1.append(words_[i][Lines_[i][Lines_[i].size() - 1][j]]);
+				for (int j = 0; j < lines_[i][lines_[i].size() - 1].size(); j++) {
+					tmp1.append(words_[i][lines_[i][lines_[i].size() - 1][j]]);
 				}
-				for (int j = 0; j < Lines_[i + 2][Lines_[i + 2].size() - 1].size(); j++) {
-					tmp2.append(words_[i + 2][Lines_[i + 2][Lines_[i + 2].size() - 1][j]]);
+				for (int j = 0; j < lines_[i + 2][lines_[i + 2].size() - 1].size(); j++) {
+					tmp2.append(words_[i + 2][lines_[i + 2][lines_[i + 2].size() - 1][j]]);
 				}
 				identical_counter=0;
 				for (int s = 0; s < std::min(tmp1.length(), tmp2.length()); s++) {
@@ -404,35 +411,35 @@ namespace ocr_tabs {
 					}
 				}
 				if ((std::max(tmp1.length(), tmp2.length()) - identical_counter) <= 2) {
-					footer_limit[i] = Lines_[i].size() - 1;
-					footer_limit[i + 2] = Lines_[i + 2].size() - 1;
+					footer_limit[i] = lines_[i].size() - 1;
+					footer_limit[i + 2] = lines_[i + 2].size() - 1;
 				}
 			}
 		}
 
-		for (int i = Lines_.size() - 1; i >= 0; i--) {
+		for (int i = lines_.size() - 1; i >= 0; i--) {
 			if (footer_limit[i] != (-1)) {
-				for (int j = Lines_[i][footer_limit[i]].size() - 1; j >= 0; j--) {
-					words_[i].erase(words_[i].begin() + Lines_[i][footer_limit[i]][j]);
-					boxes_[i].erase(boxes_[i].begin() + Lines_[i][footer_limit[i]][j]);
-					confs_[i].erase(confs_[i].begin() + Lines_[i][footer_limit[i]][j]);
-					font_size_[i].erase(font_size_[i].begin() + Lines_[i][footer_limit[i]][j]);
-					italic_[i].erase(italic_[i].begin() + Lines_[i][footer_limit[i]][j]);
-					bold_[i].erase(bold_[i].begin() + Lines_[i][footer_limit[i]][j]);
-					underscore_[i].erase(underscore_[i].begin() + Lines_[i][footer_limit[i]][j]);
-					dict_[i].erase(dict_[i].begin() + Lines_[i][footer_limit[i]][j]);
+				for (int j = lines_[i][footer_limit[i]].size() - 1; j >= 0; j--) {
+					words_[i].erase(words_[i].begin() + lines_[i][footer_limit[i]][j]);
+					boxes_[i].erase(boxes_[i].begin() + lines_[i][footer_limit[i]][j]);
+					confs_[i].erase(confs_[i].begin() + lines_[i][footer_limit[i]][j]);
+					font_size_[i].erase(font_size_[i].begin() + lines_[i][footer_limit[i]][j]);
+					italic_[i].erase(italic_[i].begin() + lines_[i][footer_limit[i]][j]);
+					bold_[i].erase(bold_[i].begin() + lines_[i][footer_limit[i]][j]);
+					underscore_[i].erase(underscore_[i].begin() + lines_[i][footer_limit[i]][j]);
+					dict_[i].erase(dict_[i].begin() + lines_[i][footer_limit[i]][j]);
 				}
 			}
 			for (int k = header_limit[i]; k >= 0; k--) {
-				for (int j = Lines_[i][k].size() - 1; j >= 0; j--) {
-					words_[i].erase(words_[i].begin() + Lines_[i][k][j]);
-					boxes_[i].erase(boxes_[i].begin() + Lines_[i][k][j]);
-					confs_[i].erase(confs_[i].begin() + Lines_[i][k][j]);
-					font_size_[i].erase(font_size_[i].begin() + Lines_[i][k][j]);
-					bold_[i].erase(bold_[i].begin() + Lines_[i][k][j]);
-					italic_[i].erase(italic_[i].begin() + Lines_[i][k][j]);
-					underscore_[i].erase(underscore_[i].begin() + Lines_[i][k][j]);
-					dict_[i].erase(dict_[i].begin() + Lines_[i][k][j]);
+				for (int j = lines_[i][k].size() - 1; j >= 0; j--) {
+					words_[i].erase(words_[i].begin() + lines_[i][k][j]);
+					boxes_[i].erase(boxes_[i].begin() + lines_[i][k][j]);
+					confs_[i].erase(confs_[i].begin() + lines_[i][k][j]);
+					font_size_[i].erase(font_size_[i].begin() + lines_[i][k][j]);
+					bold_[i].erase(bold_[i].begin() + lines_[i][k][j]);
+					italic_[i].erase(italic_[i].begin() + lines_[i][k][j]);
+					underscore_[i].erase(underscore_[i].begin() + lines_[i][k][j]);
+					dict_[i].erase(dict_[i].begin() + lines_[i][k][j]);
 				}
 			}
 		}
@@ -449,7 +456,7 @@ namespace ocr_tabs {
 
 		float ratio = 0.6 * 2; //1.2
 
-		for (int i = 0; i < Lines.size(); i++) {
+		for (int i = 0; i < lines.size(); i++) {
 			/*if (Lines[i].size() == 1) {
 				vector<vector<int>> segments;
 				vector<int> tmp;
@@ -460,14 +467,14 @@ namespace ocr_tabs {
 			float hor_thresh = (line_dims[i][1] - line_dims[i][0]) * ratio;
 			vector<vector<int>> segments;
 			vector<int> tmp;
-			tmp.push_back(Lines[i][0]);
-			for (int j = 1; j < Lines[i].size(); j++) {
-				if (boxes[Lines[i][j]][0] - boxes[Lines[i][j - 1]][2] <= hor_thresh) {
-					tmp.push_back(Lines[i][j]);
+			tmp.push_back(lines[i][0]);
+			for (int j = 1; j < lines[i].size(); j++) {
+				if (boxes[lines[i][j]][0] - boxes[lines[i][j - 1]][2] <= hor_thresh) {
+					tmp.push_back(lines[i][j]);
 				} else {
 					segments.push_back(tmp);
 					tmp.clear();
-					tmp.push_back(Lines[i][j]);
+					tmp.push_back(lines[i][j]);
 				}
 			}
 			segments.push_back(tmp);
@@ -486,14 +493,14 @@ namespace ocr_tabs {
 	void OCRTabsEngine::LineTypes() {
 		std::cout << "Find line types...";
 		aux::startClock();
-		lines_type = new int[Lines.size()];
+		lines_type = new int[lines.size()];
 
 		float sum = 0;
-		for (int i = 0; i < Lines.size(); i++) {
+		for (int i = 0; i < lines.size(); i++) {
 			if (line_segments[i].size() > 1) { lines_type[i] = LineType::TABLE; }
 			else {
-				int seg_left = boxes[line_segments[i][0][0]][bLeft];
-				int seg_right = boxes[line_segments[i][0][line_segments[i][0].size() - 1]][bRight];
+				int seg_left = boxes[line_segments[i][0][0]][BOX_LEFT];
+				int seg_right = boxes[line_segments[i][0][line_segments[i][0].size() - 1]][BOX_RIGHT];
 				//if ((seg_right-seg_left)>=(page_right-page_left)/2){Lines_type[i]=1;}
 				if ((seg_right - seg_left) >= (float)(page_right - page_left) / 2.5) { lines_type[i] = LineType::TEXT; }
 				else if (seg_left >= (page_right - page_left) / 4) { lines_type[i] = LineType::TABLE; }
@@ -514,7 +521,7 @@ namespace ocr_tabs {
 			}*/
 			sum = sum + line_dims[i][1] - line_dims[i][0];
 		}
-		sum = (float)sum / Lines.size();
+		sum = (float)sum / lines.size();
 
 		/*// FOOTER/HEADER - Line height must be smaller than thw average line height
 
@@ -568,7 +575,7 @@ namespace ocr_tabs {
 		vector<int> tmp;
 
 		if (lines_type[0] != LineType::TEXT) { tmp.push_back(0); }
-		for (int i = 1; i < Lines.size(); i++) {
+		for (int i = 1; i < lines.size(); i++) {
 			if ((lines_type[i] != LineType::TEXT) && (lines_type[i] != 4)) {
 				if ((lines_type[i - 1] != LineType::TEXT) && (lines_type[i - 1] != 4) && ((line_dims[i][0] - line_dims[i - 1][1]) <= 3 * (line_dims[i][1] - line_dims[i][0]))) {
 					tmp.push_back(i);
@@ -659,12 +666,12 @@ namespace ocr_tabs {
 						int line_id = table_rows[i][j];
 						int left_box_id = line_segments[line_id][k][0];
 						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
-						//int left = boxes[line_segments[table_rows[i][j]][k][0]][bLeft];
-						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][bRight];
-						int left = boxes[left_box_id][bLeft];
-						int right = boxes[right_box_id][bRight];
+						//int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
+						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
+						int left = boxes[left_box_id][BOX_LEFT];
+						int right = boxes[right_box_id][BOX_RIGHT];
 
-						if ((left <= boxes[min[0]][bLeft]) && (left > limit)) {
+						if ((left <= boxes[min[0]][BOX_LEFT]) && (left > limit)) {
 							//min = line_segments[table_rows[i][j]][k];
 							min = line_segments[line_id][k];
 						}
@@ -679,13 +686,13 @@ namespace ocr_tabs {
 						int line_id = table_rows[i][j];
 						int left_box_id = line_segments[line_id][k][0];
 						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
-						//int left = boxes[line_segments[table_rows[i][j]][k][0]][bLeft];
-						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][bRight];
-						int left = boxes[left_box_id][bLeft];
-						int right = boxes[right_box_id][bRight];
+						//int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
+						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
+						int left = boxes[left_box_id][BOX_LEFT];
+						int right = boxes[right_box_id][BOX_RIGHT];
 
 						// calc avg length of segments horizontally-aligned with min
-						if ((abs(left - boxes[min[0]][bLeft]) <= hor_thresh) &&
+						if ((abs(left - boxes[min[0]][BOX_LEFT]) <= hor_thresh) &&
 							/*((right-left)<=(boxes[min[min.size()-1]][2]-boxes[min[0]][0]))&&*/
 							(left > limit)) {
 							//cout<<words[Lines_segments[table_Rows[i][j]][k][0]]<<"\n";
@@ -695,7 +702,7 @@ namespace ocr_tabs {
 						}
 					}
 				}
-				int fin_left = boxes[min[0]][bLeft];
+				int fin_left = boxes[min[0]][BOX_LEFT];
 				avg = (float)avg / counter;
 				float overlap_ratio = 1.2;
 				avg = avg * overlap_ratio;
@@ -704,14 +711,14 @@ namespace ocr_tabs {
 						int line_id = table_rows[i][j];
 						int left_box_id = line_segments[line_id][k][0];
 						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
-						//int left = boxes[line_segments[table_rows[i][j]][k][0]][bLeft];
-						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][bRight];
-						int left = boxes[left_box_id][bLeft];
-						int right = boxes[right_box_id][bRight];
+						//int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
+						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
+						int left = boxes[left_box_id][BOX_LEFT];
+						int right = boxes[right_box_id][BOX_RIGHT];
 
 						// Select the segment that is closest to the avg length
 						if ((abs(left - fin_left) <= hor_thresh) &&
-							(abs(right - left - avg) <= abs(boxes[min[min.size() - 1]][bRight] - boxes[min[0]][bLeft] - avg)) &&
+							(abs(right - left - avg) <= abs(boxes[min[min.size() - 1]][BOX_RIGHT] - boxes[min[0]][BOX_LEFT] - avg)) &&
 							(left > limit)) {
 							min = line_segments[line_id][k];
 						}
@@ -721,11 +728,11 @@ namespace ocr_tabs {
 				//int aas;
 				//cin>>aas;
 				column_creator.push_back(min);
-				limit = boxes[min[min.size() - 1]][bRight];  //set left-most limit for remaining segments
+				limit = boxes[min[min.size() - 1]][BOX_RIGHT];  //set left-most limit for remaining segments
 				min.clear();
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
-						int left = boxes[line_segments[table_rows[i][j]][k][0]][bLeft];
+						int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
 						if (left > limit) {
 							min = line_segments[table_rows[i][j]][k];
 							break;
@@ -743,13 +750,13 @@ namespace ocr_tabs {
 			for (int i = 0; i < tmp_col.size(); i++) {
 				vector<vector<vector<int>>> t_col;
 				for (int j = 0; j < tmp_col[i].size(); j++) {
-					int col_left = boxes[tmp_col[i][j][0]][bLeft];
-					int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][bRight];
+					int col_left = boxes[tmp_col[i][j][0]][BOX_LEFT];
+					int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][BOX_RIGHT];
 					vector<vector<int>> t_seg;
 					for (int k = 0; k < table_rows[i].size(); k++) {
 						for (int z = 0; z < line_segments[table_rows[i][k]].size(); z++) {
-							int seg_left = boxes[line_segments[table_rows[i][k]][z][0]][bLeft];
-							int seg_right = boxes[line_segments[table_rows[i][k]][z][line_segments[table_rows[i][k]][z].size() - 1]][bRight];
+							int seg_left = boxes[line_segments[table_rows[i][k]][z][0]][BOX_LEFT];
+							int seg_right = boxes[line_segments[table_rows[i][k]][z][line_segments[table_rows[i][k]][z].size() - 1]][BOX_RIGHT];
 							if (((seg_right >= col_left) && (seg_right <= col_right)) ||
 								((seg_left >= col_left) && (seg_left <= col_right)) ||
 								((seg_left <= col_left) && (seg_right >= col_right))) {
@@ -799,7 +806,7 @@ namespace ocr_tabs {
 									if (line_segments[table_rows[i][j - 1]][z] == table_columns[i][s][h]) {
 										exist0 = true;
 										if ((k < line_segments[table_rows[i][j]].size() - 1) &&
-											(boxes[line_segments[table_rows[i][j - 1]][z][line_segments[table_rows[i][j - 1]][z].size() - 1]][bRight] >= boxes[line_segments[table_rows[i][j]][k + 1][0]][bLeft])) {
+											(boxes[line_segments[table_rows[i][j - 1]][z][line_segments[table_rows[i][j - 1]][z].size() - 1]][BOX_RIGHT] >= boxes[line_segments[table_rows[i][j]][k + 1][0]][BOX_LEFT])) {
 											exist0 = false;
 										}
 									}
@@ -843,9 +850,9 @@ namespace ocr_tabs {
 						found2 = true;
 					}
 					int tmp = line_segments[multi_rows[i][j][0]][0][0];
-					float lft1 = boxes[tmp][bLeft];
+					float lft1 = boxes[tmp][BOX_LEFT];
 					tmp = line_segments[multi_rows[i][j + 1][0]][0][0];
-					float lft2 = boxes[tmp][bLeft];
+					float lft2 = boxes[tmp][BOX_LEFT];
 					if ((found1) && (found2) && (lft2 >= lft1 + 0.6 * (line_dims[multi_rows[i][j + 1][0]][1] - line_dims[multi_rows[i][j + 1][0]][0]))) {
 						for (int z = 0; z < multi_rows[i][j + 1].size(); z++) {
 							multi_rows[i][j].push_back(multi_rows[i][j + 1][z]);
@@ -987,11 +994,11 @@ namespace ocr_tabs {
 	}
 
 	void OCRTabsEngine::DrawLines() {
-		drawingHandler::DrawLines(test, Lines, page_left, page_right, page_top, page_bottom, line_dims);
+		drawingHandler::DrawLines(test, lines, page_left, page_right, page_top, page_bottom, line_dims);
 	}
 
 	void OCRTabsEngine::DrawSegments() {
-		drawingHandler::DrawSegments(test, Lines, line_segments, line_dims, boxes);
+		drawingHandler::DrawSegments(test, lines, line_segments, line_dims, boxes);
 	}
 
 	void OCRTabsEngine::DrawAreas() {
@@ -1419,16 +1426,14 @@ namespace ocr_tabs {
 		resetAll();		
 		std::vector<cv::Mat> pages;
 		if (!parsePDF(filename, pages)) return false;
-		if (pages.size() == 1) //if (pages.size()!=1)
-		{
+		if (pages.size() == 1) /*if (pages.size() != 1)*/ {
 			test = ImagePreproccesing(pages[0]);
 			SetImage(test);
 			//RemoveGridLines();
 			OCR_Recognize();
 			BoxesAndWords();
 			TextBoundaries();
-		}
-		else {
+		} else {
 			for (int i = 0; i < pages.size(); i++) {
 				Mat tmp = ImagePreproccesing(pages[i]);
 				SetImage(tmp);
@@ -1445,8 +1450,7 @@ namespace ocr_tabs {
 		TableRows();
 		TableColumns(); ////
 		if (fail_condition()) {
-			std::cout << "\nfailCondition\n" << std::endl; 
-			std::cout << fail_msg << std::endl;
+			std::cout << "\nfailCondition: " << fail_msg << std::endl;
 			return false;
 		}
 		TableMultiRows();
@@ -1455,6 +1459,7 @@ namespace ocr_tabs {
 		std::string outputFilename = filename;
 		outputFilename.append(".html");
 		WriteHTML(outputFilename);
+
 		return true;
 	}
 
@@ -1494,7 +1499,7 @@ namespace ocr_tabs {
 		initial = cv::Mat();
 		words.clear();
 		boxes.clear();
-		Lines.clear();
+		lines.clear();
 		table_area.clear();
 		table_rows.clear();
 		multi_rows.clear();
@@ -1512,7 +1517,7 @@ namespace ocr_tabs {
 		font_size.clear();
 		if (lines_type != NULL) delete lines_type;
 		words_.clear();
-		Lines_.clear();
+		lines_.clear();
 		boxes_.clear();
 		confs_.clear();
 		font_size_.clear();
@@ -1712,8 +1717,8 @@ namespace ocr_tabs {
 						else {
 							int ln_index = i;
 							for (int k = i + 1; k < boxes.size(); k++) {
-								if (!(((boxes[k][bTop] <= boxes[i][bTop]) && (boxes[i][bTop] <= boxes[k][bBottom])) ||
-									((boxes[i][bTop] <= boxes[k][bTop]) && (boxes[k][bTop] <= boxes[i][bBottom])))) {
+								if (!(((boxes[k][BOX_TOP] <= boxes[i][BOX_TOP]) && (boxes[i][BOX_TOP] <= boxes[k][BOX_BOTTOM])) ||
+									((boxes[i][BOX_TOP] <= boxes[k][BOX_TOP]) && (boxes[k][BOX_TOP] <= boxes[i][BOX_BOTTOM])))) {
 									ln_index = k - 1;
 									k = boxes.size();
 								}

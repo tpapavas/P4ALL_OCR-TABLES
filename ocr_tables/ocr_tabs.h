@@ -4,8 +4,6 @@
 #include "opencv2/imgproc/imgproc.hpp"
 //#include <ctime>
 
-
-
 #define TESSDLL_IMPORTS
 #define STD_DOTS_SIZE 3500
 #define LOWER_DOTS_LIM 2800 
@@ -73,7 +71,7 @@ namespace ocr_tabs {
 		clock_t start;
 		double duration;
 		std::vector<char*> words;
-		std::vector<std::vector<int>> boxes, Lines, table_area, table_rows;
+		std::vector<std::vector<int>> boxes, lines, table_area, table_rows;
 		std::vector<std::vector<std::vector<int>>> multi_rows;
 		std::vector<int*> line_dims;
 		std::vector<std::vector<std::vector<int>>> line_segments;
@@ -89,7 +87,7 @@ namespace ocr_tabs {
 		int page_left, page_right, page_top, page_bottom;
 		int* lines_type;
 		std::vector<std::vector<char*>> words_;
-		std::vector<std::vector<std::vector<int>>> Lines_;
+		std::vector<std::vector<std::vector<int>>> lines_;
 		std::vector<std::vector<std::vector<int>>> boxes_;
 		std::vector<std::vector<float>> confs_;
 		std::vector<std::vector<int>> font_size_;
@@ -105,10 +103,10 @@ namespace ocr_tabs {
 		void ProcessGeneratedColumns();
 
 		enum BoxSide {
-			bLeft=0,
-			bTop=1,
-			bRight=2,
-			bBottom=3
+			BOX_LEFT=0,
+			BOX_TOP=1,
+			BOX_RIGHT=2,
+			BOX_BOTTOM=3
 		};
 
 		enum LineType {
@@ -116,9 +114,5 @@ namespace ocr_tabs {
 			TABLE=2,
 			UNKNOWN=3
 		};
-
-		//trying something new
-		//drawingHandler drawing_handler;
 	};
-
 }
