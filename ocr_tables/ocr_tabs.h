@@ -2,7 +2,7 @@
 #include "dll_config.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-//#include <ctime>
+#include "auxiliary.h"
 
 #define TESSDLL_IMPORTS
 #define STD_DOTS_SIZE 3500
@@ -11,41 +11,29 @@
 
 #include "tesseract/baseapi.h"
 
-//probably problematic
-//using namespace cv;
-//using namespace std;
-
 //class ocr_tabs
 namespace ocr_tabs {
-	enum FileType {
-		IMG = 0,
-		PDF = 1
-	};
-
 	class OCRTabsEngine {
 	public:
 		OCRTABS_API OCRTabsEngine();
 		OCRTABS_API ~OCRTabsEngine();
-		void SetImage(cv::Mat img);
+		
 		void RemoveGridLines(float ratio = 1);
 		void OCR_Recognize();
-		void BoxesAndWords();
-		void TextBoundaries();
-		void TextLines();
-		void HeadersFooters();
-		void LineSegments();
-		void LineTypes();
-		void TableAreas();
-		void TableRows();
-		void TableColumns();
-		void TableMultiRows();
-		void ColumnSize();
+		void FindBoxesAndWords();
+		void FindTextBoundaries();
+		void CreateTextLines();
+		void RemoveHeadersFooters();
+		void CreateLineSegments();
+		void AssignLineTypes();
+		void FindTableAreas();
+		void AssignRowsToTables();
+		void CreateTableColumns();
+		void CreateTableMultiRows();
+		void FindColumnSize();
 		void FinalizeGrid();
-		void WriteHTML(std::string& filename);
 		void PrepareMulti1();
 		void PrepareMulti2();
-		cv::Mat ImgSeg(cv::Mat img);
-		cv::Mat getInitial() { return initial; }
 
 		void DrawBoxes();
 		void DrawLines();
@@ -58,24 +46,27 @@ namespace ocr_tabs {
 		void DrawGridlessImage();
 		//void DrawFootHead();
 
+		void SetImage(cv::Mat img);
 		void ResetImage();
-		cv::Mat ImagePreproccesing(cv::Mat img);
-		bool ImagePreproccesing_withXML(const std::string& fileXML, std::vector<cv::Mat>& imageRAW, std::vector<cv::Mat>& imageCLN);
+		cv::Mat SegmentImage(cv::Mat img);
+		cv::Mat PreprocessImage(cv::Mat img);
+		bool PreprocessImageWithXML(const std::string& fileXML, std::vector<cv::Mat>& imageRAW, std::vector<cv::Mat>& imageCLN);
 
-		bool fail_condition();
-		//bool OCRTABS_API pdf2html(const std::string& filename, const std::string& filenameXML, bool withXML);
-		//bool OCRTABS_API img2html(const std::string& filename, const std::string& filenameXML, bool withXML);
-		//bool OCRTABS_API pdf2html_withXML(const std::string& filename, const std::string& filenameXML);
-		//bool OCRTABS_API img2html_withXML(const std::string& filename, const std::string& filenameXML);
 		bool OCRTABS_API doc2html(FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML);
 		bool parsePDF(const std::string& filename, std::vector<cv::Mat>& imageList);
+		void WriteHTML(std::string& filename);
+		bool fail_condition();
 		void resetAll();
+
+		cv::Mat getInitial() { return initial; }
 
 	private:
 		cv::Mat test, initial;
 		tesseract::TessBaseAPI  tess;
+		
 		clock_t start;
 		double duration;
+
 		std::vector<char*> words;
 		std::vector<std::vector<int>> boxes, lines, table_area, table_rows;
 		std::vector<std::vector<std::vector<int>>> multi_rows;
@@ -92,6 +83,7 @@ namespace ocr_tabs {
 		std::vector<int> font_size;
 		int page_left, page_right, page_top, page_bottom;
 		int* lines_type;
+
 		std::vector<std::vector<char*>> words_;
 		std::vector<std::vector<std::vector<int>>> lines_;
 		std::vector<std::vector<std::vector<int>>> boxes_;
@@ -102,6 +94,7 @@ namespace ocr_tabs {
 		std::vector<std::vector<bool>> italic_;
 		std::vector<std::vector<bool>> underscore_;
 		std::vector<int> page_height, page_width;
+		
 		bool fail;
 		std::string fail_msg;
 
@@ -114,12 +107,5 @@ namespace ocr_tabs {
 			BOX_RIGHT=2,
 			BOX_BOTTOM=3
 		};
-
-		enum LineType {
-			TEXT=1,
-			TABLE=2,
-			UNKNOWN=3
-		};
-
 	};
 }

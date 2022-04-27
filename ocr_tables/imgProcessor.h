@@ -7,11 +7,8 @@
 #include <numeric>
 
 //OPENCV
-//#include <cv.h> //DEPRECATED
-//#include <highgui.h> //DEPRECATED
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
-
 
 //MUPDF
 extern "C" {
@@ -21,15 +18,13 @@ extern "C" {
 }
 
 //LEPTONICA
-//#include "allheaders.h"	//not working
 #include <leptonica\allheaders.h>
 #define NO_CONSOLE_IO
-#define DFLAG        0
+#define DFLAG 0
 
 ////probably problematic////
 using namespace std;
 //using namespace cv;
-
 
 #define uget(x,y)    at<unsigned char>(y,x)
 #define uset(x,y,v)  at<unsigned char>(y,x)=v;
@@ -80,7 +75,7 @@ namespace imgProcessor {
 	bool pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat);
 
 	bool thresholdImg (cv::Mat& input, cv::Mat& output, double k = 0.2, double dR = 128);
-	double calcLocalStats (cv::Mat &im, cv::Mat &map_m, cv::Mat &map_s, int winx, int winy);
+	double calcLocalStats (cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy);
 	void NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, NiblackVersion version, int winx, int winy, double k, double dR);
 	
 	l_int32 DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks);

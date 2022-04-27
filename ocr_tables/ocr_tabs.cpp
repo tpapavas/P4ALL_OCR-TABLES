@@ -35,7 +35,7 @@ namespace ocr_tabs {
 	 * @param img: img (Mat) to be copied
 	*/
 	void OCRTabsEngine::SetImage(Mat img) {
-		//test=ImgSeg(img);
+		//test=SegmentImage(img);
 		test = img.clone();
 		initial = test.clone();
 	}
@@ -218,7 +218,7 @@ namespace ocr_tabs {
 	/**
 	 * @brief Retrieve all the recognized words and their bounding boxes from tesseract
 	 */
-	void OCRTabsEngine::BoxesAndWords() {
+	void OCRTabsEngine::FindBoxesAndWords() {
 		//tess.SetPageSegMode( tesseract::PSM_AUTO_OSD);
 		//tesseract::PageIterator* ri = tess.AnalyseLayout();
 		tesseract::ResultIterator* ri = tess.GetIterator();
@@ -262,7 +262,7 @@ namespace ocr_tabs {
 	}
 
 	// Find the text boundaries of the whole image
-	void OCRTabsEngine::TextBoundaries() {
+	void OCRTabsEngine::FindTextBoundaries() {
 		std::cout << "Find text boundaries...";
 		aux::startClock();
 
@@ -281,7 +281,7 @@ namespace ocr_tabs {
 	}
 
 	// Create lines by assigning vertically-overlapping word boxes to the same unique line
-	void OCRTabsEngine::TextLines() {
+	void OCRTabsEngine::CreateTextLines() {
 		std::cout << "Find lines...";
 		aux::startClock();
 
@@ -317,7 +317,7 @@ namespace ocr_tabs {
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
-	void OCRTabsEngine::HeadersFooters() {
+	void OCRTabsEngine::RemoveHeadersFooters() {
 		int* header_limit=new int [lines_.size()];
 		int* footer_limit=new int [lines_.size()];
 		for (int i = 0; i < lines_.size(); i++) {
@@ -447,7 +447,7 @@ namespace ocr_tabs {
 	 * If the horizontal distance between two word boxes is smaller than a threshold,
 	 * they will be considered as a single text segment
 	 */
-	void OCRTabsEngine::LineSegments() {
+	void OCRTabsEngine::CreateLineSegments() {
 		std::cout << "Find line segments...";
 		aux::startClock();
 
@@ -487,7 +487,7 @@ namespace ocr_tabs {
 	 * Type 2 - TABLE : Lines with multiple segments
 	 * Type 3 - UNKNOWN : Lines with a single short segment
 	 */
-	void OCRTabsEngine::LineTypes() {
+	void OCRTabsEngine::AssignLineTypes() {
 		std::cout << "Find line types...";
 		aux::startClock();
 		lines_type = new int[lines.size()];
@@ -566,7 +566,7 @@ namespace ocr_tabs {
 	 * @brief Find areas that can potentially be real tables.
 	 * Such areas include consequential type-2 and type-3 lines.
 	 */
-	void OCRTabsEngine::TableAreas() {
+	void OCRTabsEngine::FindTableAreas() {
 		std::cout << "Find table areas...";
 		aux::startClock();
 		vector<int> tmp;
@@ -598,7 +598,7 @@ namespace ocr_tabs {
 	 * So if there are initially type-3 without a type-2 line over them,
 	 * they are not assigned to the table, unless they are not left-aligned
 	 */
-	void OCRTabsEngine::TableRows() {
+	void OCRTabsEngine::AssignRowsToTables() {
 		std::cout << "Find table rows...";
 		aux::startClock();
 
@@ -626,7 +626,7 @@ namespace ocr_tabs {
 	}
 
 	// Assign Columns to each table
-	void OCRTabsEngine::TableColumns() {
+	void OCRTabsEngine::CreateTableColumns() {
 		std::cout << "Find table columns...";
 		aux::startClock();
 
@@ -772,7 +772,7 @@ namespace ocr_tabs {
 	}
 
 	// Create table rows that include more than one lines
-	void OCRTabsEngine::TableMultiRows() {
+	void OCRTabsEngine::CreateTableMultiRows() {
 		cout << "Find table multiple-rows...";
 		aux::startClock();
 
@@ -896,7 +896,7 @@ namespace ocr_tabs {
 	 * Each columns spans from the leftest single segment to the rightest
 	 * single segment (single segment = assigned to only one column)
 	 */
-	void OCRTabsEngine::ColumnSize() {
+	void OCRTabsEngine::FindColumnSize() {
 		std::cout << "Find column sizes...";
 		aux::startClock();
 
@@ -1035,7 +1035,7 @@ namespace ocr_tabs {
 		//resize(test,test,Size(test.size().width*2,test.size().height*2));
 	}
 
-	Mat OCRTabsEngine::ImgSeg(Mat img) {
+	Mat OCRTabsEngine::SegmentImage(Mat img) {
 		//Search for multi column text
 		std::cout << "Segment Image...";
 		aux::startClock();
@@ -1187,173 +1187,7 @@ namespace ocr_tabs {
 		return dst;
 	}
 
-	void OCRTabsEngine::WriteHTML(std::string& filename) {
-		std::cout << "Create HTML...";
-		aux::startClock();
-
-		//find average font size
-		vector<int> tmp_size;
-
-		tmp_size = font_size;
-
-		size_t n = tmp_size.size() / 2;
-		nth_element(tmp_size.begin(), tmp_size.begin() + n, tmp_size.end());
-		int font_size_avg = tmp_size[n];
-		float ratio = (float)12 / font_size_avg;
-		font_size_avg = 12;
-		tmp_size[0] = 1;
-		tmp_size[1] = 2;
-
-		vector<vector<string>> font;
-		for (int i = 0; i < font_size.size(); i++) {
-			//font_size[i]=font_size[i]*ratio;
-			vector<string> tmp;
-			//if (font_size[i]<(font_size_avg-3))
-			//{
-			//	tmp.push_back("<font size=\"1\">");
-			//	tmp.push_back("</font>");
-			//}
-			//else if (font_size[i]<(font_size_avg-2))
-			//{
-			//	tmp.push_back("<font size=\"2\">");
-			//	tmp.push_back("</font>");
-			//}
-			//else if (font_size[i]<(font_size_avg+2))
-			//{
-			tmp.push_back("");
-			tmp.push_back("");
-			//}
-			//else if (font_size[i]<(font_size_avg+4))
-			//{
-			//	tmp.push_back("<font size=\"4\">");
-			//	tmp.push_back("</font>");
-			//}
-			//else if (font_size[i]<(font_size_avg+6))
-			//{
-			//	tmp.push_back("<font size=\"5\">");
-			//	tmp.push_back("</font>");
-			//}
-			//else if (font_size[i]<(font_size_avg+8))
-			//{
-			//	tmp.push_back("<font size=\"6\">");
-			//	tmp.push_back("</font>");
-			//}
-			//else
-			//{
-			//	tmp.push_back("<font size=\"7\">");
-			//	tmp.push_back("</font>");
-			//}
-			/*if (bold[i])
-			{
-				tmp[0].append("<b>");
-				tmp[1].append("</b>");
-			}
-			if (italic[i])
-			{
-				tmp[0].append("<i>");
-				tmp[1].append("</i>");
-			}
-			if (underscore[i])
-			{
-				tmp[0].append("<u>");
-				tmp[1].append("</u>");
-			}*/
-			font.push_back(tmp);
-		}
-		std::ofstream file(filename);
-		int table_num = 0;
-		if (file.is_open()) {
-			file << "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<html>\n<body>\n";
-			file << "<p>\n";
-			for (int x = 0; x < line_segments.size(); x++) {
-				if (lines_type[x] != 2) {
-					for (int j = 0; j < line_segments[x].size(); j++) {
-						for (int k = 0; k < line_segments[x][j].size(); k++) {
-							file << font[line_segments[x][j][k]][0] << words[line_segments[x][j][k]] << " " << font[line_segments[x][j][k]][1];
-						}
-					}
-					file << "<br>";
-				}
-				else {
-					file << "\n</p>\n";
-					file << "<table border=\"1\">\n";
-					for (int i = 0; i < multi_rows[table_num].size(); i++) {
-						file << "<tr>\n";
-						vector<vector<vector<int>>> col_tmp;
-						for (int j = 0; j < table_columns[table_num].size(); j++) {
-							vector<vector<int>> ctmp;
-							col_tmp.push_back(ctmp);
-						}
-						for (int j = 0; j < multi_rows[table_num][i].size(); j++) {
-							for (int k = 0; k < line_segments[multi_rows[table_num][i][j]].size(); k++) {
-								for (int s = 0; s < table_columns[table_num].size(); s++) {
-									if (std::find(table_columns[table_num][s].begin(), table_columns[table_num][s].end(), line_segments[multi_rows[table_num][i][j]][k]) != table_columns[table_num][s].end()) {
-										col_tmp[s].push_back(line_segments[multi_rows[table_num][i][j]][k]);
-									}
-								}
-							}
-						}
-						for (int j = 0; j < table_columns[table_num].size(); j++) {
-							file << "<td";
-							int colspan = 1;
-							if (col_tmp[j].size() == 0) {
-								file << ">";
-							}
-							else {
-								for (int h = j + 1; h < table_columns[table_num].size(); h++) {
-									if (col_tmp[h].size() != 0) {
-										for (int aa = 0; aa < col_tmp[j].size(); aa++) {
-											if (std::find(col_tmp[h].begin(), col_tmp[h].end(), col_tmp[j][aa]) != col_tmp[h].end()) {
-												colspan++;
-												aa = col_tmp[j].size();
-											}
-										}
-									}
-								}
-								if (colspan > 1) {
-									file << " colspan=\"" << colspan << "\"";
-									for (int h = j + 1; h < j + colspan; h++) {
-										for (int aa = 0; aa < col_tmp[h].size(); aa++) {
-											bool found = false;
-											if (std::find(col_tmp[j].begin(), col_tmp[j].end(), col_tmp[h][aa]) != col_tmp[j].end()) {
-												found = true;
-											}
-											if (!found) { col_tmp[j].push_back(col_tmp[h][aa]); }
-										}
-									}
-								}
-								file << ">";
-							}
-							for (int k = 0; k < col_tmp[j].size(); k++) {
-								for (int s = 0; s < col_tmp[j][k].size(); s++) {
-									file << font[col_tmp[j][k][s]][0] << words[col_tmp[j][k][s]] << " " << font[col_tmp[j][k][s]][1];
-								}
-								if (col_tmp[j].size() > (k + 1)) {
-									file << "<br>";
-								}
-							}
-							file << "</td>\n";
-							j = j + colspan - 1;
-						}
-						file << "</tr>\n";
-					}
-					file << "</table>\n<p>\n";
-					while (lines_type[x] == 2) { x++; }
-					x--;
-					table_num++;
-				}
-			}
-			file << "\n</p>\n</body>\n</html>";
-			file.close();
-
-			cout << " Done in " << aux::endClock() << "s \n";
-		}
-		else {
-			std::cout << "Unable to open file";
-		}
-	}
-
-	Mat OCRTabsEngine::ImagePreproccesing(Mat img) {
+	Mat OCRTabsEngine::PreprocessImage(Mat img) {
 		std::cout << "Process Image...";
 		aux::startClock();
 
@@ -1369,10 +1203,10 @@ namespace ocr_tabs {
 		} else {
 			ratio = (float)img.size().height / 3500;
 		}*/
-		if (max_width_height < 4200 && max_width_height > 2800) {
+		if (max_width_height < UPPER_DOTS_LIM && max_width_height > LOWER_DOTS_LIM) {
 			ratio = 1;
 		} else {
-			ratio = (float)max_width_height / 3500;
+			ratio = (float)max_width_height / STD_DOTS_SIZE;
 		}
 
 		RemoveGridLines(ratio);
@@ -1415,6 +1249,10 @@ namespace ocr_tabs {
 		return (img);
 	}
 
+	void OCRTabsEngine::WriteHTML(std::string& filename) {
+		aux::WriteHTML(filename, table_columns, multi_rows, line_segments, lines_type, words, font_size);
+	}
+
 	bool OCRTabsEngine::fail_condition() { 
 		return fail; 
 	}
@@ -1422,49 +1260,48 @@ namespace ocr_tabs {
 	bool OCRTABS_API OCRTabsEngine::doc2html(FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML) {
 		resetAll();
 		std::vector<cv::Mat> pages, pages_clean;
-		//std::vector<cv::Mat> imageList, imageClean;
 		switch (filetype) {
-			case FileType::PDF:
-				if (!parsePDF(filename, pages)) return false;
-				break;
+		case FileType::PDF:
+			if (!parsePDF(filename, pages)) return false;
+			break;
 
-			case FileType::IMG:
-				pages.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE	
-				if (pages[0].empty()) { cout << "File not available" << endl; return false; }
-				break;
+		case FileType::IMG:
+			pages.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE	
+			if (pages[0].empty()) { cout << "File not available" << endl; return false; }
+			break;
 
-			default:
-				return false;
+		default:
+			return false;
 		}
 		if (withXML) {
 			//// NOT WORKING ////
-			if (!ImagePreproccesing_withXML(filenameXML, pages, pages_clean)) { cout << "Preprocessing with XML failed" << endl; return false; }
+			if (!PreprocessImageWithXML(filenameXML, pages, pages_clean)) { cout << "Preprocessing with XML failed" << endl; return false; }
 			pages.clear();
 			pages = pages_clean;  //not sure about that copying
 		}
 		for (int i = 0; i < pages.size(); i++) {
-			Mat tmp = ImagePreproccesing(pages[i]);
+			Mat tmp = PreprocessImage(pages[i]);
 			SetImage(tmp);
 			//RemoveGridLines();
 			OCR_Recognize();
-			BoxesAndWords();
+			FindBoxesAndWords();
 			PrepareMulti1();
 		}
-		HeadersFooters();
+		RemoveHeadersFooters();
 		PrepareMulti2();
-		//TextBoundaries(); ////maybe is needed here////
-		TextLines();
-		LineSegments();
-		LineTypes();
-		TableAreas();
-		TableRows();
-		TableColumns(); ////
+		//FindTextBoundaries(); ////maybe is needed here////
+		CreateTextLines();
+		CreateLineSegments();
+		AssignLineTypes();
+		FindTableAreas();
+		AssignRowsToTables();
+		CreateTableColumns(); ////
 		if (fail_condition()) {
 			std::cout << std::endl << "failCondition: " << fail_msg << std::endl;
 			return false;
 		}
-		TableMultiRows();
-		ColumnSize();	 ////
+		CreateTableMultiRows();
+		FindColumnSize();	 ////
 		FinalizeGrid(); ////
 		std::string outputFilename = filename;
 		outputFilename.append(withXML ? "XML.html" : ".html");
@@ -1472,104 +1309,6 @@ namespace ocr_tabs {
 
 		return true;
 	}
-
-	/* bool OCRTabsEngine::pdf2html(const std::string& filename, const std::string& filenameXML, bool withXML) {
-		resetAll();
-		std::vector<cv::Mat> pages, pages_clean;
-		if (!parsePDF(filename, pages)) return false;
-		if (withXML) {
-			//// NOT WORKING ////
-			if (!ImagePreproccesing_withXML(filenameXML, pages, pages_clean)) { cout << "Preprocessing with XML failed\n"; return false; }
-			pages.clear();
-			pages = pages_clean;  //not sure about that copying
-		}
-		// if (pages.size() == 1) {
-		//	test = ImagePreproccesing(pages[0]);
-		//	SetImage(test);
-		//	//RemoveGridLines();
-		//	OCR_Recognize();
-		//	BoxesAndWords();
-		//	TextBoundaries();
-		//} else {
-		//	for (int i = 0; i < pages.size(); i++) {
-		//		Mat tmp = ImagePreproccesing(pages[i]);
-		//		SetImage(tmp);
-		//		//RemoveGridLines();
-		//		OCR_Recognize();
-		//		BoxesAndWords();
-		//		PrepareMulti1();
-		//	}
-		//	HeadersFooters();
-		//	PrepareMulti2();
-		//}
-		for (int i = 0; i < pages.size(); i++) {
-			Mat tmp = ImagePreproccesing(pages[i]);
-			SetImage(tmp);
-			//RemoveGridLines();
-			OCR_Recognize();
-			BoxesAndWords();
-			PrepareMulti1();
-		}
-		HeadersFooters();
-		PrepareMulti2();
-
-		TextLines();
-		LineSegments();
-		LineTypes();
-		TableAreas();
-		TableRows();
-		TableColumns(); ////
-		if (fail_condition()) {
-			std::cout << "\nfailCondition: " << fail_msg << std::endl;
-			return false;
-		}
-		TableMultiRows();
-		ColumnSize();	 ////
-		FinalizeGrid(); ////
-		std::string outputFilename = filename;
-		outputFilename.append(withXML ? "XML.html" : ".html");
-		WriteHTML(outputFilename);
-
-		return true;
-	} */
-
-	/* bool OCRTabsEngine::img2html(const std::string& filename, const std::string& filenameXML, bool withXML) {
-		resetAll();
-		//Mat test = imread(filename, IMREAD_GRAYSCALE);
-		//if (test.empty()) { cout << "File not available\n"; return false; }
-		std::vector<cv::Mat> imageList, imageClean;
-		imageList.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE
-		if (imageList[0].empty()) { cout << "File not available" << endl; return false; }
-		if (withXML) {
-			if (!ImagePreproccesing_withXML(filenameXML, imageList, imageClean)) { cout << "Preprocessing with XML failed\n"; return false; }
-			imageList.clear();
-			imageList = imageClean;  //not sure it's working.
-		}
-		Mat test = ImagePreproccesing(imageList[0]);
-		SetImage(test);
-		//RemoveGridLines();
-		OCR_Recognize();
-		BoxesAndWords();
-		TextBoundaries();
-		TextLines();
-		LineSegments();
-		LineTypes();
-		TableAreas();
-		TableRows();
-		TableColumns(); ////
-		if (fail_condition()) {
-			std::cout << "\nfailCondition: " << fail_msg << std::endl;
-			return false;
-		}
-		TableMultiRows();
-		ColumnSize();	 ////
-		FinalizeGrid(); ////
-		std::string outputFilename = filename;
-		outputFilename.append(withXML ? "XML.html" : ".html");
-		WriteHTML(outputFilename);
-
-		return true;
-	} */
 
 	// Resets everything
 	void OCRTabsEngine::resetAll() {
@@ -1652,7 +1391,7 @@ namespace ocr_tabs {
 		return true;
 	}
 
-	bool OCRTabsEngine::ImagePreproccesing_withXML(const std::string& fileXML, std::vector<cv::Mat>& imageRAW, std::vector<cv::Mat>& imageCLN) {
+	bool OCRTabsEngine::PreprocessImageWithXML(const std::string& fileXML, std::vector<cv::Mat>& imageRAW, std::vector<cv::Mat>& imageCLN) {
 		std::ifstream file(fileXML);
 		if (!file.is_open()) return false;
 		for (int i = 0; i < imageRAW.size(); i++) {
@@ -1707,75 +1446,6 @@ namespace ocr_tabs {
 		file.close();
 		return true;
 	}
-
-	/* bool OCRTabsEngine::pdf2html_withXML(const std::string& filename, const std::string& filenameXML) {
-		resetAll();
-		std::vector<cv::Mat> pages, pages_clean;
-		if (!parsePDF(filename, pages)) return false;
-		if (!ImagePreproccesing_withXML(filenameXML, pages, pages_clean)) { cout << "Preprocessing with XML failed\n"; return false; }
-		if (pages.size() == 1) {
-			cout << "in here " << endl;
-			SetImage(pages_clean[0]);
-			//RemoveGridLines();
-			OCR_Recognize();
-			BoxesAndWords();
-			TextBoundaries();
-		} else {
-			for (int i = 0; i < pages.size(); i++) {
-				SetImage(pages_clean[i]);
-				//RemoveGridLines();
-				PrepareMulti1();
-			}
-			HeadersFooters();
-			PrepareMulti2();
-		}
-		TextLines();
-		LineSegments();
-		LineTypes();
-		TableAreas();
-		TableRows();
-		TableColumns(); ////
-		if (fail_condition()) {
-			std::cout << "\nfailCondition\n";
-			return false;
-		}
-		TableMultiRows();
-		ColumnSize();	 ////
-		FinalizeGrid(); ////
-		std::string outputFilename = filename;
-		outputFilename.append("XML.html");
-		WriteHTML(outputFilename);
-		return true;
-	} */
-
-	/* bool OCRTabsEngine::img2html_withXML(const std::string& filename, const std::string& filenameXML) {
-		resetAll();
-		std::vector<cv::Mat> imageList, imageClean;
-		imageList.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE	
-		if (imageList[0].empty()) { cout << "File not available\n"; return false; }
-		if (!ImagePreproccesing_withXML(filenameXML, imageList, imageClean)) { cout << "Preprocessing with XML failed\n"; return false; }
-		SetImage(imageClean[0]);
-		OCR_Recognize();
-		BoxesAndWords();
-		TextBoundaries();
-		TextLines();
-		LineSegments();
-		LineTypes();
-		TableAreas();
-		TableRows();
-		TableColumns(); ////
-		if (fail_condition()) {
-			std::cout <<"\nfailCondition\n";
-			return false;
-		}
-		TableMultiRows();
-		ColumnSize();	 ////
-		FinalizeGrid(); ////
-		std::string outputFilename = filename;
-		outputFilename.append("XML.html");
-		WriteHTML(outputFilename);
-		return true;
-	} */
 
 	/**
 	 * @brief Removes possible figures.
