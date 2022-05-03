@@ -2,8 +2,6 @@
 
 #include <iostream>
 #include <fstream>
-#include "ocr_tabs.h"
-#include "imgProcessor.h"
 extern "C" {
 	#include <mupdf/fitz.h>
 }
@@ -42,10 +40,10 @@ namespace ocr_tabs {
 
 			std::cout << "\n" << words[i] << "\t\t" << confs[i] << "  " << font_size[i] << " ";
 
-			if (bold[i]) { cout << "bold  "; }
-			if (italic[i]) { cout << "italic  "; }
-			if (underscore[i]) { cout << "underlined  "; }
-			if (dict[i]) { cout << "in dictionary  "; }
+			if (bold[i]) { std::cout << "bold  "; }
+			if (italic[i]) { std::cout << "italic  "; }
+			if (underscore[i]) { std::cout << "underlined  "; }
+			if (dict[i]) { std::cout << "in dictionary  "; }
 
 			std::cout << boxes[i][0] << "|" << boxes[i][1] << "|" << boxes[i][2] << "|" << boxes[i][3];
 			std::cout << "\n";

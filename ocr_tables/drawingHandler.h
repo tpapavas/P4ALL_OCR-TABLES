@@ -1,13 +1,9 @@
 #pragma once
-
 #include "dll_config.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include <ctime>
 
-#define TESSDLL_IMPORTS
-
-#include "tesseract/baseapi.h"
 
 //typedef std::vector<std::vector<std::vector<std::vector<int>>>> vec3d_int;
 namespace ocr_tabs {

@@ -1267,7 +1267,7 @@ namespace ocr_tabs {
 
 		case FileType::IMG:
 			pages.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE	
-			if (pages[0].empty()) { cout << "File not available" << endl; return false; }
+			if (pages[0].empty()) { std::cout << "File not available" << std::endl; return false; }
 			break;
 
 		default:

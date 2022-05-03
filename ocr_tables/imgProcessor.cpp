@@ -1,13 +1,13 @@
 #pragma once 
-
 #include "imgProcessor.h"
+#include "drawingHandler.h"
 
 
 bool imgProcessor::thresholdImg (cv::Mat& input, cv::Mat& output, double k, double dR) {
 	if ((input.rows <= 0) || (input.cols <= 0)) {
 		cerr << "*** ERROR: Invalid input Image " << endl;
 		return false;
-	 }
+	}
     
 	int win = (int)(2.0 * input.rows - 1) / 3;
 	win = std::min(win, input.cols - 1);
@@ -49,29 +49,47 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
 	cv::Size defSize(pixs->w, pixs->h);
     pixr = pixReduceRankBinaryCascade(pixs, 1, 0, 0, 0);
 
+	//setLeptDebugOK(1);
+	//pixDisplay(pixs, pixs->w, pixs->h);
+	//pixDisplay(pixr, pixr->w, pixr->h);
+
     /* Get seed for halftone parts */
     pixt1 = pixReduceRankBinaryCascade(pixr, 4, 4, 3, 0);
+	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. reduce rank", 1);
+
     pixt2 = pixOpenBrick(NULL, pixt1, 5, 5);
+	//pixDisplayWithTitle(pixt2, pixt2->w, pixt2->h, "t2. open brick", 1);
     pixhs = pixExpandBinaryPower2(pixt2, 8);
+	//pixDisplayWithTitle(pixhs, pixhs->w, pixhs->h, "hs. expand binary", 1);
+
     pixDestroy(&pixt1);
     pixDestroy(&pixt2);
 
     /* Get mask for connected regions */
     pixm = pixCloseSafeBrick(NULL, pixr, 4, 4);
+	//pixDisplayWithTitle(pixm, pixm->w, pixm->h, "m. close safe brick", 1);
 
     /* Fill seed into mask to get halftone mask */
     pixhm1 = pixSeedfillBinary(NULL, pixhs, pixm, 4);
+	//pixDisplayWithTitle(pixhm1, pixhm1->w, pixhm1->h, "hm1. seed fill binary", 1);
+
     pixhm2 = pixExpandBinaryPower2(pixhm1, 2);
+	//pixDisplayWithTitle(pixhm2, pixhm2->w, pixhm2->h, "hm2. expand binary", 1);
 
     /* Extract halftone stuff */
     pixht = pixAnd(NULL, pixhm1, pixr);
+	//pixDisplayWithTitle(pixht, pixht->w, pixht->h, "ht. hm1 AND r", 1);
 
 	/* Extract non-halftone stuff */
     pixnht = pixXor(NULL, pixht, pixr);
+	//pixDisplayWithTitle(pixnht, pixnht->w, pixnht->h, "nht. ht XOR r", 1);
+
     pixZero(pixht, &zero);
+	//pixDisplayWithTitle(pixht, pixht->w, pixht->h, "ht. zero", 1);
 
 	/* Get bit-inverted image */
     pixi = pixInvert(NULL, pixnht);
+	//pixDisplayWithTitle(pixi, pixi->w, pixi->h, "i. invert", 1);
 
     /* The whitespace mask will break textlines where there
 	 * is a large amount of white space below or above.
@@ -81,12 +99,19 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
 	 * vertical extent (bigger than the separation between
 	 * textlines), and subtracting this from the whitespace mask. */
     pixt1 = pixMorphCompSequence(pixi, "o80.60", 0);
+	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. morph comp", 1);
+
     pixt2 = pixSubtract(NULL, pixi, pixt1);
+	//pixDisplayWithTitle(pixt2, pixt2->w, pixt2->h, "t2. i - t1", 1);
     pixDestroy(&pixt1);
 
     /* Identify vertical whitespace by opening inverted image */
     pixt3 = pixOpenBrick(NULL, pixt2, 5, 1);  /* removes thin vertical lines */
+	//pixDisplayWithTitle(pixt3, pixt3->w, pixt3->h, "t3. open brick", 1);
+
     pixvws = pixOpenBrick(NULL, pixt3, 1, 200);  /* gets long vertical lines */
+	//pixDisplayWithTitle(pixvws, pixvws->w, pixvws->h, "vws. open brick", 1);
+
 	pix2mat(&pixvws, blocks.vert);
     pixDestroy(&pixt2);
     pixDestroy(&pixt3);
@@ -94,16 +119,22 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
     /* Get proto (early processed) text line mask. */
     /* First close the characters and words in the textlines */
     pixtm1 = pixCloseSafeBrick(NULL, pixnht, 30, 1);
+	//pixDisplayWithTitle(pixtm1, pixtm1->w, pixtm1->h, "tm1. close brick", 1);
 
 	/* Next open back up the vertical whitespace corridors */
     pixtm2 = pixSubtract(NULL, pixtm1, pixvws);
+	//pixDisplayWithTitle(pixtm2, pixtm2->w, pixtm2->h, "tm2. tm1 - vws", 1);
 
     /* Do a small opening to remove noise */
     pixOpenBrick(pixtm2, pixtm2, 3, 3);
+	//pixDisplayWithTitle(pixtm2, pixtm2->w, pixtm2->h, "tm2. open brick", 1);
+
     pixtm3 = pixExpandBinaryPower2(pixtm2, 2);
+	//pixDisplayWithTitle(pixtm3, pixtm3->w, pixtm3->h, "tm3. expand power", 1);
 
     /* Join pixels vertically to make text block mask */
     pixtb1 = pixMorphSequence(pixtm2, "c1.10 + o4.1", 0);
+	//pixDisplayWithTitle(pixtb1, pixtb1->w, pixtb1->h, "tb1. morph sequence", 1);
 
     /* Solidify the textblock mask and remove noise:
      *  (1) For each c.c., close the blocks and dilate slightly
@@ -112,44 +143,70 @@ l_int32  imgProcessor::DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks)
      *  (3) Open the white space between columns, again
      *  (4) Remove small components */
     pixt1 = pixMorphSequenceByComponent(pixtb1, "c30.30 + d3.3", 8, 0, 0, NULL);
-    pixCloseSafeBrick(pixt1, pixt1, 10, 1);
+	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. morph sequence", 1);
+    
+	pixCloseSafeBrick(pixt1, pixt1, 10, 1);
+	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. close brick", 1);
+
     pixt2 = pixSubtract(NULL, pixt1, pixvws);
+	//pixDisplayWithTitle(pixt2, pixt2->w, pixt2->h, "t2. t1 - vws", 1);
+
     pixt3 = pixSelectBySize(pixt2, 25, 5, 8, L_SELECT_IF_BOTH,
                             L_SELECT_IF_GTE, NULL);
+	//pixDisplayWithTitle(pixt3, pixt3->w, pixt3->h, "t3. select", 1);
+
 	pix2mat(&pixt3, blocks.text);
     pixtb2 = pixExpandBinaryPower2(pixt3, 2);
-    pixDestroy(&pixt1);
+	//pixDisplayWithTitle(pixtb2, pixtb2->w, pixtb2->h, "tb2. expand binary", 1);
+    
+	pixDestroy(&pixt1);
     pixDestroy(&pixt2);
     pixDestroy(&pixt3);
 
 	/* Identify the outlines of each textblock */
     ptaa = pixGetOuterBordersPtaa(pixtb2);
     pixt1 = pixRenderRandomCmapPtaa(pixtb2, ptaa, 1, 8, 1);
-    cmap = pixGetColormap(pixt1);
-    pixcmapResetColor(cmap, 0, 130, 130, 130);  /* set interior to gray */
-     ptaaDestroy(&ptaa);
+	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. random cmap", 1);
+    
+	cmap = pixGetColormap(pixt1);
+	pixcmapResetColor(cmap, 0, 130, 130, 130);  /* set interior to gray */
+
+    ptaaDestroy(&ptaa);
     pixDestroy(&pixt1);
 
     /* Fill line mask (as seed) into the original */
     pixt1 = pixSeedfillBinary(NULL, pixtm3, pixs, 8);
+	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. seed fill", 1);
+
     pixOr(pixtm3, pixtm3, pixt1);
+	//pixDisplayWithTitle(pixtm3, pixtm3->w, pixtm3->h, "tm3. tm3 OR t1", 1);
+
     pixDestroy(&pixt1);
  
     /* Fill halftone mask (as seed) into the original */
     pixt1 = pixSeedfillBinary(NULL, pixhm2, pixs, 8);
-    pixOr(pixhm2, pixhm2, pixt1);
+	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. seed fill", 1);
+    
+	pixOr(pixhm2, pixhm2, pixt1);
+	//pixDisplayWithTitle(pixhm2, pixhm2->w, pixhm2->h, "hm2. hm2 OR t1", 1);
+
     pixDestroy(&pixt1);
 	pix2mat(&pixhm2, blocks.figures);
+	//pixDisplayWithTitle(pixhm2, pixhm2->w, pixhm2->h, "hm2", 1);
   
     /* Find objects that are neither text nor halftones */
     pixt1 = pixSubtract(NULL, pixs, pixtm3);  /* remove text pixels */
-    pixnon = pixSubtract(NULL, pixt1, pixhm2);  /* remove halftone pixels */
-     pixDestroy(&pixt1);
-	 pix2mat(&pixnon, blocks.other);
+	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. s - tm3", 1);
+    
+	pixnon = pixSubtract(NULL, pixt1, pixhm2);  /* remove halftone pixels */
+	//pixDisplayWithTitle(pixnon, pixnon->w, pixnon->h, "non. t1 - hm2", 1);
+
+    pixDestroy(&pixt1);
+	pix2mat(&pixnon, blocks.other);
 
     /* Write out b.b. for text line mask and halftone mask components */
-    boxatm = pixConnComp(pixtm3, NULL, 4);
-    boxahm = pixConnComp(pixhm2, NULL, 8);
+    boxatm = pixConnComp(pixtm3, NULL, 4);    
+	boxahm = pixConnComp(pixhm2, NULL, 8);
 
     //pixDestroy(&pixt1);
     //pixaDestroy(&pixa);
@@ -359,7 +416,7 @@ bool imgProcessor::mat2pix (cv::Mat& mat, Pix** px) {
 	*px = pixCreate(mat.cols, mat.rows, 8);
 	uchar* data = mat.data;
 	
-	for (int i = 0; i < mat.rows; i++) {
+ 	for (int i = 0; i < mat.rows; i++) {
 		unsigned idx = i * mat.cols;
 		for (int j = 0; j < mat.cols; j++) {
 			pixSetPixel(*px, j, i, (l_uint32)data[idx + j]);
@@ -434,20 +491,27 @@ bool imgProcessor::pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat) {
 	return true;
 }
 
+/**
+ * @brief Binarize and segment image
+ * @param input: the image to be processed
+ * @param thres: threshold to be calculated
+ * @param blocks: segmentation blocks
+ */
 void imgProcessor::prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks& blocks) {
 	std::cout << "Thresholding Image...";
-	
 	cv::Mat tr,tr2;
 	cv::erode(input, tr2, cv::Mat(), cv::Point(-1, -1), 1);
-	imgProcessor::thresholdImg(tr2, thres);
+	imgProcessor::thresholdImg(tr2, thres);  //get binary image
 	cv::erode(thres, tr, cv::Mat(), cv::Point(-1, -1), 3);
-	std::cout << "Done!\n";
+	std::cout << "Done!" << std::endl;
+
+	std::cout << "Segmenting Page...";
 	Pix* px = NULL;
 	imgProcessor::mat2pixBinary(tr, &px);
-	std::cout << "Segmenting Page...";
 	imgProcessor::DoPageSegmentation(px, blocks);
-	std::cout << "Done!\n";
+	std::cout << "Done!" << std::endl;
 	pixDestroy(&px);
+
 	imgProcessor::thresholdImg(input, thres);
 }
 
@@ -471,6 +535,7 @@ void imgProcessor::getTextImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	output = input.clone();
 	output.setTo(255, blk.figures == 255);
 	output.setTo(255, blk.text == 0);
+	//ocr_tabs::drawingHandler::DrawGridlessImage(output);
 	//output.setTo(255, blk.other==255);
 }
 
