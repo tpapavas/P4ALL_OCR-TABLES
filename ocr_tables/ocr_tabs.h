@@ -100,12 +100,18 @@ namespace ocr_tabs {
 
 		void RemoveFigures();
 		void ProcessGeneratedColumns();
+		int FindMaxBoxInSegment(const std::vector<int> &seg);
 
 		enum BoxSide {
 			BOX_LEFT=0,
 			BOX_TOP=1,
 			BOX_RIGHT=2,
 			BOX_BOTTOM=3
+		};
+
+		enum LineSide {
+			LINE_TOP=0,
+			LINE_BOTTOM=1
 		};
 	};
 }

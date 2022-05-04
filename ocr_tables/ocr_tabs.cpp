@@ -308,8 +308,8 @@ namespace ocr_tabs {
 			tmp[0] = page_bottom;
 			tmp[1] = page_top;
 			for (int j = 0; j < lines[i].size(); j++) {
-				if (boxes[lines[i][j]][BOX_TOP] <= tmp[0]) { tmp[0] = boxes[lines[i][j]][BOX_TOP]; }
-				if (boxes[lines[i][j]][BOX_BOTTOM] >= tmp[1]) { tmp[1] = boxes[lines[i][j]][BOX_BOTTOM]; }
+				if (boxes[lines[i][j]][BOX_TOP] <= tmp[LINE_TOP]) { tmp[LINE_TOP] = boxes[lines[i][j]][BOX_TOP]; }
+				if (boxes[lines[i][j]][BOX_BOTTOM] >= tmp[LINE_BOTTOM]) { tmp[LINE_BOTTOM] = boxes[lines[i][j]][BOX_BOTTOM]; }
 			}
 			line_dims.push_back(tmp);
 		}
@@ -461,7 +461,7 @@ namespace ocr_tabs {
 				segments.push_back(tmp);
 				Lines_segments.push_back(segments);
 			} else {*/
-			float hor_thresh = (line_dims[i][1] - line_dims[i][0]) * ratio;
+			float hor_thresh = (line_dims[i][LINE_BOTTOM] - line_dims[i][LINE_TOP]) * ratio;
 			vector<vector<int>> segments;
 			vector<int> tmp;
 			tmp.push_back(lines[i][0]);
@@ -516,7 +516,7 @@ namespace ocr_tabs {
 					((seg_right2-seg_left2)>=(page_right-page_left)/2))
 				{Lines_type[i]=3;}
 			}*/
-			sum = sum + line_dims[i][1] - line_dims[i][0];
+			sum = sum + line_dims[i][LINE_BOTTOM] - line_dims[i][LINE_TOP];
 		}
 		sum = (float)sum / lines.size();
 
@@ -526,7 +526,7 @@ namespace ocr_tabs {
 		float ratio=0.95;
 		for (int i=0;i<(std::min((int)Lines.size(),2));i++)
 		{
-			if ((Line_dims[i][1]-Line_dims[i][0])<=ratio*sum)
+			if ((Line_dims[i][LINE_BOTTOM]-Line_dims[i][LINE_TOP])<=ratio*sum)
 			{
 				if (i==0)
 				{
@@ -544,7 +544,7 @@ namespace ocr_tabs {
 
 		for (int i=(Lines.size()-1);i>=0;i--)
 		{
-			if ((Line_dims[i][1]-Line_dims[i][0])<=ratio*sum)
+			if ((Line_dims[i][LINE_BOTTOM]-Line_dims[i][LINE_TOP])<=ratio*sum)
 			{
 				if (i==Lines.size()-1)
 				{
@@ -641,8 +641,8 @@ namespace ocr_tabs {
 			// Some large segments can be assigned to more than one columns
 			vector<vector<int>> column_creator;  //segment used as column generator
 			int limit = -1;
-			vector<int> min;
-			min = line_segments[table_rows[0][0]][0];  //left-most segment
+			vector<int> min_seg;
+			min_seg = line_segments[table_rows[0][0]][0];  //left-most segment
 			bool end_of_table = false;
 
 			//FIND COLUMN GENERATORS
@@ -654,121 +654,124 @@ namespace ocr_tabs {
 					i = table_rows.size();
 					fail = true;
 					fail_msg = "Find Table Columns task failed";
-					//cout << "TASK FAILED\n";
 					break;
 				}
 
+				//find left-most segment in current table area
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						int line_id = table_rows[i][j];
-						int left_box_id = line_segments[line_id][k][0];
-						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
+						int first_box_id = line_segments[line_id][k][0];
+						int last_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
 						//int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
 						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
-						int left = boxes[left_box_id][BOX_LEFT];
-						int right = boxes[right_box_id][BOX_RIGHT];
+						int left = boxes[first_box_id][BOX_LEFT];
+						int right = boxes[last_box_id][BOX_RIGHT];
 
-						if ((left <= boxes[min[0]][BOX_LEFT]) && (left > limit)) {
-							//min = line_segments[table_rows[i][j]][k];
-							min = line_segments[line_id][k];
+						if ((left <= boxes[min_seg[0]][BOX_LEFT]) && (left > limit)) {
+							//min_seg = line_segments[table_rows[i][j]][k];
+							min_seg = line_segments[line_id][k];
 						}
 					}
 				}
-				//cout<<"\n\n"<<words[min[0]]<<"\n\n";
-				float avg = 0;
+
+				float avg_seg_len = 0;
 				int counter = 0;
-				int hor_thresh = (line_dims[table_rows[i][(int)table_rows[i].size() / 2]][1] - line_dims[table_rows[i][(int)table_rows[i].size() / 2]][0]) * 2.6;
+				int hor_thresh = (line_dims[table_rows[i][(int)table_rows[i].size() / 2]][LINE_BOTTOM] - line_dims[table_rows[i][(int)table_rows[i].size() / 2]][LINE_TOP]) * 2.6;
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						int line_id = table_rows[i][j];
-						int left_box_id = line_segments[line_id][k][0];
-						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
-						//int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
-						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
-						int left = boxes[left_box_id][BOX_LEFT];
-						int right = boxes[right_box_id][BOX_RIGHT];
+						int first_box_id = line_segments[line_id][k][0];
+						int last_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
 
-						// calc avg length of segments horizontally-aligned with min
-						if ((abs(left - boxes[min[0]][BOX_LEFT]) <= hor_thresh) &&
-							/*((right-left)<=(boxes[min[min.size()-1]][2]-boxes[min[0]][0]))&&*/
+						int left = boxes[first_box_id][BOX_LEFT];
+						int right = boxes[last_box_id][BOX_RIGHT];
+
+						// calc avg length of segments horizontally-aligned with min_seg
+						if ((abs(left - boxes[min_seg[0]][BOX_LEFT]) <= hor_thresh) &&
+							/*((right-left)<=(boxes[min_seg[min_seg.size()-1]][2]-boxes[min_seg[0]][0]))&&*/
 							(left > limit)) {
-							//cout<<words[Lines_segments[table_Rows[i][j]][k][0]]<<"\n";
-							//min=Lines_segments[table_Rows[i][j]][k];
-							avg = avg + right - left;
+							//min_seg=Lines_segments[table_Rows[i][j]][k];
+							avg_seg_len = avg_seg_len + (right - left);
 							counter++;
 						}
 					}
 				}
-				int fin_left = boxes[min[0]][BOX_LEFT];
-				avg = (float)avg / counter;
+				int fin_left = boxes[min_seg[0]][BOX_LEFT];
+				avg_seg_len = (float)avg_seg_len / counter;
 				float overlap_ratio = 1.2;
-				avg = avg * overlap_ratio;
+				avg_seg_len = avg_seg_len * overlap_ratio;
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						int line_id = table_rows[i][j];
 						int left_box_id = line_segments[line_id][k][0];
 						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
-						//int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
-						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
+
 						int left = boxes[left_box_id][BOX_LEFT];
 						int right = boxes[right_box_id][BOX_RIGHT];
 
 						// Select the segment that is closest to the avg length
 						if ((abs(left - fin_left) <= hor_thresh) &&
-							(abs(right - left - avg) <= abs(boxes[min[min.size() - 1]][BOX_RIGHT] - boxes[min[0]][BOX_LEFT] - avg)) &&
+							(abs((right - left) - avg_seg_len) <= abs((boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT] - boxes[min_seg[0]][BOX_LEFT]) - avg_seg_len)) &&
 							(left > limit)) {
-							min = line_segments[line_id][k];
+							min_seg = line_segments[line_id][k];
 						}
 					}
 				}
-				//cout<<"\n"<<words[min[0]]<<"\n\n";
-				//int aas;
-				//cin>>aas;
-				column_creator.push_back(min);
-				limit = boxes[min[min.size() - 1]][BOX_RIGHT];  //set left-most limit for remaining segments
-				min.clear();
+
+				column_creator.push_back(min_seg);
+				int max_box_id = FindMaxBoxInSegment(min_seg);  //maybe there aren't sorted
+				//limit = boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT];  //set left-most limit for remaining segments
+				limit = boxes[min_seg[max_box_id]][BOX_RIGHT];
+				min_seg.clear();
+				
+				// find new min_seg initial value for new limit
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
 						if (left > limit) {
-							min = line_segments[table_rows[i][j]][k];
+							min_seg = line_segments[table_rows[i][j]][k];
 							break;
 						}
 					}
 				}
 
-				if (min.size() == 0) { end_of_table = true; }
+				if (min_seg.size() == 0) { end_of_table = true; }
 			}
 			tmp_col.push_back(column_creator);
 		}
 
-		if (!fail) {
-			//FIND REST OF COLUMNS
-			for (int i = 0; i < tmp_col.size(); i++) {
-				vector<vector<vector<int>>> t_col;
-				for (int j = 0; j < tmp_col[i].size(); j++) {
-					int col_left = boxes[tmp_col[i][j][0]][BOX_LEFT];
-					int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][BOX_RIGHT];
-					vector<vector<int>> t_seg;
-					for (int k = 0; k < table_rows[i].size(); k++) {
-						for (int z = 0; z < line_segments[table_rows[i][k]].size(); z++) {
-							int seg_left = boxes[line_segments[table_rows[i][k]][z][0]][BOX_LEFT];
-							int seg_right = boxes[line_segments[table_rows[i][k]][z][line_segments[table_rows[i][k]][z].size() - 1]][BOX_RIGHT];
-							if (((seg_right >= col_left) && (seg_right <= col_right)) ||
-								((seg_left >= col_left) && (seg_left <= col_right)) ||
-								((seg_left <= col_left) && (seg_right >= col_right))) {
-								t_seg.push_back(line_segments[table_rows[i][k]][z]);
-							}
+		if (fail) return;
+		
+		// Assign all the segments that horizontally overlap with the column generator to a new column.
+		for (int i = 0; i < tmp_col.size(); i++) {
+			vector<vector<vector<int>>> t_col;
+			for (int j = 0; j < tmp_col[i].size(); j++) {
+				int col_left = boxes[tmp_col[i][j][0]][BOX_LEFT]; //left side of first box of column creator (segment)
+				int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][BOX_RIGHT]; //right side of last box of column creator (segment)
+				vector<vector<int>> t_seg;
+				for (int k = 0; k < table_rows[i].size(); k++) {
+					int line_id = table_rows[i][k];
+					for (int z = 0; z < line_segments[line_id].size(); z++) {
+						int seg_left = boxes[line_segments[line_id][z][0]][BOX_LEFT];
+						int seg_right = boxes[line_segments[line_id][z][line_segments[line_id][z].size() - 1]][BOX_RIGHT];
+						/*if (((seg_right >= col_left) && (seg_right <= col_right)) ||
+							((seg_left >= col_left) && (seg_left <= col_right)) ||
+							((seg_left <= col_left) && (seg_right >= col_right))) {
+							t_seg.push_back(line_segments[line_id][z]);
+						}*/
+						if ((seg_right >= col_left) && (seg_left <= col_right)) {
+							t_seg.push_back(line_segments[line_id][z]);
 						}
 					}
-
-					t_col.push_back(t_seg);
 				}
-				table_columns.push_back(t_col);
-			}
 
-			ProcessGeneratedColumns();
+				t_col.push_back(t_seg);
+			}
+			table_columns.push_back(t_col);
 		}
+
+		ProcessGeneratedColumns();
 	}
 
 	// Create table rows that include more than one lines
@@ -1497,195 +1500,208 @@ namespace ocr_tabs {
 	 * Remove, merge etc
 	 */
 	void OCRTabsEngine::ProcessGeneratedColumns() {
-		if (!fail) {
-			// remove empty columns
-			for (int i = 0; i < table_columns.size(); i++) {
-				for (int j = 0; j < table_columns[i].size(); j++) {
-					if (table_columns[i][j].size() == 0) {
-						table_columns[i].erase(table_columns[i].begin() + j);
-						j--;
-					}
+		if (fail) return;
+
+		// remove empty columns
+		for (int i = 0; i < table_columns.size(); i++) {
+			for (int j = 0; j < table_columns[i].size(); j++) {
+				if (table_columns[i][j].size() == 0) {
+					table_columns[i].erase(table_columns[i].begin() + j);
+					j--;
 				}
 			}
+		}
 
-			// If we find a column where the unique segments  (segments that are assigned to only one column)
-			// are less than the multiple segemnts (segments assigned to more than 1 column), we merge this column with
-			// the immediatelly previous one
-			for (int i = 0; i < table_columns.size(); i++) {
-				for (int j = 1; j < table_columns[i].size(); j++) {
-					int counter_single = 0;
-					int counter_multi = 0;
+		// If we find a column where the unique segments  (segments that are assigned to only one column)
+		// are less than the multiple segemnts (segments assigned to more than 1 column), we merge this column with
+		// the immediatelly previous one
+		for (int i = 0; i < table_columns.size(); i++) {
+			for (int j = 1; j < table_columns[i].size(); j++) {
+				int counter_single = 0;
+				int counter_multi = 0;
+				for (int k = 0; k < table_columns[i][j].size(); k++) {
+					bool multi = false;
+					if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) != table_columns[i][j - 1].end()) {
+						multi = true;
+					}
+					if (multi) {
+						counter_multi++;
+					}
+					else {
+						counter_single++;
+					}
+				}
+				if (counter_multi >= 1 * counter_single) {
 					for (int k = 0; k < table_columns[i][j].size(); k++) {
 						bool multi = false;
 						if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) != table_columns[i][j - 1].end()) {
 							multi = true;
 						}
-						if (multi) {
-							counter_multi++;
-						}
-						else {
-							counter_single++;
-						}
+						if (!multi) { table_columns[i][j - 1].push_back(table_columns[i][j][k]); }
 					}
-					if (counter_multi >= 1 * counter_single) {
-						for (int k = 0; k < table_columns[i][j].size(); k++) {
-							bool multi = false;
-							if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) != table_columns[i][j - 1].end()) {
-								multi = true;
-							}
-							if (!multi) { table_columns[i][j - 1].push_back(table_columns[i][j][k]); }
-						}
-						table_columns[i].erase(table_columns[i].begin() + j);
-						j--;
-					}
+					table_columns[i].erase(table_columns[i].begin() + j);
+					j--;
 				}
 			}
+		}
 
-			// Type-3 lines that are in the end of a table, and their single segment is assigned to more than one columns,
-			// are removed from the table
-			for (int i = 0; i < table_rows.size(); i++) {
-				for (int j = table_rows[i].size() - 1; j >= 0; j--) {
-					//cout << table_Rows[0].size()<<"     "<<table_Rows[1].size()<<"\n";
-					//cout << i<<"     "<<j<<"\n";
-					if (lines_type[table_rows[i][j]] == LineType::UNKNOWN) {
-						vector<int> xcol;
-						for (int k = 0; k < table_columns[i].size(); k++) {
-							if (table_columns[i][k].size() > 0) {
-								if (line_segments[table_rows[i][j]][0] == table_columns[i][k][table_columns[i][k].size() - 1]) {
-									xcol.push_back(k);
-								}
+		// Type-3 lines that are in the end of a table, and their single segment is assigned to more than one columns,
+		// are removed from the table
+		for (int i = 0; i < table_rows.size(); i++) {
+			for (int j = table_rows[i].size() - 1; j >= 0; j--) {
+				//cout << table_Rows[0].size()<<"     "<<table_Rows[1].size()<<"\n";
+				//cout << i<<"     "<<j<<"\n";
+				if (lines_type[table_rows[i][j]] == LineType::UNKNOWN) {
+					vector<int> xcol;
+					for (int k = 0; k < table_columns[i].size(); k++) {
+						if (table_columns[i][k].size() > 0) {
+							if (line_segments[table_rows[i][j]][0] == table_columns[i][k][table_columns[i][k].size() - 1]) {
+								xcol.push_back(k);
 							}
 						}
-						if (xcol.size() > 1) {
-							lines_type[table_rows[i][j]] = LineType::TEXT;
-							table_rows[i].erase(table_rows[i].begin() + j);
-							for (int k = 0; k < xcol.size(); k++) {
-								table_columns[i][xcol[k]].erase(table_columns[i][xcol[k]].begin() + table_columns[i][xcol[k]].size() - 1);
-							}
-						} else {
-							j = -1;
+					}
+					if (xcol.size() > 1) {
+						lines_type[table_rows[i][j]] = LineType::TEXT;
+						table_rows[i].erase(table_rows[i].begin() + j);
+						for (int k = 0; k < xcol.size(); k++) {
+							table_columns[i][xcol[k]].erase(table_columns[i][xcol[k]].begin() + table_columns[i][xcol[k]].size() - 1);
 						}
 					} else {
 						j = -1;
 					}
+				} else {
+					j = -1;
 				}
 			}
-
-			//If a column has only one segment, which is on the 1st row (possibly missaligned table header) and the column on its left doesnot have a segment
-			// in the same row, then merge these columns
-			for (int i = 0; i < table_columns.size(); i++) {
-				for (int j = 1; j < table_columns[i].size(); j++) {
-					if (table_columns[i][j].size() == 1) {
-						bool found1 = false;
-						bool found2 = false;
-						if (std::find(line_segments[table_rows[i][0]].begin(), line_segments[table_rows[i][0]].end(), table_columns[i][j][0]) != line_segments[table_rows[i][0]].end()) {
-							found1 = true;
-						}
-						if (std::find(line_segments[table_rows[i][0]].begin(), line_segments[table_rows[i][0]].end(), table_columns[i][j - 1][0]) != line_segments[table_rows[i][0]].end()) {
-							found2 = true;
-						}
-						if ((found1) && (!found2)) {
-							for (int k = 0; k < table_columns[i][j - 1].size(); k++) {
-								table_columns[i][j].push_back(table_columns[i][j - 1][k]);
-							}
-							table_columns[i].erase(table_columns[i].begin() + j - 1);
-						}
-					}
-				}
-			}
-
-			// Tables that end up having only one column, are discarded and treated as simple text
-			for (int i = table_columns.size() - 1; i >= 0; i--) {
-				if (table_columns[i].size() < 2) {
-					table_columns.erase(table_columns.begin() + i);
-					for (int j = 0; j < table_rows[i].size(); j++) {
-						lines_type[table_rows[i][j]] = LineType::TEXT;
-					}
-					table_rows.erase(table_rows.begin() + i);
-				}
-			}
-
-			//Check and remove scrambled tables i.e tables that seem to have a table format but in reality are random segments generated by
-			// big white spaces bwtween words (justified text aligment)
-
-			//bool scrambled_table=false;
-			//int scramLim = 0;
-			//for (int i=table_Columns.size()-1;i>=0;i--)
-			//{
-			//	if (scrambled_table)
-			//	{	
-			//		table_Columns.erase(table_Columns.begin()+i+1);
-			//		for (int k=0;k<table_Rows[i+1].size();k++)
-			//		{
-			//			Lines_type[table_Rows[i+1][k]]=1;
-			//		}
-			//		table_Rows.erase(table_Rows.begin()+i+1);
-			//	}
-			//	scrambled_table=false;
-			//	for (int j=0;j<table_Columns[i].size();j++)
-			//	{
-			//		bool scrambled_col=false;
-			//		for (int k=0;k<table_Columns[i][j].size()-1;k++)
-			//		{
-			//			int left1=boxes[table_Columns[i][j][k][0]][0];
-			//			int left2=boxes[table_Columns[i][j][k+1][0]][0];
-			//			int right1=boxes[table_Columns[i][j][k][table_Columns[i][j][k].size()-1]][2];
-			//			int right2=boxes[table_Columns[i][j][k+1][table_Columns[i][j][k+1].size()-1]][2];	
-			//			if ((abs(left1-left2)<=scramLim)||(abs(right1-right2)<=scramLim))
-			//			{
-			//				scrambled_col=true;
-			//			}
-			//			if (k<table_Columns[i][j].size()-2){
-			//			left2=boxes[table_Columns[i][j][k+2][0]][0];
-			//			right2=boxes[table_Columns[i][j][k+2][table_Columns[i][j][k+2].size()-1]][2];	
-			//			if ((abs(left1-left2)<=scramLim)||(abs(right1-right2)<=scramLim))
-			//			{
-			//				scrambled_col=true;
-			//			}
-			//			}
-			//		}
-			//		if (!scrambled_col)
-			//		{
-			//			scrambled_table=true;
-			//			j=table_Columns[i].size();
-			//		}
-			//	}
-			//}
-			//if (scrambled_table)
-			//{	
-			//	table_Columns.erase(table_Columns.begin()+0);
-			//	for (int k=0;k<table_Rows[0].size();k++)
-			//	{
-			//		Lines_type[table_Rows[0][k]]=1;
-			//	}
-			//	table_Rows.erase(table_Rows.begin()+0);
-			//}
-
-			//If all the columns of a table (besides the 1st one) have more empty cells than cells with data then
-			//this table is discarded (simple formatted text)
-			for (int i = table_columns.size() - 1; i >= 0; i--) {
-				bool almost_empty = false;
-				for (int j = 1; j < table_columns[i].size(); j++) {
-					if (table_columns[i][j].size() < table_rows[i].size() / 2) {
-						almost_empty = true;
-					}
-					else {
-						almost_empty = false;
-						j = table_columns[i].size();
-					}
-				}
-				if (almost_empty) {
-					table_columns.erase(table_columns.begin() + i);
-					for (int k = 0; k < table_rows[i].size(); k++) {
-						lines_type[table_rows[i][k]] = LineType::TEXT;
-					}
-					table_rows.erase(table_rows.begin() + i);
-				}
-			}
-
-			//duration = (std::clock() - start) / CLOCKS_PER_SEC;
-			//std::cout << " Done in " << duration << "s \n";
-			std::cout << " Done in " << aux::endClock() << "s \n";
 		}
+
+		//If a column has only one segment, which is on the 1st row (possibly missaligned table header) and the column on its left doesnot have a segment
+		// in the same row, then merge these columns
+		for (int i = 0; i < table_columns.size(); i++) {
+			for (int j = 1; j < table_columns[i].size(); j++) {
+				if (table_columns[i][j].size() == 1) {
+					bool found1 = false;
+					bool found2 = false;
+					if (std::find(line_segments[table_rows[i][0]].begin(), line_segments[table_rows[i][0]].end(), table_columns[i][j][0]) != line_segments[table_rows[i][0]].end()) {
+						found1 = true;
+					}
+					if (std::find(line_segments[table_rows[i][0]].begin(), line_segments[table_rows[i][0]].end(), table_columns[i][j - 1][0]) != line_segments[table_rows[i][0]].end()) {
+						found2 = true;
+					}
+					if ((found1) && (!found2)) {
+						for (int k = 0; k < table_columns[i][j - 1].size(); k++) {
+							table_columns[i][j].push_back(table_columns[i][j - 1][k]);
+						}
+						table_columns[i].erase(table_columns[i].begin() + j - 1);
+					}
+				}
+			}
+		}
+
+		// Tables that end up having only one column, are discarded and treated as simple text
+		for (int i = table_columns.size() - 1; i >= 0; i--) {
+			if (table_columns[i].size() < 2) {
+				table_columns.erase(table_columns.begin() + i);
+				for (int j = 0; j < table_rows[i].size(); j++) {
+					lines_type[table_rows[i][j]] = LineType::TEXT;
+				}
+				table_rows.erase(table_rows.begin() + i);
+			}
+		}
+
+		//Check and remove scrambled tables i.e tables that seem to have a table format but in reality are random segments generated by
+		// big white spaces bwtween words (justified text aligment)
+
+		//bool scrambled_table=false;
+		//int scramLim = 0;
+		//for (int i=table_Columns.size()-1;i>=0;i--)
+		//{
+		//	if (scrambled_table)
+		//	{	
+		//		table_Columns.erase(table_Columns.begin()+i+1);
+		//		for (int k=0;k<table_Rows[i+1].size();k++)
+		//		{
+		//			Lines_type[table_Rows[i+1][k]]=1;
+		//		}
+		//		table_Rows.erase(table_Rows.begin()+i+1);
+		//	}
+		//	scrambled_table=false;
+		//	for (int j=0;j<table_Columns[i].size();j++)
+		//	{
+		//		bool scrambled_col=false;
+		//		for (int k=0;k<table_Columns[i][j].size()-1;k++)
+		//		{
+		//			int left1=boxes[table_Columns[i][j][k][0]][0];
+		//			int left2=boxes[table_Columns[i][j][k+1][0]][0];
+		//			int right1=boxes[table_Columns[i][j][k][table_Columns[i][j][k].size()-1]][2];
+		//			int right2=boxes[table_Columns[i][j][k+1][table_Columns[i][j][k+1].size()-1]][2];	
+		//			if ((abs(left1-left2)<=scramLim)||(abs(right1-right2)<=scramLim))
+		//			{
+		//				scrambled_col=true;
+		//			}
+		//			if (k<table_Columns[i][j].size()-2){
+		//			left2=boxes[table_Columns[i][j][k+2][0]][0];
+		//			right2=boxes[table_Columns[i][j][k+2][table_Columns[i][j][k+2].size()-1]][2];	
+		//			if ((abs(left1-left2)<=scramLim)||(abs(right1-right2)<=scramLim))
+		//			{
+		//				scrambled_col=true;
+		//			}
+		//			}
+		//		}
+		//		if (!scrambled_col)
+		//		{
+		//			scrambled_table=true;
+		//			j=table_Columns[i].size();
+		//		}
+		//	}
+		//}
+		//if (scrambled_table)
+		//{	
+		//	table_Columns.erase(table_Columns.begin()+0);
+		//	for (int k=0;k<table_Rows[0].size();k++)
+		//	{
+		//		Lines_type[table_Rows[0][k]]=1;
+		//	}
+		//	table_Rows.erase(table_Rows.begin()+0);
+		//}
+
+		//If all the columns of a table (besides the 1st one) have more empty cells than cells with data then
+		//this table is discarded (simple formatted text)
+		for (int i = table_columns.size() - 1; i >= 0; i--) {
+			bool almost_empty = false;
+			for (int j = 1; j < table_columns[i].size(); j++) {
+				if (table_columns[i][j].size() < table_rows[i].size() / 2) {
+					almost_empty = true;
+				}
+				else {
+					almost_empty = false;
+					j = table_columns[i].size();
+				}
+			}
+			if (almost_empty) {
+				table_columns.erase(table_columns.begin() + i);
+				for (int k = 0; k < table_rows[i].size(); k++) {
+					lines_type[table_rows[i][k]] = LineType::TEXT;
+				}
+				table_rows.erase(table_rows.begin() + i);
+			}
+		}
+
+		//duration = (std::clock() - start) / CLOCKS_PER_SEC;
+		//std::cout << " Done in " << duration << "s \n";
+		std::cout << " Done in " << aux::endClock() << "s \n";
+	}
+
+	int OCRTabsEngine::FindMaxBoxInSegment(const std::vector<int>& seg) {
+		int max_right = -1;
+		int max_box_id = -1;
+		for (int i = 0; i < seg.size(); i++) {
+			if (boxes[seg[i]][BOX_RIGHT] > max_right) {
+				max_right = boxes[seg[i]][BOX_RIGHT];
+				max_box_id = i;
+			}
+		}
+
+		return max_box_id;
 	}
 }
