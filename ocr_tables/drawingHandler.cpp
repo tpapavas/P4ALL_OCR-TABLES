@@ -223,7 +223,7 @@ namespace ocr_tabs {
 	}
 
 	void drawingHandler::DrawGridlessImage(cv::Mat& test) {
-		namedWindow("img", 0);
+		namedWindow("img", cv::WINDOW_NORMAL);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 		imshow("img", test);

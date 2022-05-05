@@ -77,7 +77,7 @@ namespace ocr_tabs {
 		underscore_.push_back(underscore);
 		dict_.push_back(dict);
 		
-		test.release();
+		//test.release();
 		confs.clear();
 		boxes.clear();
 		words.clear();
@@ -299,6 +299,7 @@ namespace ocr_tabs {
 				}
 			}
 			i = j - 1;
+			
 			lines.push_back(tmp);  //assign them to the same line
 		}
 
@@ -469,10 +470,21 @@ namespace ocr_tabs {
 				if (boxes[lines[i][j]][0] - boxes[lines[i][j - 1]][2] <= hor_thresh) {
 					tmp.push_back(lines[i][j]);
 				} else {
+					InsertionSortBoxesInSegment(tmp);
+					cout << endl << endl;
+					for (int k = 0; k < tmp.size(); k++) {
+						cout << "[" << boxes[tmp[k]][BOX_LEFT] << "," << boxes[tmp[k]][BOX_RIGHT] << "] ";
+					}
 					segments.push_back(tmp);
 					tmp.clear();
 					tmp.push_back(lines[i][j]);
 				}
+			}
+
+			InsertionSortBoxesInSegment(tmp); 
+			cout << endl << endl;
+			for (int k = 0; k < tmp.size(); k++) {
+				cout << "[" << boxes[tmp[k]][BOX_LEFT] << "," << boxes[tmp[k]][BOX_RIGHT] << "] ";
 			}
 			segments.push_back(tmp);
 			line_segments.push_back(segments);
@@ -675,6 +687,8 @@ namespace ocr_tabs {
 					}
 				}
 
+				cout << "min segment #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[0]][BOX_RIGHT] << endl;
+
 				float avg_seg_len = 0;
 				int counter = 0;
 				int hor_thresh = (line_dims[table_rows[i][(int)table_rows[i].size() / 2]][LINE_BOTTOM] - line_dims[table_rows[i][(int)table_rows[i].size() / 2]][LINE_TOP]) * 2.6;
@@ -701,6 +715,9 @@ namespace ocr_tabs {
 				avg_seg_len = (float)avg_seg_len / counter;
 				float overlap_ratio = 1.2;
 				avg_seg_len = avg_seg_len * overlap_ratio;
+
+				cout << "avg seg len: " << avg_seg_len << endl;
+				
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						int line_id = table_rows[i][j];
@@ -719,6 +736,8 @@ namespace ocr_tabs {
 					}
 				}
 
+				cout << "column creator #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT] << endl;
+
 				column_creator.push_back(min_seg);
 				int max_box_id = FindMaxBoxInSegment(min_seg);  //maybe there aren't sorted
 				//limit = boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT];  //set left-most limit for remaining segments
@@ -736,6 +755,9 @@ namespace ocr_tabs {
 					}
 				}
 
+				cout << "new limit: " << limit << endl;
+				cout << "NEW min segment #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[0]][BOX_RIGHT] << endl << endl;
+
 				if (min_seg.size() == 0) { end_of_table = true; }
 			}
 			tmp_col.push_back(column_creator);
@@ -750,6 +772,7 @@ namespace ocr_tabs {
 				int col_left = boxes[tmp_col[i][j][0]][BOX_LEFT]; //left side of first box of column creator (segment)
 				int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][BOX_RIGHT]; //right side of last box of column creator (segment)
 				vector<vector<int>> t_seg;
+				cout << endl << "this column: (" << col_left << "," << col_right << ")" << endl;
 				for (int k = 0; k < table_rows[i].size(); k++) {
 					int line_id = table_rows[i][k];
 					for (int z = 0; z < line_segments[line_id].size(); z++) {
@@ -759,14 +782,20 @@ namespace ocr_tabs {
 							((seg_left >= col_left) && (seg_left <= col_right)) ||
 							((seg_left <= col_left) && (seg_right >= col_right))) {
 							t_seg.push_back(line_segments[line_id][z]);
+
+							cout << seg_left << " " << seg_right << endl;
 						}*/
 						if ((seg_right >= col_left) && (seg_left <= col_right)) {
 							t_seg.push_back(line_segments[line_id][z]);
+
+							cout << seg_left << " " << seg_right << endl;
 						}
 					}
 				}
+				cout << endl;
 
-				t_col.push_back(t_seg);
+				//if (t_seg.size() > 0)
+					t_col.push_back(t_seg);
 			}
 			table_columns.push_back(t_col);
 		}
@@ -1005,9 +1034,6 @@ namespace ocr_tabs {
 		drawingHandler::DrawAreas(test, table_area, line_dims, page_left, page_right);
 	}
 
-	/**
-	 * Draw rows on a cv window
-	 */
 	void OCRTabsEngine::DrawRows() {
 		drawingHandler::DrawRows(test, multi_rows, line_dims, page_left, page_right);
 	}
@@ -1269,7 +1295,7 @@ namespace ocr_tabs {
 			break;
 
 		case FileType::IMG:
-			pages.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));  //CV_LOAD_IMAGE_GRAYSCALE	
+			pages.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));
 			if (pages[0].empty()) { std::cout << "File not available" << std::endl; return false; }
 			break;
 
@@ -1282,6 +1308,7 @@ namespace ocr_tabs {
 			pages.clear();
 			pages = pages_clean;  //not sure about that copying
 		}
+
 		for (int i = 0; i < pages.size(); i++) {
 			Mat tmp = PreprocessImage(pages[i]);
 			SetImage(tmp);
@@ -1506,8 +1533,12 @@ namespace ocr_tabs {
 		for (int i = 0; i < table_columns.size(); i++) {
 			for (int j = 0; j < table_columns[i].size(); j++) {
 				if (table_columns[i][j].size() == 0) {
+					cout << "empty column" << endl;
 					table_columns[i].erase(table_columns[i].begin() + j);
 					j--;
+				}
+				else if (table_columns[i][j].size() == 1) {
+					cout << "unary column" << endl;
 				}
 			}
 		}
@@ -1703,5 +1734,20 @@ namespace ocr_tabs {
 		}
 
 		return max_box_id;
+	}
+
+	void OCRTabsEngine::InsertionSortBoxesInSegment(std::vector<int>& seg) {
+		for (int i = 1; i < seg.size(); i++) {
+			int key = boxes[seg[i]][BOX_LEFT];
+			int key_id = seg[i];
+
+			int j = i - 1;
+			while (j >= 0 && key < boxes[seg[j]][BOX_LEFT]) {
+				seg[j + 1] = seg[j];
+				j--;
+			}
+
+			seg[j + 1] = key_id;
+		}
 	}
 }
