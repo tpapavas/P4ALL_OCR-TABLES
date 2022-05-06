@@ -72,6 +72,7 @@ namespace ocr_tabs {
 		std::vector<std::vector<std::vector<int>>> multi_rows;
 		std::vector<int*> line_dims;
 		std::vector<std::vector<std::vector<int>>> line_segments;
+		std::vector<std::vector<std::vector<int>>> line_segments_dims;
 		std::vector<std::vector<std::vector<std::vector<int>>>> table_columns;
 		std::vector<std::vector<int*>> col_dims, row_dims;
 		std::vector<std::vector<std::vector<int>>> tmp_col;
@@ -100,7 +101,8 @@ namespace ocr_tabs {
 
 		void RemoveFigures();
 		void ProcessGeneratedColumns();
-		int FindMaxBoxInSegment(const std::vector<int> &seg);
+		int FindMaxRightBoxInSegment(const std::vector<int>& seg);
+		int FindMinLeftBoxInSegment(const std::vector<int>& seg);
 		void InsertionSortBoxesInSegment(std::vector<int>& seg);
 
 		enum BoxSide {
@@ -113,6 +115,11 @@ namespace ocr_tabs {
 		enum LineSide {
 			LINE_TOP=0,
 			LINE_BOTTOM=1
+		};
+
+		enum SegSide {
+			SEG_LEFT=0,
+			SEG_RIGHT=1
 		};
 	};
 }

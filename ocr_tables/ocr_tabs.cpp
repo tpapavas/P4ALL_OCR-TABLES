@@ -465,29 +465,40 @@ namespace ocr_tabs {
 			float hor_thresh = (line_dims[i][LINE_BOTTOM] - line_dims[i][LINE_TOP]) * ratio;
 			vector<vector<int>> segments;
 			vector<int> tmp;
+			vector<vector<int>> segments_dims;
+			vector<int> tmp_seg_dims;
 			tmp.push_back(lines[i][0]);
 			for (int j = 1; j < lines[i].size(); j++) {
-				if (boxes[lines[i][j]][0] - boxes[lines[i][j - 1]][2] <= hor_thresh) {
+				if (boxes[lines[i][j]][BOX_LEFT] - boxes[lines[i][j - 1]][BOX_RIGHT] <= hor_thresh) {
 					tmp.push_back(lines[i][j]);
 				} else {
-					InsertionSortBoxesInSegment(tmp);
-					cout << endl << endl;
+					/*cout << endl << "BOXES" << endl;
 					for (int k = 0; k < tmp.size(); k++) {
 						cout << "[" << boxes[tmp[k]][BOX_LEFT] << "," << boxes[tmp[k]][BOX_RIGHT] << "] ";
-					}
+					}*/
+					tmp_seg_dims.push_back(boxes[FindMinLeftBoxInSegment(tmp)][BOX_LEFT]);
+					tmp_seg_dims.push_back(boxes[FindMaxRightBoxInSegment(tmp)][BOX_RIGHT]);
 					segments.push_back(tmp);
+					segments_dims.push_back(tmp_seg_dims);
 					tmp.clear();
+					tmp_seg_dims.clear();
 					tmp.push_back(lines[i][j]);
 				}
 			}
 
-			InsertionSortBoxesInSegment(tmp); 
-			cout << endl << endl;
-			for (int k = 0; k < tmp.size(); k++) {
-				cout << "[" << boxes[tmp[k]][BOX_LEFT] << "," << boxes[tmp[k]][BOX_RIGHT] << "] ";
-			}
+			tmp_seg_dims.push_back(boxes[FindMinLeftBoxInSegment(tmp)][BOX_LEFT]);
+			tmp_seg_dims.push_back(boxes[FindMaxRightBoxInSegment(tmp)][BOX_RIGHT]);
 			segments.push_back(tmp);
+			segments_dims.push_back(tmp_seg_dims);
 			line_segments.push_back(segments);
+			line_segments_dims.push_back(segments_dims);
+
+			/*cout << endl << endl;
+			for (int k = 0; k < line_segments_dims.size(); k++) {
+				for (int l = 0; l < line_segments_dims[k].size(); l++) {
+					cout << "[" << line_segments_dims[k][l][SEG_LEFT] << "," << line_segments_dims[k][l][SEG_RIGHT] << "] ";
+				}
+			}*/
 			//}s
 		}
 
@@ -673,21 +684,25 @@ namespace ocr_tabs {
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						int line_id = table_rows[i][j];
-						int first_box_id = line_segments[line_id][k][0];
-						int last_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
-						//int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
-						//int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
-						int left = boxes[first_box_id][BOX_LEFT];
-						int right = boxes[last_box_id][BOX_RIGHT];
+						//int first_box_id = line_segments[line_id][k][0];
+						//int last_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
+						////int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
+						////int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
+						//int left = boxes[first_box_id][BOX_LEFT];
+						//int right = boxes[last_box_id][BOX_RIGHT];
 
-						if ((left <= boxes[min_seg[0]][BOX_LEFT]) && (left > limit)) {
+						int left = line_segments_dims[line_id][k][SEG_LEFT];
+						int right = line_segments_dims[line_id][k][SEG_RIGHT];
+						int min_left = boxes[FindMinLeftBoxInSegment(min_seg)][BOX_LEFT];
+
+						if ((left <= min_left)/*boxes[min_seg[0]][BOX_LEFT])*/ && (left > limit)) {
 							//min_seg = line_segments[table_rows[i][j]][k];
 							min_seg = line_segments[line_id][k];
 						}
 					}
 				}
 
-				cout << "min segment #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[0]][BOX_RIGHT] << endl;
+				//cout << "min segment #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[0]][BOX_RIGHT] << endl;
 
 				float avg_seg_len = 0;
 				int counter = 0;
@@ -695,14 +710,18 @@ namespace ocr_tabs {
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						int line_id = table_rows[i][j];
-						int first_box_id = line_segments[line_id][k][0];
+						/*int first_box_id = line_segments[line_id][k][0];
 						int last_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
 
 						int left = boxes[first_box_id][BOX_LEFT];
-						int right = boxes[last_box_id][BOX_RIGHT];
+						int right = boxes[last_box_id][BOX_RIGHT];*/
+
+						int left = line_segments_dims[line_id][k][SEG_LEFT];
+						int right = line_segments_dims[line_id][k][SEG_RIGHT];
+						int min_left = boxes[FindMinLeftBoxInSegment(min_seg)][BOX_LEFT];
 
 						// calc avg length of segments horizontally-aligned with min_seg
-						if ((abs(left - boxes[min_seg[0]][BOX_LEFT]) <= hor_thresh) &&
+						if ((abs(left - min_left/*boxes[min_seg[0]][BOX_LEFT]*/) <= hor_thresh) &&
 							/*((right-left)<=(boxes[min_seg[min_seg.size()-1]][2]-boxes[min_seg[0]][0]))&&*/
 							(left > limit)) {
 							//min_seg=Lines_segments[table_Rows[i][j]][k];
@@ -711,43 +730,50 @@ namespace ocr_tabs {
 						}
 					}
 				}
-				int fin_left = boxes[min_seg[0]][BOX_LEFT];
+				//int fin_left = boxes[min_seg[0]][BOX_LEFT];
+				int fin_left = boxes[FindMinLeftBoxInSegment(min_seg)][BOX_LEFT];
 				avg_seg_len = (float)avg_seg_len / counter;
 				float overlap_ratio = 1.2;
 				avg_seg_len = avg_seg_len * overlap_ratio;
 
-				cout << "avg seg len: " << avg_seg_len << endl;
+				//cout << "avg seg len: " << avg_seg_len << endl;
 				
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						int line_id = table_rows[i][j];
-						int left_box_id = line_segments[line_id][k][0];
+						/*int left_box_id = line_segments[line_id][k][0];
 						int right_box_id = line_segments[line_id][k][line_segments[line_id][k].size() - 1];
 
 						int left = boxes[left_box_id][BOX_LEFT];
-						int right = boxes[right_box_id][BOX_RIGHT];
+						int right = boxes[right_box_id][BOX_RIGHT];*/
+
+						int left = line_segments_dims[line_id][k][SEG_LEFT];
+						int right = line_segments_dims[line_id][k][SEG_RIGHT];
+						int min_left = boxes[FindMinLeftBoxInSegment(min_seg)][BOX_LEFT];
+						int min_right = boxes[FindMaxRightBoxInSegment(min_seg)][BOX_RIGHT];
 
 						// Select the segment that is closest to the avg length
 						if ((abs(left - fin_left) <= hor_thresh) &&
-							(abs((right - left) - avg_seg_len) <= abs((boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT] - boxes[min_seg[0]][BOX_LEFT]) - avg_seg_len)) &&
+							(abs((right - left) - avg_seg_len) <= abs((min_right-min_left/*boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT] - boxes[min_seg[0]][BOX_LEFT]*/) - avg_seg_len)) &&
 							(left > limit)) {
 							min_seg = line_segments[line_id][k];
 						}
 					}
 				}
 
-				cout << "column creator #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT] << endl;
+				//cout << "column creator #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT] << endl;
 
 				column_creator.push_back(min_seg);
-				int max_box_id = FindMaxBoxInSegment(min_seg);  //maybe there aren't sorted
+				int max_box_id = FindMaxRightBoxInSegment(min_seg);  //there aren't sorted
 				//limit = boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT];  //set left-most limit for remaining segments
-				limit = boxes[min_seg[max_box_id]][BOX_RIGHT];
+				limit = boxes[max_box_id][BOX_RIGHT];
 				min_seg.clear();
 				
 				// find new min_seg initial value for new limit
 				for (int j = 0; j < table_rows[i].size(); j++) {
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
-						int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
+						//int left = boxes[line_segments[table_rows[i][j]][k][0]][BOX_LEFT];
+						int left = boxes[FindMinLeftBoxInSegment(line_segments[table_rows[i][j]][k])][BOX_LEFT];
 						if (left > limit) {
 							min_seg = line_segments[table_rows[i][j]][k];
 							break;
@@ -755,8 +781,8 @@ namespace ocr_tabs {
 					}
 				}
 
-				cout << "new limit: " << limit << endl;
-				cout << "NEW min segment #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[0]][BOX_RIGHT] << endl << endl;
+				/*cout << "new limit: " << limit << endl;
+				cout << "NEW min segment #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[0]][BOX_RIGHT] << endl << endl;*/
 
 				if (min_seg.size() == 0) { end_of_table = true; }
 			}
@@ -769,15 +795,23 @@ namespace ocr_tabs {
 		for (int i = 0; i < tmp_col.size(); i++) {
 			vector<vector<vector<int>>> t_col;
 			for (int j = 0; j < tmp_col[i].size(); j++) {
-				int col_left = boxes[tmp_col[i][j][0]][BOX_LEFT]; //left side of first box of column creator (segment)
-				int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][BOX_RIGHT]; //right side of last box of column creator (segment)
+				//int col_left = boxes[tmp_col[i][j][0]][BOX_LEFT]; //left side of first box of column creator (segment)
+				//int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][BOX_RIGHT]; //right side of last box of column creator (segment)
+				
+				int col_left = boxes[FindMinLeftBoxInSegment(tmp_col[i][j])][BOX_LEFT];
+				int col_right = boxes[FindMaxRightBoxInSegment(tmp_col[i][j])][BOX_RIGHT];
+				
 				vector<vector<int>> t_seg;
 				cout << endl << "this column: (" << col_left << "," << col_right << ")" << endl;
 				for (int k = 0; k < table_rows[i].size(); k++) {
 					int line_id = table_rows[i][k];
 					for (int z = 0; z < line_segments[line_id].size(); z++) {
-						int seg_left = boxes[line_segments[line_id][z][0]][BOX_LEFT];
-						int seg_right = boxes[line_segments[line_id][z][line_segments[line_id][z].size() - 1]][BOX_RIGHT];
+						//int seg_left = boxes[line_segments[line_id][z][0]][BOX_LEFT];
+						//int seg_right = boxes[line_segments[line_id][z][line_segments[line_id][z].size() - 1]][BOX_RIGHT];
+
+						int seg_left = line_segments_dims[line_id][z][SEG_LEFT];
+						int seg_right = line_segments_dims[line_id][z][SEG_RIGHT];
+
 						/*if (((seg_right >= col_left) && (seg_right <= col_right)) ||
 							((seg_left >= col_left) && (seg_left <= col_right)) ||
 							((seg_left <= col_left) && (seg_right >= col_right))) {
@@ -834,8 +868,13 @@ namespace ocr_tabs {
 								for (int z = 0; z < line_segments[table_rows[i][j - 1]].size(); z++) {
 									if (line_segments[table_rows[i][j - 1]][z] == table_columns[i][s][h]) {
 										exist0 = true;
-										if ((k < line_segments[table_rows[i][j]].size() - 1) &&
-											(boxes[line_segments[table_rows[i][j - 1]][z][line_segments[table_rows[i][j - 1]][z].size() - 1]][BOX_RIGHT] >= boxes[line_segments[table_rows[i][j]][k + 1][0]][BOX_LEFT])) {
+
+										int box_ijm1z_right = line_segments_dims[table_rows[i][j - 1]][z][SEG_RIGHT];
+										int box_ijkp1_left = line_segments_dims[table_rows[i][j]][k + 1][SEG_LEFT];
+
+										if ((k < line_segments[table_rows[i][j]].size() - 1) /*&&
+											(boxes[line_segments[table_rows[i][j - 1]][z][line_segments[table_rows[i][j - 1]][z].size() - 1]][BOX_RIGHT] >= boxes[line_segments[table_rows[i][j]][k + 1][0]][BOX_LEFT])*/
+											&& box_ijm1z_right >= box_ijkp1_left) {
 											exist0 = false;
 										}
 									}
@@ -879,9 +918,11 @@ namespace ocr_tabs {
 						found2 = true;
 					}
 					int tmp = line_segments[multi_rows[i][j][0]][0][0];
-					float lft1 = boxes[tmp][BOX_LEFT];
+					//float lft1 = boxes[tmp][BOX_LEFT];
+					float lft1 = line_segments_dims[multi_rows[i][j][0]][0][SEG_LEFT];
 					tmp = line_segments[multi_rows[i][j + 1][0]][0][0];
-					float lft2 = boxes[tmp][BOX_LEFT];
+					//float lft2 = boxes[tmp][BOX_LEFT];
+					float lft2 = line_segments_dims[multi_rows[i][j + 1][0]][0][SEG_LEFT];
 					if ((found1) && (found2) && (lft2 >= lft1 + 0.6 * (line_dims[multi_rows[i][j + 1][0]][1] - line_dims[multi_rows[i][j + 1][0]][0]))) {
 						for (int z = 0; z < multi_rows[i][j + 1].size(); z++) {
 							multi_rows[i][j].push_back(multi_rows[i][j + 1][z]);
@@ -1544,31 +1585,26 @@ namespace ocr_tabs {
 		}
 
 		// If we find a column where the unique segments  (segments that are assigned to only one column)
-		// are less than the multiple segemnts (segments assigned to more than 1 column), we merge this column with
+		// are less than the multiple segments (segments assigned to more than 1 column), we merge this column with
 		// the immediatelly previous one
 		for (int i = 0; i < table_columns.size(); i++) {
 			for (int j = 1; j < table_columns[i].size(); j++) {
 				int counter_single = 0;
 				int counter_multi = 0;
 				for (int k = 0; k < table_columns[i][j].size(); k++) {
-					bool multi = false;
 					if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) != table_columns[i][j - 1].end()) {
-						multi = true;
-					}
-					if (multi) {
 						counter_multi++;
-					}
-					else {
+					} else {
 						counter_single++;
 					}
 				}
-				if (counter_multi >= 1 * counter_single) {
+
+				if (counter_multi >= counter_single) {
 					for (int k = 0; k < table_columns[i][j].size(); k++) {
 						bool multi = false;
-						if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) != table_columns[i][j - 1].end()) {
-							multi = true;
+						if (std::find(table_columns[i][j - 1].begin(), table_columns[i][j - 1].end(), table_columns[i][j][k]) == table_columns[i][j - 1].end()) { 
+							table_columns[i][j - 1].push_back(table_columns[i][j][k]); 
 						}
-						if (!multi) { table_columns[i][j - 1].push_back(table_columns[i][j][k]); }
 					}
 					table_columns[i].erase(table_columns[i].begin() + j);
 					j--;
@@ -1576,7 +1612,7 @@ namespace ocr_tabs {
 			}
 		}
 
-		// Type-3 lines that are in the end of a table, and their single segment is assigned to more than one columns,
+		// Type-3 lines (UNKNOWN) that are in the end of a table, and their single segment is assigned to more than one columns,
 		// are removed from the table
 		for (int i = 0; i < table_rows.size(); i++) {
 			for (int j = table_rows[i].size() - 1; j >= 0; j--) {
@@ -1586,6 +1622,7 @@ namespace ocr_tabs {
 					vector<int> xcol;
 					for (int k = 0; k < table_columns[i].size(); k++) {
 						if (table_columns[i][k].size() > 0) {
+							//mysterious if statement (?)
 							if (line_segments[table_rows[i][j]][0] == table_columns[i][k][table_columns[i][k].size() - 1]) {
 								xcol.push_back(k);
 							}
@@ -1606,20 +1643,21 @@ namespace ocr_tabs {
 			}
 		}
 
-		//If a column has only one segment, which is on the 1st row (possibly missaligned table header) and the column on its left doesnot have a segment
-		// in the same row, then merge these columns
+		//If a column has only one segment, which is on the 1st row (possibly missaligned table header) and 
+		// the column on its left doesnot have a segment in the same row, then 
+		// merge these columns
 		for (int i = 0; i < table_columns.size(); i++) {
 			for (int j = 1; j < table_columns[i].size(); j++) {
 				if (table_columns[i][j].size() == 1) {
-					bool found1 = false;
-					bool found2 = false;
+					bool col_has_in_1st_row = false;
+					bool prev_col_has_in_1st_row = false;
 					if (std::find(line_segments[table_rows[i][0]].begin(), line_segments[table_rows[i][0]].end(), table_columns[i][j][0]) != line_segments[table_rows[i][0]].end()) {
-						found1 = true;
+						col_has_in_1st_row = true;
 					}
 					if (std::find(line_segments[table_rows[i][0]].begin(), line_segments[table_rows[i][0]].end(), table_columns[i][j - 1][0]) != line_segments[table_rows[i][0]].end()) {
-						found2 = true;
+						prev_col_has_in_1st_row = true;
 					}
-					if ((found1) && (!found2)) {
+					if ((col_has_in_1st_row) && (!prev_col_has_in_1st_row)) {
 						for (int k = 0; k < table_columns[i][j - 1].size(); k++) {
 							table_columns[i][j].push_back(table_columns[i][j - 1][k]);
 						}
@@ -1699,12 +1737,9 @@ namespace ocr_tabs {
 		//If all the columns of a table (besides the 1st one) have more empty cells than cells with data then
 		//this table is discarded (simple formatted text)
 		for (int i = table_columns.size() - 1; i >= 0; i--) {
-			bool almost_empty = false;
+			bool almost_empty = true;
 			for (int j = 1; j < table_columns[i].size(); j++) {
-				if (table_columns[i][j].size() < table_rows[i].size() / 2) {
-					almost_empty = true;
-				}
-				else {
+				if (table_columns[i][j].size() >= table_rows[i].size() / 2) {
 					almost_empty = false;
 					j = table_columns[i].size();
 				}
@@ -1718,22 +1753,33 @@ namespace ocr_tabs {
 			}
 		}
 
-		//duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		//std::cout << " Done in " << duration << "s \n";
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
-	int OCRTabsEngine::FindMaxBoxInSegment(const std::vector<int>& seg) {
+	int OCRTabsEngine::FindMaxRightBoxInSegment(const std::vector<int>& seg) {
 		int max_right = -1;
 		int max_box_id = -1;
 		for (int i = 0; i < seg.size(); i++) {
 			if (boxes[seg[i]][BOX_RIGHT] > max_right) {
 				max_right = boxes[seg[i]][BOX_RIGHT];
-				max_box_id = i;
+				max_box_id = seg[i];
 			}
 		}
 
 		return max_box_id;
+	}
+
+	int OCRTabsEngine::FindMinLeftBoxInSegment(const std::vector<int>& seg) {
+		int min_left = boxes[seg[0]][BOX_LEFT];
+		int min_box_id = seg[0];
+		for (int i = 1; i < seg.size(); i++) {
+			if (boxes[seg[i]][BOX_LEFT] < min_left) {
+				min_left = boxes[seg[i]][BOX_RIGHT];
+				min_box_id = seg[i];
+			}
+		}
+
+		return min_box_id;
 	}
 
 	void OCRTabsEngine::InsertionSortBoxesInSegment(std::vector<int>& seg) {
