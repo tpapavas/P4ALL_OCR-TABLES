@@ -291,6 +291,7 @@ namespace ocr_tabs {
 			int j;
 			for (j = i + 1; j < boxes.size(); j++) {
 				// check vetically-overlapping bboxes
+				// IMPORTANT: counts (probably incorrectly) boxes that slightly overlap in same line
 				if (((boxes[j - 1][BOX_TOP] <= boxes[j][BOX_TOP]) && (boxes[j][BOX_TOP] <= boxes[j - 1][BOX_BOTTOM])) ||
 					((boxes[j][BOX_TOP] <= boxes[j - 1][BOX_TOP]) && (boxes[j - 1][BOX_TOP] <= boxes[j][BOX_BOTTOM]))) {
 					tmp.push_back(j);
@@ -690,7 +691,6 @@ namespace ocr_tabs {
 						////int right = boxes[line_segments[table_rows[i][j]][k][line_segments[table_rows[i][j]][k].size() - 1]][BOX_RIGHT];
 						//int left = boxes[first_box_id][BOX_LEFT];
 						//int right = boxes[last_box_id][BOX_RIGHT];
-
 						int left = line_segments_dims[line_id][k][SEG_LEFT];
 						int right = line_segments_dims[line_id][k][SEG_RIGHT];
 						int min_left = boxes[FindMinLeftBoxInSegment(min_seg)][BOX_LEFT];
@@ -701,7 +701,6 @@ namespace ocr_tabs {
 						}
 					}
 				}
-
 				//cout << "min segment #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[0]][BOX_RIGHT] << endl;
 
 				float avg_seg_len = 0;
@@ -715,7 +714,6 @@ namespace ocr_tabs {
 
 						int left = boxes[first_box_id][BOX_LEFT];
 						int right = boxes[last_box_id][BOX_RIGHT];*/
-
 						int left = line_segments_dims[line_id][k][SEG_LEFT];
 						int right = line_segments_dims[line_id][k][SEG_RIGHT];
 						int min_left = boxes[FindMinLeftBoxInSegment(min_seg)][BOX_LEFT];
@@ -735,7 +733,6 @@ namespace ocr_tabs {
 				avg_seg_len = (float)avg_seg_len / counter;
 				float overlap_ratio = 1.2;
 				avg_seg_len = avg_seg_len * overlap_ratio;
-
 				//cout << "avg seg len: " << avg_seg_len << endl;
 				
 				for (int j = 0; j < table_rows[i].size(); j++) {
@@ -746,7 +743,6 @@ namespace ocr_tabs {
 
 						int left = boxes[left_box_id][BOX_LEFT];
 						int right = boxes[right_box_id][BOX_RIGHT];*/
-
 						int left = line_segments_dims[line_id][k][SEG_LEFT];
 						int right = line_segments_dims[line_id][k][SEG_RIGHT];
 						int min_left = boxes[FindMinLeftBoxInSegment(min_seg)][BOX_LEFT];
@@ -762,7 +758,6 @@ namespace ocr_tabs {
 				}
 
 				//cout << "column creator #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT] << endl;
-
 				column_creator.push_back(min_seg);
 				int max_box_id = FindMaxRightBoxInSegment(min_seg);  //there aren't sorted
 				//limit = boxes[min_seg[min_seg.size() - 1]][BOX_RIGHT];  //set left-most limit for remaining segments
@@ -780,7 +775,6 @@ namespace ocr_tabs {
 						}
 					}
 				}
-
 				/*cout << "new limit: " << limit << endl;
 				cout << "NEW min segment #" << min_seg[0] << "  " << boxes[min_seg[0]][BOX_LEFT] << "," << boxes[min_seg[0]][BOX_RIGHT] << endl << endl;*/
 
@@ -797,7 +791,6 @@ namespace ocr_tabs {
 			for (int j = 0; j < tmp_col[i].size(); j++) {
 				//int col_left = boxes[tmp_col[i][j][0]][BOX_LEFT]; //left side of first box of column creator (segment)
 				//int col_right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][BOX_RIGHT]; //right side of last box of column creator (segment)
-				
 				int col_left = boxes[FindMinLeftBoxInSegment(tmp_col[i][j])][BOX_LEFT];
 				int col_right = boxes[FindMaxRightBoxInSegment(tmp_col[i][j])][BOX_RIGHT];
 				
@@ -808,7 +801,6 @@ namespace ocr_tabs {
 					for (int z = 0; z < line_segments[line_id].size(); z++) {
 						//int seg_left = boxes[line_segments[line_id][z][0]][BOX_LEFT];
 						//int seg_right = boxes[line_segments[line_id][z][line_segments[line_id][z].size() - 1]][BOX_RIGHT];
-
 						int seg_left = line_segments_dims[line_id][z][SEG_LEFT];
 						int seg_right = line_segments_dims[line_id][z][SEG_RIGHT];
 
@@ -851,16 +843,17 @@ namespace ocr_tabs {
 			vector<int> tmp_multi_lines;
 			tmp_multi_lines.push_back(table_rows[i][0]);
 			for (int j = 1; j < table_rows[i].size(); j++) {
-				bool found = false;
+				bool has_seg_in_1st_col = false;
 				if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[table_rows[i][j]][0]) != table_columns[i][0].end()) {
-					found = true;
+					has_seg_in_1st_col = true;
 				}
-				if (!found) {
+				if (!has_seg_in_1st_col) {
 					bool exist_all = true;
 					for (int k = 0; k < line_segments[table_rows[i][j]].size(); k++) {
 						bool exist = false;
 						for (int s = 0; s < table_columns[i].size(); s++) {
-							bool exist1 = false; bool exist0 = false;
+							bool exist1 = false;  //true if k seg of j line is in s column
+							bool exist0 = false;  //true if z seg of j-1 line is in s column
 							for (int h = 0; h < table_columns[i][s].size(); h++) {
 								if (line_segments[table_rows[i][j]][k] == table_columns[i][s][h]) {
 									exist1 = true;
@@ -868,13 +861,9 @@ namespace ocr_tabs {
 								for (int z = 0; z < line_segments[table_rows[i][j - 1]].size(); z++) {
 									if (line_segments[table_rows[i][j - 1]][z] == table_columns[i][s][h]) {
 										exist0 = true;
-
-										int box_ijm1z_right = line_segments_dims[table_rows[i][j - 1]][z][SEG_RIGHT];
-										int box_ijkp1_left = line_segments_dims[table_rows[i][j]][k + 1][SEG_LEFT];
-
-										if ((k < line_segments[table_rows[i][j]].size() - 1) /*&&
-											(boxes[line_segments[table_rows[i][j - 1]][z][line_segments[table_rows[i][j - 1]][z].size() - 1]][BOX_RIGHT] >= boxes[line_segments[table_rows[i][j]][k + 1][0]][BOX_LEFT])*/
-											&& box_ijm1z_right >= box_ijkp1_left) {
+										if ((k < line_segments[table_rows[i][j]].size() - 1) &&
+											/*(boxes[line_segments[table_rows[i][j - 1]][z][line_segments[table_rows[i][j - 1]][z].size() - 1]][BOX_RIGHT] >= boxes[line_segments[table_rows[i][j]][k + 1][0]][BOX_LEFT])*/
+											line_segments_dims[table_rows[i][j - 1]][z][SEG_RIGHT] >= line_segments_dims[table_rows[i][j]][k + 1][SEG_LEFT]) {
 											exist0 = false;
 										}
 									}
@@ -902,15 +891,15 @@ namespace ocr_tabs {
 			tmp_multi_lines.clear();
 			tmp_multi_row.clear();
 
-			// if a line is type-3, its segment is assigned ONLY to the first column,
-			// the line below it is type-2, and it has a segment in the fist column which is more to the
+			// if a line type-3 line, has its segment assigned ONLY to the first column,
+			// and the line below it is type-2, and it has a segment in the fist column which is more to the
 			// right than the segment of the first line THEN these two lines are merged together
 			for (int j = 0; j < multi_rows[i].size() - 1; j++) {
 				if ((multi_rows[i][j].size() == 1) &&
 					(lines_type[multi_rows[i][j][0]] == LineType::UNKNOWN) && (line_segments[multi_rows[i][j][0]].size() == 1) &&
 					(lines_type[multi_rows[i][j + 1][0]] == LineType::TABLE)) {
-					bool found1 = false;
-					bool found2 = false;
+					bool found1 = false;  //true if j line's single segment is in first col
+					bool found2 = false;  //true if (j+1) line's seg is in first col
 					if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[multi_rows[i][j][0]][0]) != table_columns[i][0].end()) {
 						found1 = true;
 					}
@@ -923,7 +912,7 @@ namespace ocr_tabs {
 					tmp = line_segments[multi_rows[i][j + 1][0]][0][0];
 					//float lft2 = boxes[tmp][BOX_LEFT];
 					float lft2 = line_segments_dims[multi_rows[i][j + 1][0]][0][SEG_LEFT];
-					if ((found1) && (found2) && (lft2 >= lft1 + 0.6 * (line_dims[multi_rows[i][j + 1][0]][1] - line_dims[multi_rows[i][j + 1][0]][0]))) {
+					if ((found1) && (found2) && (lft2 >= lft1 + 0.6 * (line_dims[multi_rows[i][j + 1][0]][LINE_BOTTOM] - line_dims[multi_rows[i][j + 1][0]][LINE_TOP]))) {
 						for (int z = 0; z < multi_rows[i][j + 1].size(); z++) {
 							multi_rows[i][j].push_back(multi_rows[i][j + 1][z]);
 						}
@@ -932,7 +921,7 @@ namespace ocr_tabs {
 				}
 			}
 			if ((multi_rows[i][multi_rows[i].size() - 1].size() == 1) &&
-				(lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] == 3) && (line_segments[multi_rows[i][multi_rows[i].size() - 1][0]].size() == 1) &&
+				(lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] == LineType::UNKNOWN) && (line_segments[multi_rows[i][multi_rows[i].size() - 1][0]].size() == 1) &&
 				(line_segments[multi_rows[i][multi_rows[i].size() - 1][0]][0] == table_columns[i][0][table_columns[i][0].size() - 1])) {
 				lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] = LineType::TEXT;
 				multi_rows[i].erase(multi_rows[i].begin() + multi_rows[i].size() - 1);
