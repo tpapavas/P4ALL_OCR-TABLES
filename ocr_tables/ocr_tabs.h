@@ -104,6 +104,7 @@ namespace ocr_tabs {
 		int FindMaxRightBoxInSegment(const std::vector<int>& seg);
 		int FindMinLeftBoxInSegment(const std::vector<int>& seg);
 		void InsertionSortBoxesInSegment(std::vector<int>& seg);
+		template<typename T> bool Find(const std::vector<T>& list, const T& element);
 
 		enum BoxSide {
 			BOX_LEFT=0,

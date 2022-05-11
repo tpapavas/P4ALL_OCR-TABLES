@@ -501,9 +501,18 @@ void imgProcessor::prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks
 	std::cout << "Thresholding Image...";
 	cv::Mat tr,tr2;
 	cv::erode(input, tr2, cv::Mat(), cv::Point(-1, -1), 1);
+
+	cv::namedWindow("eroded", CV_WINDOW_NORMAL);
+	cv::imshow("eroded", tr2);
+	cv::waitKey(0);
+
 	imgProcessor::thresholdImg(tr2, thres);  //get binary image
 	cv::erode(thres, tr, cv::Mat(), cv::Point(-1, -1), 3);
 	std::cout << "Done!" << std::endl;
+
+	cv::namedWindow("thresholded", CV_WINDOW_NORMAL);
+	cv::imshow("thresholded", thres);
+	cv::waitKey(0);
 
 	std::cout << "Segmenting Page...";
 	Pix* px = NULL;

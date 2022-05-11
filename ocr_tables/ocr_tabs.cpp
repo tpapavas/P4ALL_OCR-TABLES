@@ -22,8 +22,10 @@ namespace ocr_tabs {
 		fail_msg = "";
 		lines_type = NULL;
 		//tess.Init("..\\tessdata", "eng");
-		//tess.Init("tessdata", "Greek");
-		tess.Init("tessdata", "eng");
+		tess.Init("tessdata", "ell");
+		//tess.Init("tessdata", "eng");
+
+		std::setlocale(LC_ALL, "el_GR.UTF-8");
 	}
 
 	OCRTabsEngine::~OCRTabsEngine() {
@@ -156,11 +158,17 @@ namespace ocr_tabs {
 		//start = clock();
 		aux::startClock();
 
+
 		//threshold( test, dst, 100, 255,1 );
 		threshold(test, dst, 200, 255, cv::THRESH_BINARY);  //creates binary img
 		//erode(dst,dst,Mat(),Point(-1,-1),2);
 		uchar* data = (uchar*)dst.data;
 		//cvtColor(test,test,CV_GRAY2BGR);
+
+
+		/*cv::namedWindow("asd", CV_WINDOW_NORMAL);
+		cv::imshow("asd", dst);
+		cv::waitKey(0);*/
 
 		//check columns for black lines and remove them
 		for (int i = 0; i < dst.cols; i++) {
@@ -191,9 +199,9 @@ namespace ocr_tabs {
 			}
 		}
 
-		//cv::namedWindow("asd",CV_WINDOW_NORMAL);
-		//cv::imshow("asd", test);
-		//cv::waitKey(0);
+		/*cv::namedWindow("asd",CV_WINDOW_NORMAL);
+		cv::imshow("asd", test);
+		cv::waitKey(0);*/
 
 		//duration = (std::clock() - start) / CLOCKS_PER_SEC;
 		//std::cout << " Done in " << duration << "s \n";
@@ -895,40 +903,46 @@ namespace ocr_tabs {
 			// and the line below it is type-2, and it has a segment in the fist column which is more to the
 			// right than the segment of the first line THEN these two lines are merged together
 			for (int j = 0; j < multi_rows[i].size() - 1; j++) {
+				int line_id = multi_rows[i][j][0];
+				int next_line_id = multi_rows[i][j + 1][0];
 				if ((multi_rows[i][j].size() == 1) &&
-					(lines_type[multi_rows[i][j][0]] == LineType::UNKNOWN) && (line_segments[multi_rows[i][j][0]].size() == 1) &&
-					(lines_type[multi_rows[i][j + 1][0]] == LineType::TABLE)) {
+					(lines_type[line_id] == LineType::UNKNOWN) && (line_segments[line_id].size() == 1) &&
+					(lines_type[next_line_id] == LineType::TABLE)) {
 					bool found1 = false;  //true if j line's single segment is in first col
 					bool found2 = false;  //true if (j+1) line's seg is in first col
-					if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[multi_rows[i][j][0]][0]) != table_columns[i][0].end()) {
+					if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[line_id][0]) != table_columns[i][0].end()) {
 						found1 = true;
 					}
-					if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[multi_rows[i][j + 1][0]][0]) != table_columns[i][0].end()) {
+					if (std::find(table_columns[i][0].begin(), table_columns[i][0].end(), line_segments[next_line_id][0]) != table_columns[i][0].end()) {
 						found2 = true;
 					}
-					int tmp = line_segments[multi_rows[i][j][0]][0][0];
+					//int tmp = line_segments[multi_rows[i][j][0]][0][0];
 					//float lft1 = boxes[tmp][BOX_LEFT];
-					float lft1 = line_segments_dims[multi_rows[i][j][0]][0][SEG_LEFT];
-					tmp = line_segments[multi_rows[i][j + 1][0]][0][0];
+					//tmp = line_segments[multi_rows[i][j + 1][0]][0][0];
 					//float lft2 = boxes[tmp][BOX_LEFT];
-					float lft2 = line_segments_dims[multi_rows[i][j + 1][0]][0][SEG_LEFT];
-					if ((found1) && (found2) && (lft2 >= lft1 + 0.6 * (line_dims[multi_rows[i][j + 1][0]][LINE_BOTTOM] - line_dims[multi_rows[i][j + 1][0]][LINE_TOP]))) {
+					float lft1 = line_segments_dims[line_id][0][SEG_LEFT];
+					float lft2 = line_segments_dims[next_line_id][0][SEG_LEFT];
+					if ((found1) && (found2) && ((lft2 - lft1) >= 0.6 * (line_dims[next_line_id][LINE_BOTTOM] - line_dims[next_line_id][LINE_TOP]))) {
 						for (int z = 0; z < multi_rows[i][j + 1].size(); z++) {
 							multi_rows[i][j].push_back(multi_rows[i][j + 1][z]);
 						}
-						multi_rows[i].erase(multi_rows[i].begin() + j + 1);
+						multi_rows[i].erase(multi_rows[i].begin() + j + 1);  //remove (j+1) row
 					}
 				}
 			}
+
+			// if last row is single, unknown line with one segment and that segment is in 1st column,
+			// remove this line from table and turn into textline. also delete 1st column (?).
+			int last_line_id = multi_rows[i][multi_rows[i].size() - 1][0];
 			if ((multi_rows[i][multi_rows[i].size() - 1].size() == 1) &&
-				(lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] == LineType::UNKNOWN) && (line_segments[multi_rows[i][multi_rows[i].size() - 1][0]].size() == 1) &&
-				(line_segments[multi_rows[i][multi_rows[i].size() - 1][0]][0] == table_columns[i][0][table_columns[i][0].size() - 1])) {
-				lines_type[multi_rows[i][multi_rows[i].size() - 1][0]] = LineType::TEXT;
+				(lines_type[last_line_id] == LineType::UNKNOWN) && (line_segments[last_line_id].size() == 1) &&
+				(line_segments[last_line_id][0] == table_columns[i][0][table_columns[i][0].size() - 1])) {
+				lines_type[last_line_id] = LineType::TEXT;
 				multi_rows[i].erase(multi_rows[i].begin() + multi_rows[i].size() - 1);
 				table_columns[i][0].erase(table_columns[i][0].begin() + table_columns[i][0].size() - 1);
 			}
 
-			//Finalize Line Types. Change all Lines within the table to type-2
+			//Finalize line types. Change all lines within the table to type-2
 			for (int j = 0; j < multi_rows[i].size(); j++) {
 				for (int k = 0; k < multi_rows[i][j].size(); k++) {
 					lines_type[multi_rows[i][j][k]] = LineType::TABLE;
@@ -1363,6 +1377,9 @@ namespace ocr_tabs {
 		CreateTableMultiRows();
 		FindColumnSize();	 ////
 		FinalizeGrid(); ////
+
+		DrawBoxes();
+
 		std::string outputFilename = filename;
 		outputFilename.append(withXML ? "XML.html" : ".html");
 		WriteHTML(outputFilename);
@@ -1424,21 +1441,18 @@ namespace ocr_tabs {
 		for (unsigned i = 0; i < pagecount; i++) {
 			fz_page* page = fz_load_page(ctx, doc, i);
 			fz_matrix transform = fz_rotate(rotation);
-			//fz_rotate(&transform, rotation);
-			fz_pre_scale(transform, zoom / 100.0f, zoom / 100.0f);
-			//fz_pre_scale(&transform, zoom / 100.0f, zoom / 100.0f);
+			fz_matrix no_transform = fz_rotate(rotation);
+			/*cout << "[" << transform.a << " " << transform.b << " " << transform.c << " " << transform.d << " " << transform.e << " " << transform.f << "]" << endl;*/
+			transform = fz_pre_scale(transform, zoom / 100.0f, zoom / 100.0f);
 			fz_rect bounds = fz_bound_page(ctx, page);
-			//fz_bound_page(ctx, page, &bounds);
-			fz_transform_rect(bounds, transform);
-			//fz_transform_rect(&bounds, &transform);
+			bounds = fz_transform_rect(bounds, transform);
 			fz_irect bbox = fz_round_rect(bounds);
-			//fz_round_rect(&bbox, &bounds);
+			cout << bbox.x0 << ", " << bbox.x1 << endl;
 			fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), bbox, NULL, 1);
-			//fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), bbox);
 			fz_clear_pixmap_with_value(ctx, pix, 0xff);
-			//fz_device* dev = fz_new_draw_device(ctx, pix);
-			fz_device* dev = fz_new_draw_device(ctx, transform, pix);
+			fz_device* dev = fz_new_draw_device(ctx, no_transform, pix);
 			fz_run_page(ctx, page, dev, transform, NULL);
+			//fz_save_pixmap_as_png(ctx, pix, "out.png");
 			fz_drop_device(ctx, dev);
 			cv::Mat input;
 			imgProcessor::pixmap2mat(&pix, input);
@@ -1784,5 +1798,9 @@ namespace ocr_tabs {
 
 			seg[j + 1] = key_id;
 		}
+	}
+
+	template<typename T> bool OCRTabsEngine::Find(const std::vector<T>& list, const T& element) {
+		return std::find(list.begin(), list.end(), element) != list.end();
 	}
 }
