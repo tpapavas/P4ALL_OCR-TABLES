@@ -411,87 +411,6 @@ void imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, Niblack
 		}
 }
 
-bool imgProcessor::mat2pix (cv::Mat& mat, Pix** px) {
-	if ((mat.type() !=CV_8UC1) || (mat.empty())) return false;
-
-	*px = pixCreate(mat.cols, mat.rows, 8);
-	uchar* data = mat.data;
-	
- 	for (int i = 0; i < mat.rows; i++) {
-		unsigned idx = i * mat.cols;
-		for (int j = 0; j < mat.cols; j++) {
-			pixSetPixel(*px, j, i, (l_uint32)data[idx + j]);
-		}
-	}
-	return true;
-}
-
-/**
- * @brief Creates a binary pix from mat
- * @param mat: input mat
- * @param px: output pix
- * @return 
- */
-bool imgProcessor::mat2pixBinary (cv::Mat& mat, Pix** px) {
-	if ((mat.type() != CV_8UC1) || (mat.empty())) return false;
-
-	*px = pixCreate(mat.cols, mat.rows, 1);
-	uchar* data = mat.data;
-	
-	for (int i = 0; i < mat.rows; i++) {
-		unsigned idx = i * mat.cols;
-		for (int j = 0; j < mat.cols; j++) {
-			pixSetPixel(*px, j, i, 1 - (l_uint32)(data[idx + j] / 255));
-		}
-	}
-	return true;
-}
-
-bool imgProcessor::pix2mat (Pix** px, cv::Mat& mat) {
-	if (((*px)->d != 8 && (*px)->d != 1)
-		|| ((*px)->w < 1)) return false;
-	
-	mat = cv::Mat((*px)->h, (*px)->w, CV_8UC1);
-	uchar* data = mat.data;
-
-	if ((*px)->d == 8) {
-		for (int i = 0; i < mat.rows; i++) {
-			unsigned idx = i * mat.cols;
-			for (int j = 0; j < mat.cols; j++) {
-				l_uint32 val;
-				pixGetPixel(*px, j, i, &val);
-				data[idx+j] = (uchar) val;
-			}
-		}
-	} else {
-		for (int i = 0; i < mat.rows; i++) {
-			unsigned idx = i * mat.cols;
-			for (int j = 0; j < mat.cols; j++) {
-				l_uint32 val;
-				pixGetPixel(*px, j, i, &val);
-				data[idx + j] = (uchar)(255 - val * 255);
-			}
-		}
-	}
-	return true;
-}
-
-bool imgProcessor::pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat) {
-	if ((*fzpxmap)->w < 1) return false;
-	mat = cv::Mat((*fzpxmap)->h, (*fzpxmap)->w, CV_8UC1);
-	uchar* data = mat.data;
-
-	for (unsigned i = 0; i < (*fzpxmap)->h; i++) {
-		//cout << i << ", ";
-		unsigned idxMat = i * mat.cols;
-		unsigned idxPixmap = i * 4 * mat.cols;
-		for (unsigned j = 0; j < (*fzpxmap)->w; j++) {
-			data[idxMat + j] = ((*fzpxmap)->samples[idxPixmap + 4 * j] + (*fzpxmap)->samples[idxPixmap + 4 * j + 1] + (*fzpxmap)->samples[idxPixmap + 4 * j + 2]) / 3;
-		}
-	}
-	return true;
-}
-
 /**
  * @brief Binarize and segment image
  * @param input: the image to be processed
@@ -541,6 +460,13 @@ void imgProcessor::prepareAll(Pix** px, cv::Mat& thres, segmentationBlocks& bloc
 	prepareAll(input, thres, blocks);
 }
 
+/**
+ * @brief Extracts image that contains only text areas, based on input blocks.
+ * It basically clears non text areas
+ * @param input: input image
+ * @param blk: segmentation blocks of input image 
+ * @param output: output text image 
+ */
 void imgProcessor::getTextImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output) {
 	blk.text.setTo(0, blk.figures == 255);
 	blk.text.setTo(0, blk.vert == 255);
@@ -549,7 +475,6 @@ void imgProcessor::getTextImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	output = input.clone();
 	output.setTo(255, blk.figures == 255);
 	output.setTo(255, blk.text == 0);
-	//ocr_tabs::drawingHandler::DrawGridlessImage(output);
 	//output.setTo(255, blk.other==255);
 }
 
@@ -712,4 +637,86 @@ void imgProcessor::reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat
 	for (unsigned i = 1; i < outputParts.size(); i++) {
 		cv::vconcat(output,outputParts[i],output);
 	}
+}
+
+bool imgProcessor::mat2pix(cv::Mat& mat, Pix** px) {
+	if ((mat.type() != CV_8UC1) || (mat.empty())) return false;
+
+	*px = pixCreate(mat.cols, mat.rows, 8);
+	uchar* data = mat.data;
+
+	for (int i = 0; i < mat.rows; i++) {
+		unsigned idx = i * mat.cols;
+		for (int j = 0; j < mat.cols; j++) {
+			pixSetPixel(*px, j, i, (l_uint32)data[idx + j]);
+		}
+	}
+	return true;
+}
+
+/**
+ * @brief Creates a binary pix from mat
+ * @param mat: input mat
+ * @param px: output pix
+ * @return
+ */
+bool imgProcessor::mat2pixBinary(cv::Mat& mat, Pix** px) {
+	if ((mat.type() != CV_8UC1) || (mat.empty())) return false;
+
+	*px = pixCreate(mat.cols, mat.rows, 1);
+	uchar* data = mat.data;
+
+	for (int i = 0; i < mat.rows; i++) {
+		unsigned idx = i * mat.cols;
+		for (int j = 0; j < mat.cols; j++) {
+			pixSetPixel(*px, j, i, 1 - (l_uint32)(data[idx + j] / 255));
+		}
+	}
+	return true;
+}
+
+bool imgProcessor::pix2mat(Pix** px, cv::Mat& mat) {
+	if (((*px)->d != 8 && (*px)->d != 1)
+		|| ((*px)->w < 1)) return false;
+
+	mat = cv::Mat((*px)->h, (*px)->w, CV_8UC1);
+	uchar* data = mat.data;
+
+	if ((*px)->d == 8) {
+		for (int i = 0; i < mat.rows; i++) {
+			unsigned idx = i * mat.cols;
+			for (int j = 0; j < mat.cols; j++) {
+				l_uint32 val;
+				pixGetPixel(*px, j, i, &val);
+				data[idx + j] = (uchar)val;
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < mat.rows; i++) {
+			unsigned idx = i * mat.cols;
+			for (int j = 0; j < mat.cols; j++) {
+				l_uint32 val;
+				pixGetPixel(*px, j, i, &val);
+				data[idx + j] = (uchar)(255 - val * 255);
+			}
+		}
+	}
+	return true;
+}
+
+bool imgProcessor::pixmap2mat(fz_pixmap** fzpxmap, cv::Mat& mat) {
+	if ((*fzpxmap)->w < 1) return false;
+	mat = cv::Mat((*fzpxmap)->h, (*fzpxmap)->w, CV_8UC1);
+	uchar* data = mat.data;
+
+	for (unsigned i = 0; i < (*fzpxmap)->h; i++) {
+		//cout << i << ", ";
+		unsigned idxMat = i * mat.cols;
+		unsigned idxPixmap = i * 4 * mat.cols;
+		for (unsigned j = 0; j < (*fzpxmap)->w; j++) {
+			data[idxMat + j] = ((*fzpxmap)->samples[idxPixmap + 4 * j] + (*fzpxmap)->samples[idxPixmap + 4 * j + 1] + (*fzpxmap)->samples[idxPixmap + 4 * j + 2]) / 3;
+		}
+	}
+	return true;
 }

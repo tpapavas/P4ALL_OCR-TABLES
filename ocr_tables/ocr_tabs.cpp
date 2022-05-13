@@ -1284,13 +1284,11 @@ namespace ocr_tabs {
 
 		RemoveGridLines(ratio);
 		imgProcessor::segmentationBlocks blk;
-		cv::Mat clean, clean2;
-		imgProcessor::prepareAll(img, clean, blk);
+		cv::Mat clean_img, clean2;
+		imgProcessor::prepareAll(img, clean_img, blk);
 
-		if (ratio >= 0.8) cv::erode(clean, clean, cv::Mat(), cv::Point(-1, -1), 1);
-		//cv::imshow("asd", clean);
-		//cv::waitKey(0);
-		imgProcessor::getTextImage(clean, blk, clean2);
+		if (ratio >= 0.8) cv::erode(clean_img, clean_img, cv::Mat(), cv::Point(-1, -1), 1);
+		imgProcessor::getTextImage(clean_img, blk, clean2);
 		//imgProcessor::getTextImage(img, blk, clean2);
 		cv::Size orgSiz = img.size();
 		int max_org_width_height = std::max(orgSiz.width, orgSiz.height);

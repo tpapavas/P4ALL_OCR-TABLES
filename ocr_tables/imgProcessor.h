@@ -43,17 +43,17 @@ namespace imgProcessor {
 
 		void resize(cv::Size& siz) {
 			if (siz.width == 0 || siz.height == 0) return;
-			if (text.size() != siz) cv::resize(text, text, siz,0,0,4);
-			if (figures.size() != siz) cv::resize(figures, figures, siz,0,0,4);
-			if (other.size() != siz) cv::resize(other, other, siz,0,0,4);
-			if (vert.size() != siz) cv::resize(vert, vert, siz,0,0,4);
+			if (text.size() != siz) cv::resize(text, text, siz, 0, 0, 4);
+			if (figures.size() != siz) cv::resize(figures, figures, siz, 0, 0, 4);
+			if (other.size() != siz) cv::resize(other, other, siz, 0, 0, 4);
+			if (vert.size() != siz) cv::resize(vert, vert, siz, 0, 0, 4);
 		}
 
 		void invertColors() {
-			text = 255-text;
-			figures=255-figures;
-			other=255-other;
-			vert=255-vert;
+			text = 255 - text;
+			figures = 255 - figures;
+			other = 255 - other;
+			vert = 255 - vert;
 		}
 	};
 
@@ -67,25 +67,22 @@ namespace imgProcessor {
 			if (ra.y <= rb.y && ra.x <= (rb.x + rb.width)) return true;
 			return false;
 		}
-	};	
-
-	bool mat2pix (cv::Mat& mat, Pix** px);
-	bool mat2pixBinary (cv::Mat& mat, Pix** px);
-	bool pix2mat (Pix** px, cv::Mat& mat);
-	bool pixmap2mat (fz_pixmap** fzpxmap, cv::Mat& mat);
+	};
 
 	bool thresholdImg (cv::Mat& input, cv::Mat& output, double k = 0.2, double dR = 128);
 	double calcLocalStats (cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy);
 	void NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, NiblackVersion version, int winx, int winy, double k, double dR);
 	
 	l_int32 DoPageSegmentation(PIX *pixs, segmentationBlocks& blocks);
+	void getTextImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output);
+	void reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output);
 
 	void prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks& blocks);
 	void prepareAll(fz_pixmap** fzpxmap, cv::Mat& thres, segmentationBlocks& blocks);
 	void prepareAll(Pix** px, cv::Mat& thres, segmentationBlocks& blocks);
 
-	void getTextImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output);
-
-	void reorderImage(cv::Mat& input, segmentationBlocks& blk, cv::Mat& output);
-
+	bool mat2pix(cv::Mat& mat, Pix** px);
+	bool mat2pixBinary(cv::Mat& mat, Pix** px);
+	bool pix2mat(Pix** px, cv::Mat& mat);
+	bool pixmap2mat(fz_pixmap** fzpxmap, cv::Mat& mat);
 };
