@@ -13,8 +13,9 @@ bool imgProcessor::thresholdImg (cv::Mat& input, cv::Mat& output, double k, doub
 	win = std::min(win, input.cols - 1);
 
     // Threshold
-    output = cv::Mat(input.rows, input.cols, CV_8U);
-    NiblackSauvolaWolfJolion (input, output, SAUVOLA, win, win, k, dR);
+	output = cv::Mat(input.rows, input.cols, CV_8U);
+	//NiblackSauvolaWolfJolion (input, output, SAUVOLA, win, win, k, dR);
+	NiblackSauvolaWolfJolion(input, output, SAUVOLA, 20, 50, 0.4, dR);
 	output = 255 * output;
 	return true;
 }
@@ -295,13 +296,13 @@ double imgProcessor::calcLocalStats (cv::Mat &im, cv::Mat &map_m, cv::Mat &map_s
 
 /**
  * @brief Creates binary image based on a threshold
- * @param im 
- * @param output 
- * @param version 
+ * @param im: input image
+ * @param output: output binary image
+ * @param version: type of Threshold (NIBLACK, SAUVOLA, WOLFJOLION)
  * @param winx 
  * @param winy 
- * @param k 
- * @param dR 
+ * @param k: constant value in range [0.2, 0.5] 
+ * @param dR: dynamic range of standard deviation
 */
 void imgProcessor::NiblackSauvolaWolfJolion (cv::Mat im, cv::Mat output, NiblackVersion version, int winx, int winy, double k, double dR) {
 	double m, s, max_s;
@@ -513,6 +514,10 @@ void imgProcessor::prepareAll(cv::Mat& input, cv::Mat& thres, segmentationBlocks
 	cv::namedWindow("thresholded", CV_WINDOW_NORMAL);
 	cv::imshow("thresholded", thres);
 	cv::waitKey(0);
+
+	cv::Mat closed;
+	cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));
+	cv::morphologyEx(thres, closed, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 1);
 
 	std::cout << "Segmenting Page...";
 	Pix* px = NULL;

@@ -1447,7 +1447,6 @@ namespace ocr_tabs {
 			fz_rect bounds = fz_bound_page(ctx, page);
 			bounds = fz_transform_rect(bounds, transform);
 			fz_irect bbox = fz_round_rect(bounds);
-			cout << bbox.x0 << ", " << bbox.x1 << endl;
 			fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_rgb(ctx), bbox, NULL, 1);
 			fz_clear_pixmap_with_value(ctx, pix, 0xff);
 			fz_device* dev = fz_new_draw_device(ctx, no_transform, pix);

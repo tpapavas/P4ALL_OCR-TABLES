@@ -2,36 +2,26 @@
 <html>
 <body>
 <p>
-V4 DATABASE RELATIONSHIPS <br>This document outlines the primary tables in the V4 database. For each table, the <br>intended purpose, the signiﬁcant key columns and suggested relationship to other tables is <br>provided. The format of the content will mirror the following: <br>TABLE NAME (Primary Key Columns) <br>Purpose and data items of interest <br>Recommended relationship criteria <br>*IF*IF1”}:16************************* ** ** ** ** ** ** ** *******************************$ <br>PARCEL (SWIS_CO, SWIS_TOWN, SWIS_VG, PARCEL_]D) <br>Data items relate to parcel speciﬁc data that spans assessment roll years, i.e. print key, grid <br>coordinates, parcel address. <br>Parcel table is the primary ‘target’ table in most situations and will be referred to in that manner. <br>For a list of all print keys within a municipality, parcel table may be queried by SWIS code. <br>ASSESSMENT (SWIS_CO, SWIS_TOWN, SWIS_VG, PARCEL_ID, ROLL_YR) <br>Data items relate to speciﬁc assessment roll year settings, i.e. roll section, property class, <br>assessed values for land and total, taxable values for county, municipality, village and school, <br>school code, active code. <br>Assessment table is related to parcel via SWIS_CO, SWIS_TOWN, SWIS_VG and <br>PARCEL_ID. Data for a given assessment roll can be gathered by including ROLL_YR in <br>selection criteria. Many of the reporting functions in V4 utilize active code to distinguish parcels <br>as useful, i.e. ACTIVE_CODE where ‘A’ active, ‘D’ inactive (deleted), ‘R’ reactivated, ‘H’ <br>historical. <br>Further, several data items on this table have related reference tables that provide decode <br>information and are listed here in part: <br>
+V4 DATABASE RELATIONSHIPS <br>This document outlines the primary tables in the V4 database. For each table, the <br>intended purpose, the significant key columns and suggested relationship to other tables is <br>provided. The format of the content will mirror the following: <br>TABLE NAME (Primary Key Columns) <br>Purpose and data items of interest <br>Recommended relationship criteria <br>2k ok 2 o o ok ok ok 2 ok o ok o ok o ok 2 ol o ok o ok ok ok 2 ol o ok o ok o ok 2 ol o ok o ok 2 ok o ol o ol o ok 2B ok o ol o ok o ok 2B ok o ol o ok o ok o ok o ol o ol ok ok R ok o ol o ke ok <br>PARCEL (SWIS_CO, SWIS_TOWN, SWIS_VG, PARCEL_ID) <br>Data items relate to parcel specific data that spans assessment roll years, i.e. print key, grid <br>coordinates, parcel address. <br>Parcel table is the primary ‘target’ table in most situations and will be referred to in that manner. <br>For a list of all print keys within a municipality, parcel table may be queried by SWIS code. <br>ASSESSMENT (SWIS_CO, SWIS_TOWN, SWIS_VG, PARCEL _ID, ROLL_YR) <br>Data items relate to specific assessment roll year settings, 1.e. roll section, property class, <br>assessed values for land and total, taxable values for county, municipality, village and school, <br>school code, active code. <br>Assessment table is related to parcel via SWIS_CO, SWIS_TOWN, SWIS_VG and <br>PARCEL_ID. Data for a given assessment roll can be gathered by including ROLL_YR in <br>selection criteria. Many of the reporting functions in V4 utilize active code to distinguish parcels <br>as useful, i.e. ACTIVE_CODE where ‘A’ active, ‘D’ inactive (deleted), ‘R’ reactivated, ‘H’ <br>historical. <br>Further, several data items on this table have related reference tables that provide decode <br>information and are listed here in part: <br>
 </p>
 <table border="1">
 <tr>
 <td>PROP_CLASS </td>
-<td>PROPCLASS_REF </td>
+<td>PROPCLASS REF </td>
 </tr>
 <tr>
 <td>ROLL_SECTION </td>
 <td>ROLLSECTION_STR </td>
 </tr>
 <tr>
-<td>OWN_CODE </td>
-<td>OWNERCODE_STR </td>
+<td colspan="2">OWN_CODE <br>OWNERCODE_STR TAX_CODE <br>TAXCODE_STR </td>
 </tr>
 <tr>
-<td>TAX_CODE </td>
-<td>TAXCODE_STR </td>
-</tr>
-<tr>
-<td>SCH_CODE </td>
-<td>SCHOOL_REF </td>
-</tr>
-<tr>
-<td>BANK_CODE </td>
-<td>BANK </td>
+<td colspan="2">SCH_CODE <br>SCHOOL_REF BANK_CODE <br>BANK </td>
 </tr>
 </table>
 <p>
-Primary ownership of the parcel for an assessment roll year may be determined by referring to <br>the PRIMARY_OWNER data item and following the link to the OWNER table via OWNER_]D <br>(details to follow in discussion of owner-related data). <br>EXEMPT (SWIS_CO, SWIS_TOWN, SWIS_VG, PARCEL_]D, ROLL_YR, EX_CODE, <br>EX_NUM when parcel has multiple of same exemption code, UN1T_NBR when exemption is <br>
+Primary ownership of the parcel for an assessment roll year may be determined by referring to <br>the PRIMARY_ OWNER data item and following the link to the OWNER table via OWNER_ID <br>(details to follow in discussion of owner-related data). <br>EXEMPT (SWIS_CO, SWIS_TOWN, SWIS_VG, PARCEL_ID, ROLL_YR, EX_CODE, <br>EX_NUM when parcel has multiple of same exemption code, UNIT_NBR when exemption is <br>
 </p>
 </body>
 </html>
