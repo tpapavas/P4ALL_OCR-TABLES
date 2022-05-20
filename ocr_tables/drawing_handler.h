@@ -7,10 +7,10 @@
 
 //typedef std::vector<std::vector<std::vector<std::vector<int>>>> vec3d_int;
 namespace ocr_tabs {
-	namespace drawingHandler {
+	namespace drawing_handler {
 	/*public:
-		drawingHandler();
-		~drawingHandler();*/
+		drawing_handler();
+		~drawing_handler();*/
 		void DrawBoxes(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<char*>& words, std::vector<float>& confs, std::vector<int>& font_size, std::vector<bool>& bold, std::vector<bool>& italic, std::vector<bool>& underscore, std::vector<bool>& dict);
 		void DrawLines(cv::Mat& test, std::vector<std::vector<int>>& Lines, int page_left, int page_right, int page_top, int page_bottom, std::vector<int*>& Line_dims);
 		void DrawSegments(cv::Mat& test, std::vector<std::vector<int>>& Lines, std::vector<std::vector<std::vector<int>>>& Lines_segments, std::vector<int*>& Line_dims, std::vector<std::vector<int>>& boxes);

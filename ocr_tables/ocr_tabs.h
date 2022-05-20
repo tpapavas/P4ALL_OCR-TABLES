@@ -11,6 +11,8 @@
 
 #include "tesseract/baseapi.h"
 
+#define ocrtabs_find(list,element) std::find(list.begin(), list.end(), element) != list.end();
+
 //class ocr_tabs
 namespace ocr_tabs {
 	class OCRTabsEngine {

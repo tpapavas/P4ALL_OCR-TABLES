@@ -3,8 +3,8 @@
 #include <fstream>
 #include "ocr_tabs.h"
 #include "auxiliary.h"
-#include "imgProcessor.h"
-#include "drawingHandler.h"
+#include "img_processor.h"
+#include "drawing_handler.h"
 extern "C" {
 	#include <mupdf/fitz.h>
 }
@@ -15,6 +15,7 @@ using namespace cv;
 #pragma warning( disable : 4018 )
 #pragma warning( disable : 4305 )
 #pragma warning( disable : 4244 )
+
 
 namespace ocr_tabs {
 	OCRTabsEngine::OCRTabsEngine() {
@@ -153,22 +154,16 @@ namespace ocr_tabs {
 	 * @param ratio: ratio of input image resize
 	 */
 	void OCRTabsEngine::RemoveGridLines(float ratio /*=1*/) {
-		Mat dst;
 		std::cout << "Remove Grid Lines...";
-		//start = clock();
 		aux::startClock();
 
+		Mat dst;
 
 		//threshold( test, dst, 100, 255,1 );
 		threshold(test, dst, 200, 255, cv::THRESH_BINARY);  //creates binary img
 		//erode(dst,dst,Mat(),Point(-1,-1),2);
 		uchar* data = (uchar*)dst.data;
 		//cvtColor(test,test,CV_GRAY2BGR);
-
-
-		/*cv::namedWindow("asd", CV_WINDOW_NORMAL);
-		cv::imshow("asd", dst);
-		cv::waitKey(0);*/
 
 		//check columns for black lines and remove them
 		for (int i = 0; i < dst.cols; i++) {
@@ -199,12 +194,6 @@ namespace ocr_tabs {
 			}
 		}
 
-		/*cv::namedWindow("asd",CV_WINDOW_NORMAL);
-		cv::imshow("asd", test);
-		cv::waitKey(0);*/
-
-		//duration = (std::clock() - start) / CLOCKS_PER_SEC;
-		//std::cout << " Done in " << duration << "s \n";
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
@@ -1063,43 +1052,43 @@ namespace ocr_tabs {
 	}
 
 	void OCRTabsEngine::DrawBoxes() {
-		drawingHandler::DrawBoxes(test, boxes, words, confs, font_size, bold, italic, underscore, dict);
+		drawing_handler::DrawBoxes(test, boxes, words, confs, font_size, bold, italic, underscore, dict);
 	}
 
 	void OCRTabsEngine::DrawLines() {
-		drawingHandler::DrawLines(test, lines, page_left, page_right, page_top, page_bottom, line_dims);
+		drawing_handler::DrawLines(test, lines, page_left, page_right, page_top, page_bottom, line_dims);
 	}
 
 	void OCRTabsEngine::DrawSegments() {
-		drawingHandler::DrawSegments(test, lines, line_segments, line_dims, boxes);
+		drawing_handler::DrawSegments(test, lines, line_segments, line_dims, boxes);
 	}
 
 	void OCRTabsEngine::DrawAreas() {
-		drawingHandler::DrawAreas(test, table_area, line_dims, page_left, page_right);
+		drawing_handler::DrawAreas(test, table_area, line_dims, page_left, page_right);
 	}
 
 	void OCRTabsEngine::DrawRows() {
-		drawingHandler::DrawRows(test, multi_rows, line_dims, page_left, page_right);
+		drawing_handler::DrawRows(test, multi_rows, line_dims, page_left, page_right);
 	}
 
 	void OCRTabsEngine::DrawColsPartial() {
-		drawingHandler::DrawColsPartial(test, boxes, tmp_col);
+		drawing_handler::DrawColsPartial(test, boxes, tmp_col);
 	}
 
 	void OCRTabsEngine::DrawCols() {
-		drawingHandler::DrawCols(test, boxes, tmp_col, table_columns);
+		drawing_handler::DrawCols(test, boxes, tmp_col, table_columns);
 	}
 
 	void OCRTabsEngine::DrawGrid() {
-		drawingHandler::DrawGrid(test, boxes, row_dims, col_dims, multi_rows, line_segments);
+		drawing_handler::DrawGrid(test, boxes, row_dims, col_dims, multi_rows, line_segments);
 	}
 
 	void OCRTabsEngine::DrawGridlessImage() {
-		drawingHandler::DrawGridlessImage(test);
+		drawing_handler::DrawGridlessImage(test);
 	}
 
 	//void ocr_tabs::DrawFootHead() {
-	//	drawingHandler::DrawFootHead(test, Lines_type, Lines, Line_dims, page_left, page_right);
+	//	drawing_handler::DrawFootHead(test, Lines_type, Lines, Line_dims, page_left, page_right);
 	//} 
 
 	// Resets the image to initial state.
@@ -1136,7 +1125,7 @@ namespace ocr_tabs {
 		}
 
 
-		cvtColor(img, img, cv::COLOR_GRAY2BGR);  //CV_GRAY2BGR
+		cvtColor(img, img, cv::COLOR_GRAY2BGR);
 		for (int i = 0; i < hor.size(); i++) {
 			line(img, Point2i(0, i), Point2i(hor[i] * 2 - 400, i), Scalar(0, 0, 255), 2);
 		}
@@ -1283,19 +1272,20 @@ namespace ocr_tabs {
 		}
 
 		RemoveGridLines(ratio);
-		imgProcessor::segmentationBlocks blk;
-		cv::Mat clean_img, clean2;
-		imgProcessor::prepareAll(img, clean_img, blk);
+		img_processor::SegmentationBlocks blk;
+		cv::Mat clean, clean2;
+		img_processor::PrepareAll(img, clean, blk);
 
-		if (ratio >= 0.8) cv::erode(clean_img, clean_img, cv::Mat(), cv::Point(-1, -1), 1);
-		imgProcessor::getTextImage(clean_img, blk, clean2);
-		//imgProcessor::getTextImage(img, blk, clean2);
+		//if (ratio >= 0.8) cv::erode(clean, clean, cv::Mat(), cv::Point(-1, -1), 1);
+		//drawing_handler::DrawGridlessImage(clean);
+		img_processor::ExtractTextImage(clean, blk, clean2);
+		//img_processor::ExtractTextImage(img, blk, clean2);
 		cv::Size orgSiz = img.size();
 		int max_org_width_height = std::max(orgSiz.width, orgSiz.height);
 		int min_org_width_height = std::min(orgSiz.width, orgSiz.height);
 		int min_max_wh_ratio = min_org_width_height / (float)max_org_width_height;
 
-		imgProcessor::reorderImage(clean2, blk, img);
+		img_processor::ReorderImage(clean2, blk, img);
 
 		/*if (((std::max(orgSiz.width, orgSiz.height)) < 4200) && ((std::max(orgSiz.width, orgSiz.height)) > 2800)) {
 			std::cout << " Done in " << aux::endClock() << "s \n";
@@ -1452,7 +1442,7 @@ namespace ocr_tabs {
 			//fz_save_pixmap_as_png(ctx, pix, "out.png");
 			fz_drop_device(ctx, dev);
 			cv::Mat input;
-			imgProcessor::pixmap2mat(&pix, input);
+			img_processor::pixmap2mat(&pix, input);
 			imageList.push_back(input.clone());
 			fz_drop_pixmap(ctx, pix);
 			fz_drop_page(ctx, page);
@@ -1507,7 +1497,7 @@ namespace ocr_tabs {
 					cv::resize(mask, mask, imageRAW[i].size());
 					imageRAW[i].copyTo(imageCLN[i], mask);
 
-					//imgProcessor::thresholdImg(imageCLN[i], imageCLN[i]);
+					//img_processor::ThresholdImage(imageCLN[i], imageCLN[i]);
 					//cv::erode(imageCLN[i],imageCLN[i],cv::Mat(), cv::Point(-1,-1), 1);
 
 					break;

@@ -30,7 +30,7 @@
     <ClInclude Include="ocr_tables\dll_config.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
-    <ClInclude Include="ocr_tables\imgProcessor.h">
+    <ClInclude Include="ocr_tables\img_processor.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
     <ClInclude Include="ocr_tables\ocr_tabs.h">
@@ -39,7 +39,7 @@
     <ClInclude Include="App\gui.h">
       <Filter>Header Files\App</Filter>
     </ClInclude>
-    <ClInclude Include="ocr_tables\drawingHandler.h">
+    <ClInclude Include="ocr_tables\drawing_handler.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
     <ClInclude Include="ocr_tables\auxiliary.h">
@@ -47,7 +47,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ocr_tables\imgProcessor.cpp">
+    <ClCompile Include="ocr_tables\img_processor.cpp">
       <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
     <ClCompile Include="ocr_tables\ocr_tabs.cpp">
@@ -56,7 +56,7 @@
     <ClCompile Include="App\main.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
-    <ClCompile Include="ocr_tables\drawingHandler.cpp">
+    <ClCompile Include="ocr_tables\drawing_handler.cpp">
       <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
     <ClCompile Include="App\ocrApp.cpp">

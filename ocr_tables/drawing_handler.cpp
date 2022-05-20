@@ -1,4 +1,4 @@
-#include "drawingHandler.h"
+#include "drawing_handler.h"
 
 #include <iostream>
 #include <fstream>
@@ -15,15 +15,15 @@ using namespace cv;
 #pragma warning( disable : 4244 )
 
 namespace ocr_tabs {
-	/*drawingHandler::drawingHandler() {
+	/*drawing_handler::drawing_handler() {
 
 	}
 
-	drawingHandler::~drawingHandler() {
+	drawing_handler::~drawing_handler() {
 
 	}*/
 
-	void drawingHandler::DrawBoxes(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<char*>& words, std::vector<float>& confs, std::vector<int>& font_size, std::vector<bool>& bold, std::vector<bool>& italic, std::vector<bool>& underscore, std::vector<bool>& dict) {
+	void drawing_handler::DrawBoxes(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<char*>& words, std::vector<float>& confs, std::vector<int>& font_size, std::vector<bool>& bold, std::vector<bool>& italic, std::vector<bool>& underscore, std::vector<bool>& dict) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -53,7 +53,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawLines(cv::Mat& test, std::vector<std::vector<int>>& Lines, int page_left, int page_right, int page_top, int page_bottom, std::vector<int*>& Line_dims) {
+	void drawing_handler::DrawLines(cv::Mat& test, std::vector<std::vector<int>>& Lines, int page_left, int page_right, int page_top, int page_bottom, std::vector<int*>& Line_dims) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -67,7 +67,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawSegments(cv::Mat& test, std::vector<std::vector<int>>& Lines, std::vector<std::vector<std::vector<int>>>& Lines_segments, std::vector<int*>& Line_dims, std::vector<std::vector<int>>& boxes) {
+	void drawing_handler::DrawSegments(cv::Mat& test, std::vector<std::vector<int>>& Lines, std::vector<std::vector<std::vector<int>>>& Lines_segments, std::vector<int*>& Line_dims, std::vector<std::vector<int>>& boxes) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -87,7 +87,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawAreas(cv::Mat& test, std::vector<std::vector<int>>& table_area, std::vector<int*>& Line_dims, int page_left, int page_right) {
+	void drawing_handler::DrawAreas(cv::Mat& test, std::vector<std::vector<int>>& table_area, std::vector<int*>& Line_dims, int page_left, int page_right) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -106,7 +106,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawRows(cv::Mat& test, std::vector<std::vector<std::vector<int>>>& multi_Rows, std::vector<int*>& Line_dims, int page_left, int page_right) {
+	void drawing_handler::DrawRows(cv::Mat& test, std::vector<std::vector<std::vector<int>>>& multi_Rows, std::vector<int*>& Line_dims, int page_left, int page_right) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -128,7 +128,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawColsPartial(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<std::vector<int>>>& tmp_col) {
+	void drawing_handler::DrawColsPartial(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<std::vector<int>>>& tmp_col) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -149,7 +149,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawCols(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<std::vector<int>>>& tmp_col, std::vector<std::vector<std::vector<std::vector<int>>>>& table_Columns) {
+	void drawing_handler::DrawCols(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<std::vector<int>>>& tmp_col, std::vector<std::vector<std::vector<std::vector<int>>>>& table_Columns) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -174,7 +174,7 @@ namespace ocr_tabs {
 		}
 	}
 
-	void drawingHandler::DrawGrid(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<int*>>& row_dims, std::vector<std::vector<int*>>& col_dims, std::vector<std::vector<std::vector<int>>>& multi_Rows, std::vector<std::vector<std::vector<int>>>& Lines_segments) {
+	void drawing_handler::DrawGrid(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<int*>>& row_dims, std::vector<std::vector<int*>>& col_dims, std::vector<std::vector<std::vector<int>>>& multi_Rows, std::vector<std::vector<std::vector<int>>>& Lines_segments) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -222,7 +222,7 @@ namespace ocr_tabs {
 		char c = waitKey(0);
 	}
 
-	void drawingHandler::DrawGridlessImage(cv::Mat& test) {
+	void drawing_handler::DrawGridlessImage(cv::Mat& test) {
 		namedWindow("img", cv::WINDOW_NORMAL);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
@@ -230,7 +230,7 @@ namespace ocr_tabs {
 		waitKey(0);
 	}
 
-	void drawingHandler::DrawFootHead(cv::Mat& test, int* Lines_type, std::vector<std::vector<int>>& Lines, std::vector<int*>& Line_dims, int page_left, int page_right) {
+	void drawing_handler::DrawFootHead(cv::Mat& test, int* Lines_type, std::vector<std::vector<int>>& Lines, std::vector<int*>& Line_dims, int page_left, int page_right) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
