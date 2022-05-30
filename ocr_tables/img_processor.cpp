@@ -1,6 +1,7 @@
 #pragma once 
 #include "img_processor.h"
 #include "drawing_handler.h"
+#include "debug.h"
 
 /**
  * @brief Outputs a binary image.
@@ -10,7 +11,7 @@
  * @param dR: dynamic range of standard deviation. Default 128.
  * @return true if everything goes normal.
  */
-bool img_processor::ThresholdImage (cv::Mat& input, cv::Mat& output, BinarizationType type, double k, double dR) {
+bool img_processor::ThresholdImage (cv::Mat& input, cv::Mat& output, BinarizationType type, int winx, int winy, double k, double dR) {
 	if ((input.rows <= 0) || (input.cols <= 0)) {
 		cerr << "*** ERROR: Invalid input Image " << endl;
 		return false;
@@ -21,7 +22,9 @@ bool img_processor::ThresholdImage (cv::Mat& input, cv::Mat& output, Binarizatio
 
     // Threshold
 	output = cv::Mat(input.rows, input.cols, CV_8U);
-	ApplyThreshold(input, output, type, win_len, win_len, k, dR);
+	//ApplyThreshold(input, output, type, win_len, win_len, k, dR);
+
+	ApplyThreshold(input, output, type, winx, winy, k, dR);
 	//ApplyThreshold(input, output, BATAINEH, 20, 20, 0.2, dR);
 	output = 255 * output;
 	return true;
@@ -34,7 +37,9 @@ bool img_processor::ThresholdImage (cv::Mat& input, cv::Mat& output, Binarizatio
  * @param map_s: standard deviation of image's subwindows
  * @param winx: window width
  * @param winy: window height
- * @param mean:
+ * @param mean: image mean value
+ * @param max_s: max sd value
+ * @param min_s: min sd value
  * @return 
  */
 double img_processor::CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy, double& mean, double& max_s, double& min_s) {
@@ -88,7 +93,7 @@ double img_processor::CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s
 	}
 
 	mean = mean / num_of_windows;
-	cout << mean << endl;
+	//cout << mean << endl;
 
 	return max_s;
 }
@@ -226,7 +231,7 @@ void img_processor::PrepareAll(cv::Mat& input, cv::Mat& output, SegmentationBloc
 	
 	cv::Mat threshed_input, temp, closed;
 	cv::erode(input, temp, cv::Mat(), cv::Point(-1, -1), 1);
-	img_processor::ThresholdImage(temp, output);  //get binary image
+	img_processor::ThresholdImage(temp, output, BinarizationType::BATAINEH);  //get binary image
 
 	//cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 2));
 	//cv::morphologyEx(output, closed, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 2);  //new operation #1
@@ -249,8 +254,8 @@ void img_processor::PrepareAll(cv::Mat& input, cv::Mat& output, SegmentationBloc
 	std::cout << "Done!" << std::endl;
 	pixDestroy(&px);
 
-	img_processor::ThresholdImage(input, output);
-	ocr_tabs::drawing_handler::DrawGridlessImage(output);
+	//img_processor::ThresholdImage(input, output);
+	//ocr_tabs::drawing_handler::DrawGridlessImage(output);
 }
 
 void img_processor::PrepareAll(fz_pixmap** fzpxmap, cv::Mat& thres, SegmentationBlocks& blocks) {
@@ -298,22 +303,23 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 	l_int32      text_flag = 0;
 	l_int32      block_flag = 0;
 
+	setLeptDebugOK(LEPT_DEBUG);
 
 	cv::Size defSize(pixs->w, pixs->h);
-	pixr = pixReduceRankBinaryCascade(pixs, 1, 0, 0, 0);
+	//pixr = pixReduceRankBinaryCascade(pixs, 1, 0, 0, 0);
+	PIX_CALL(pixReduceRankBinaryCascade(pixs, 1, 0, 0, 0), pixr);
 
-	//setLeptDebugOK(1);
 	//pixDisplay(pixs, pixs->w, pixs->h);
 	//pixDisplay(pixr, pixr->w, pixr->h);
 
 	/* Get seed for halftone parts */
-	pixt1 = pixReduceRankBinaryCascade(pixr, 4, 4, 3, 0);
-	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. reduce rank", 1);
+	//pixt1 = pixReduceRankBinaryCascade(pixr, 4, 4, 3, 0);
+	PIX_CALL(pixReduceRankBinaryCascade(pixr, 4, 4, 3, 0), pixt1);
 
-	pixt2 = pixOpenBrick(NULL, pixt1, 5, 5);
-	//pixDisplayWithTitle(pixt2, pixt2->w, pixt2->h, "t2. open brick", 1);
-	pixhs = pixExpandBinaryPower2(pixt2, 8);
-	//pixDisplayWithTitle(pixhs, pixhs->w, pixhs->h, "hs. expand binary", 1);
+	//pixt2 = pixOpenBrick(NULL, pixt1, 5, 5);
+	PIX_CALL(pixOpenBrick(NULL, pixt1, 5, 5), pixt2);
+	//pixhs = pixExpandBinaryPower2(pixt2, 8);
+	PIX_CALL(pixExpandBinaryPower2(pixt2, 8), pixhs);
 
 	pixDestroy(&pixt1);
 	pixDestroy(&pixt2);
@@ -773,7 +779,7 @@ bool img_processor::ConstructImage(cv::Mat& image, cv::Mat& filter, int ker_len)
 						cnt_black += (filter.data[ker_indx + l] == 0) ? 1 : 0;
 					}
 				}
-				if (cnt_black > 1) {
+				if (cnt_black > local_blacks_limit) {
 					output.data[indx + j] = 0;
 				}
 			} /*else if (image.data[indx + j] == 0 && filter.data[indx + j] == 255) {

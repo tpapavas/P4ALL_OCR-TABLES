@@ -12,7 +12,6 @@
 
 //MUPDF
 extern "C" {
-
 	//#include <mupdf\fitz\pixmap.h>
 	#include <mupdf\fitz.h>
 }
@@ -70,7 +69,7 @@ namespace img_processor {
 		}
 	};
 
-	bool ThresholdImage(cv::Mat& input, cv::Mat& output, BinarizationType type = SAUVOLA, double k = 0.2, double dR = 128);
+	bool ThresholdImage(cv::Mat& input, cv::Mat& output, BinarizationType type = SAUVOLA, int winx = 20, int winy = 20, double k = 0.2, double dR = 128);
 	double CalcLocalStats (cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy, double& mean, double& max_s, double& min_s);
 	void ApplyThreshold (cv::Mat im, cv::Mat output, BinarizationType type, int winx, int winy, double k, double dR);
 	

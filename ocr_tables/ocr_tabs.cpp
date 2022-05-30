@@ -1342,6 +1342,7 @@ namespace ocr_tabs {
 		}
 
 		for (int i = 0; i < pages.size(); i++) {
+			raw = pages[i].clone();
 			Mat tmp = PreprocessImage(pages[i]);
 			SetImage(tmp);
 			//RemoveGridLines();
@@ -1366,7 +1367,7 @@ namespace ocr_tabs {
 		FindColumnSize();	 ////
 		FinalizeGrid(); ////
 
-		DrawBoxes();
+		//DrawBoxes();
 
 		std::string outputFilename = filename;
 		outputFilename.append(withXML ? "XML.html" : ".html");

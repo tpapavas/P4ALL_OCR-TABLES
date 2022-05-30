@@ -18,6 +18,7 @@ namespace ocr_tabs {
 	class OCRTabsEngine {
 	public:
 		OCRTABS_API OCRTabsEngine();
+		OCRTABS_API OCRTabsEngine(FileType filetype, const std::string& filename);
 		OCRTABS_API ~OCRTabsEngine();
 		
 		void RemoveGridLines(float ratio = 1);
@@ -61,9 +62,10 @@ namespace ocr_tabs {
 		void resetAll();
 
 		cv::Mat getInitial() { return initial; }
+		cv::Mat getRaw() { return raw; }
 
 	private:
-		cv::Mat test, initial;
+		cv::Mat test, initial, raw;
 		tesseract::TessBaseAPI  tess;
 		
 		clock_t start;
