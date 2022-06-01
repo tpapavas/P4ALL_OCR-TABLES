@@ -44,8 +44,6 @@ bool img_processor::ThresholdImage (cv::Mat& input, cv::Mat& output, Binarizatio
  */
 double img_processor::CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy, double& mean, double& max_s, double& min_s) {
 	cv::Mat im_sum, im_sum_sq;
-	cv::integral(im, im_sum, im_sum_sq, CV_64F);
-
 	double m, s, sum, sum_sq; 
 	int wxh = winx / 2;
 	int wyh = winy / 2;
@@ -53,21 +51,27 @@ double img_processor::CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s
 	int y_lastth = im.rows - wyh - 1;
 	int y_firstth = wyh;
 	double winarea = winx * winy;
-	mean = 0;
 	int num_of_windows = 0;
-
+	
+	cv::integral(im, im_sum, im_sum_sq, CV_64F);
+	mean = 0;
 	max_s = 0;
 	for	(int j = y_firstth ; j<=y_lastth; j++) {   
 		sum = sum_sq = 0;
 
-		sum = im_sum.at<double>(j - wyh + winy, winx) - im_sum.at<double>(j - wyh, winx) - im_sum.at<double>(j - wyh + winy, 0) + im_sum.at<double>(j - wyh, 0);
-		sum_sq = im_sum_sq.at<double>(j - wyh + winy, winx) - im_sum_sq.at<double>(j - wyh, winx) - im_sum_sq.at<double>(j - wyh + winy, 0) + im_sum_sq.at<double>(j - wyh, 0);
+		sum = im_sum.dget(winx, j - wyh + winy) - im_sum.dget(winx, j - wyh) - im_sum.dget(0, j - wyh + winy) + im_sum.dget(0, j - wyh);
+		sum_sq = im_sum_sq.dget(winx, j - wyh + winy) - im_sum_sq.dget(winx, j - wyh) - im_sum_sq.dget(0, j - wyh + winy) + im_sum_sq.dget(0, j - wyh);
 
 		m  = sum / winarea;
-		mean += m;
-		num_of_windows++;
 		s = sqrt((sum_sq - m * sum) / winarea);
 		if (s > max_s) max_s = s;
+
+		mean += m;
+		num_of_windows++;
+
+		//cout << "sum: " << s << " | sum_sq: " << sum_sq << " | m: " << m << " | sd: " << s << endl;
+		//cout << im_sum.at<double>(j - wyh + winy, winx) << " | " << im_sum_sq.at<double>(j - wyh + winy, winx) << endl;
+		//cin.get();
 
 		map_m.fset(x_firstth, j, m);
 		map_s.fset(x_firstth, j, s);
@@ -75,17 +79,19 @@ double img_processor::CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s
 		// Shift the window, add and remove	new/old values to the histogram
 		for (int i = 1; i <= im.cols - winx; i++) {
 			// Remove the left old column and add the right new column
-			sum -= im_sum.at<double>(j-wyh+winy,i) - im_sum.at<double>(j-wyh,i) - im_sum.at<double>(j-wyh+winy,i-1) + im_sum.at<double>(j-wyh,i-1);
-			sum += im_sum.at<double>(j-wyh+winy,i+winx) - im_sum.at<double>(j-wyh,i+winx) - im_sum.at<double>(j-wyh+winy,i+winx-1) + im_sum.at<double>(j-wyh,i+winx-1);
+			sum -= im_sum.dget(i, j - wyh + winy) - im_sum.dget(i, j - wyh) - im_sum.dget(i - 1, j - wyh + winy) + im_sum.dget(i - 1, j - wyh);
+			sum += im_sum.dget(i + winx, j - wyh + winy) - im_sum.dget(i + winx, j - wyh) - im_sum.dget(i + winx - 1, j - wyh + winy) + im_sum.dget(i + winx - 1, j - wyh);
 
-			sum_sq -= im_sum_sq.at<double>(j - wyh + winy, i) - im_sum_sq.at<double>(j - wyh, i) - im_sum_sq.at<double>(j - wyh + winy, i - 1) + im_sum_sq.at<double>(j - wyh, i - 1);
-			sum_sq += im_sum_sq.at<double>(j - wyh + winy, i + winx) - im_sum_sq.at<double>(j - wyh, i + winx) - im_sum_sq.at<double>(j - wyh + winy, i + winx - 1) + im_sum_sq.at<double>(j - wyh, i + winx - 1);
+			// Remove the left old column and add the right new column
+			sum_sq -= im_sum_sq.dget(i, j - wyh + winy) - im_sum_sq.dget(i, j - wyh) - im_sum_sq.dget(i - 1, j - wyh + winy) + im_sum_sq.dget(i - 1, j - wyh);
+			sum_sq += im_sum_sq.dget(i + winx, j - wyh + winy) - im_sum_sq.dget(i + winx, j - wyh) - im_sum_sq.dget(i + winx - 1, j - wyh + winy) + im_sum_sq.dget(i + winx - 1, j - wyh);
 
 			m = sum / winarea;
-			mean += m;
-			num_of_windows++;
 			s = sqrt((sum_sq - m * sum) / winarea);
 			if (s > max_s) max_s = s;
+
+			mean += m;
+			num_of_windows++;
 
 			map_m.fset(i + wxh, j, m);
 			map_s.fset(i + wxh, j, s);
@@ -93,7 +99,6 @@ double img_processor::CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s
 	}
 
 	mean = mean / num_of_windows;
-	//cout << mean << endl;
 
 	return max_s;
 }
@@ -128,7 +133,7 @@ void img_processor::ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType 
 
 	minMaxLoc(im, &min_I, &max_I);
 
-	cv::Mat thsurf (im.rows, im.cols, CV_32F);
+	cv::Mat thsurf(im.rows, im.cols, CV_32F);
 			
 	// Create the threshold surface, including border processing
 	// ----------------------------------------------------
@@ -168,13 +173,11 @@ void img_processor::ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType 
         		// LEFT BORDER
 				for (int i = 0; i <= x_firstth; ++i)
 					thsurf.fset(i, j, th);
-
         		// LEFT-UPPER CORNER
 				if (j == y_firstth)
 					for (int u = 0; u < y_firstth; ++u)
 						for (int i = 0; i <= x_firstth; ++i)
 							thsurf.fset(i, u, th);
-
         		// LEFT-LOWER CORNER
 				if (j == y_lastth)
 					for (int u = y_lastth + 1; u < im.rows; ++u)
@@ -186,7 +189,6 @@ void img_processor::ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType 
 			if (j == y_firstth)
 				for (int u = 0; u < y_firstth; ++u)
 					thsurf.fset(i + wxh, u, th);
-
 			// LOWER BORDER
 			if (j == y_lastth)
 				for (int u = y_lastth + 1; u < im.rows; ++u)
@@ -196,13 +198,11 @@ void img_processor::ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType 
 		// RIGHT BORDER
 		for (int i = x_lastth; i < im.cols; ++i)
 			thsurf.fset(i, j, th);
-
   		// RIGHT-UPPER CORNER
 		if (j == y_firstth)
 			for (int u = 0; u < y_firstth; ++u)
 				for (int i = x_lastth; i < im.cols; ++i)
 					thsurf.fset(i, u, th);
-
 		// RIGHT-LOWER CORNER
 		if (j == y_lastth)
 			for (int u = y_lastth + 1; u < im.rows; ++u)
@@ -211,6 +211,7 @@ void img_processor::ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType 
 	}
 	//cerr << "surface created" << endl;
 	
+	//apply threshold to each pixel
 	for (int y = 0; y < im.rows; ++y)
 		for (int x = 0; x < im.cols; ++x)
 			if (im.uget(x, y) >= thsurf.fget(x, y))
@@ -227,35 +228,31 @@ void img_processor::ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType 
  * @param blocks: segmentation blocks
  */
 void img_processor::PrepareAll(cv::Mat& input, cv::Mat& output, SegmentationBlocks& blocks) {
-	std::cout << "Thresholding Image...";
+	OCR_LOG_MSG("Thresholding Image...");
 	
 	cv::Mat threshed_input, temp, closed;
-	cv::erode(input, temp, cv::Mat(), cv::Point(-1, -1), 1);
-	img_processor::ThresholdImage(temp, output, BinarizationType::BATAINEH);  //get binary image
+	//cv::erode(input, temp, cv::Mat(), cv::Point(-1, -1), 1);
+	//img_processor::ThresholdImage(temp, output, BinarizationType::BATAINEH);  //get binary image
+	ClearImage(input, output);
+	ocr_tabs::drawing_handler::DrawGridlessImage(output);
 
 	//cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 2));
 	//cv::morphologyEx(output, closed, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 2);  //new operation #1
 	//img_processor::ConstructImage(output, closed, 3);  //new operation #2
 	//ocr_tabs::drawing_handler::DrawGridlessImage(output);
-	
-	cv::erode(output, threshed_input, cv::Mat(), cv::Point(-1, -1), 3);
 
-	//ocr_tabs::drawing_handler::DrawGridlessImage(threshed_input);
-
-	std::cout << "Done!" << std::endl;
-
-
-	std::cout << "Segmenting Page...";
+	OCR_LOG_MSG("Done!\n");
+	OCR_LOG_MSG("Segmenting Page...");
 
 	Pix* px = NULL;
+	cv::erode(output, threshed_input, cv::Mat(), cv::Point(-1, -1), 3);
 	img_processor::mat2pixBinary(threshed_input, &px);
 	img_processor::DoPageSegmentation(px, blocks);
 
-	std::cout << "Done!" << std::endl;
+	OCR_LOG_MSG("Done!\n");
 	pixDestroy(&px);
 
 	//img_processor::ThresholdImage(input, output);
-	//ocr_tabs::drawing_handler::DrawGridlessImage(output);
 }
 
 void img_processor::PrepareAll(fz_pixmap** fzpxmap, cv::Mat& thres, SegmentationBlocks& blocks) {
@@ -269,7 +266,6 @@ void img_processor::PrepareAll(Pix** px, cv::Mat& thres, SegmentationBlocks& blo
 	pix2mat(px, input);
 	PrepareAll(input, thres, blocks);
 }
-
 
 /**
  * @brief Segment input pix and extract segmentation blocks
@@ -303,14 +299,14 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 	l_int32      text_flag = 0;
 	l_int32      block_flag = 0;
 
-	setLeptDebugOK(LEPT_DEBUG);
+	setLeptDebugOK(OCR_LEPT_DEBUG);
 
 	cv::Size defSize(pixs->w, pixs->h);
 	//pixr = pixReduceRankBinaryCascade(pixs, 1, 0, 0, 0);
 	PIX_CALL(pixReduceRankBinaryCascade(pixs, 1, 0, 0, 0), pixr);
 
-	//pixDisplay(pixs, pixs->w, pixs->h);
-	//pixDisplay(pixr, pixr->w, pixr->h);
+	PIX_CALL(pixs, pixs);
+	PIX_CALL(pixr, pixr);
 
 	/* Get seed for halftone parts */
 	//pixt1 = pixReduceRankBinaryCascade(pixr, 4, 4, 3, 0);
@@ -325,31 +321,31 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 	pixDestroy(&pixt2);
 
 	/* Get mask for connected regions */
-	pixm = pixCloseSafeBrick(NULL, pixr, 4, 4);
-	//pixDisplayWithTitle(pixm, pixm->w, pixm->h, "m. close safe brick", 1);
-
+	//pixm = pixCloseSafeBrick(NULL, pixr, 4, 4);
+	PIX_CALL(pixCloseSafeBrick(NULL, pixr, 4, 4), pixm);
+	
 	/* Fill seed into mask to get halftone mask */
-	pixhm1 = pixSeedfillBinary(NULL, pixhs, pixm, 4);
-	//pixDisplayWithTitle(pixhm1, pixhm1->w, pixhm1->h, "hm1. seed fill binary", 1);
-
-	pixhm2 = pixExpandBinaryPower2(pixhm1, 2);
-	//pixDisplayWithTitle(pixhm2, pixhm2->w, pixhm2->h, "hm2. expand binary", 1);
-
+	//pixhm1 = pixSeedfillBinary(NULL, pixhs, pixm, 4);
+	PIX_CALL(pixSeedfillBinary(NULL, pixhs, pixm, 4), pixhm1);
+	
+	//pixhm2 = pixExpandBinaryPower2(pixhm1, 2);
+	PIX_CALL(pixExpandBinaryPower2(pixhm1, 2), pixhm2);
+	
 	/* Extract halftone stuff */
-	pixht = pixAnd(NULL, pixhm1, pixr);
-	//pixDisplayWithTitle(pixht, pixht->w, pixht->h, "ht. hm1 AND r", 1);
-
+	//pixht = pixAnd(NULL, pixhm1, pixr);
+	PIX_CALL(pixAnd(NULL, pixhm1, pixr), pixht);
+	
 	/* Extract non-halftone stuff */
-	pixnht = pixXor(NULL, pixht, pixr);
-	//pixDisplayWithTitle(pixnht, pixnht->w, pixnht->h, "nht. ht XOR r", 1);
-
+	//pixnht = pixXor(NULL, pixht, pixr);
+	PIX_CALL(pixXor(NULL, pixht, pixr), pixnht);
+	
 	pixZero(pixht, &zero);
 	//pixDisplayWithTitle(pixht, pixht->w, pixht->h, "ht. zero", 1);
 
 	/* Get bit-inverted image */
-	pixi = pixInvert(NULL, pixnht);
-	//pixDisplayWithTitle(pixi, pixi->w, pixi->h, "i. invert", 1);
-
+	//pixi = pixInvert(NULL, pixnht);
+	PIX_CALL(pixInvert(NULL, pixnht), pixi);
+	
 	/* The whitespace mask will break textlines where there
 	 * is a large amount of white space below or above.
 	 * We can prevent this by identifying regions of the
@@ -357,19 +353,19 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 	 * the separation between columns) and significant
 	 * vertical extent (bigger than the separation between
 	 * textlines), and subtracting this from the whitespace mask. */
-	pixt1 = pixMorphCompSequence(pixi, "o80.60", 0);
-	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. morph comp", 1);
+	//pixt1 = pixMorphCompSequence(pixi, "o80.60", 0);
+	PIX_CALL(pixMorphCompSequence(pixi, "o80.60", 0), pixt1);
 
-	pixt2 = pixSubtract(NULL, pixi, pixt1);
-	//pixDisplayWithTitle(pixt2, pixt2->w, pixt2->h, "t2. i - t1", 1);
+	//pixt2 = pixSubtract(NULL, pixi, pixt1);
+	PIX_CALL(pixSubtract(NULL, pixi, pixt1), pixt2);
 	pixDestroy(&pixt1);
 
 	/* Identify vertical whitespace by opening inverted image */
-	pixt3 = pixOpenBrick(NULL, pixt2, 5, 1);  /* removes thin vertical lines */
-	//pixDisplayWithTitle(pixt3, pixt3->w, pixt3->h, "t3. open brick", 1);
+	//pixt3 = pixOpenBrick(NULL, pixt2, 5, 1);  /* removes thin vertical lines */
+	PIX_CALL(pixOpenBrick(NULL, pixt2, 5, 1), pixt3);
 
-	pixvws = pixOpenBrick(NULL, pixt3, 1, 200);  /* gets long vertical lines */
-	//pixDisplayWithTitle(pixvws, pixvws->w, pixvws->h, "vws. open brick", 1);
+	//pixvws = pixOpenBrick(NULL, pixt3, 1, 200);  /* gets long vertical lines */
+	PIX_CALL(pixOpenBrick(NULL, pixt3, 1, 200), pixvws);
 
 	pix2mat(&pixvws, blocks.vert);
 	pixDestroy(&pixt2);
@@ -377,23 +373,23 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 
 	/* Get proto (early processed) text line mask. */
 	/* First close the characters and words in the textlines */
-	pixtm1 = pixCloseSafeBrick(NULL, pixnht, 30, 1);
-	//pixDisplayWithTitle(pixtm1, pixtm1->w, pixtm1->h, "tm1. close brick", 1);
+	//pixtm1 = pixCloseSafeBrick(NULL, pixnht, 30, 1);
+	PIX_CALL(pixCloseSafeBrick(NULL, pixnht, 30, 1), pixtm1);
 
 	/* Next open back up the vertical whitespace corridors */
-	pixtm2 = pixSubtract(NULL, pixtm1, pixvws);
-	//pixDisplayWithTitle(pixtm2, pixtm2->w, pixtm2->h, "tm2. tm1 - vws", 1);
-
+	//pixtm2 = pixSubtract(NULL, pixtm1, pixvws);
+	PIX_CALL(pixSubtract(NULL, pixtm1, pixvws), pixtm2);
+	
 	/* Do a small opening to remove noise */
 	pixOpenBrick(pixtm2, pixtm2, 3, 3);
 	//pixDisplayWithTitle(pixtm2, pixtm2->w, pixtm2->h, "tm2. open brick", 1);
 
-	pixtm3 = pixExpandBinaryPower2(pixtm2, 2);
-	//pixDisplayWithTitle(pixtm3, pixtm3->w, pixtm3->h, "tm3. expand power", 1);
+	//pixtm3 = pixExpandBinaryPower2(pixtm2, 2);
+	PIX_CALL(pixExpandBinaryPower2(pixtm2, 2), pixtm3);
 
 	/* Join pixels vertically to make text block mask */
-	pixtb1 = pixMorphSequence(pixtm2, "c1.10 + o4.1", 0);
-	//pixDisplayWithTitle(pixtb1, pixtb1->w, pixtb1->h, "tb1. morph sequence", 1);
+	//pixtb1 = pixMorphSequence(pixtm2, "c1.10 + o4.1", 0);
+	PIX_CALL(pixMorphSequence(pixtm2, "c1.10 + o4.1", 0), pixtb1);
 
 	/* Solidify the textblock mask and remove noise:
 	 *  (1) For each c.c., close the blocks and dilate slightly
@@ -401,22 +397,22 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 	 *  (2) Small horizontal closing between components
 	 *  (3) Open the white space between columns, again
 	 *  (4) Remove small components */
-	pixt1 = pixMorphSequenceByComponent(pixtb1, "c30.30 + d3.3", 8, 0, 0, NULL);
-	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. morph sequence", 1);
+	//pixt1 = pixMorphSequenceByComponent(pixtb1, "c30.30 + d3.3", 8, 0, 0, NULL);
+	PIX_CALL(pixMorphSequenceByComponent(pixtb1, "c30.30 + d3.3", 8, 0, 0, NULL), pixt1);
 
 	pixCloseSafeBrick(pixt1, pixt1, 10, 1);
 	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. close brick", 1);
 
-	pixt2 = pixSubtract(NULL, pixt1, pixvws);
-	//pixDisplayWithTitle(pixt2, pixt2->w, pixt2->h, "t2. t1 - vws", 1);
+	//pixt2 = pixSubtract(NULL, pixt1, pixvws);
+	PIX_CALL(pixSubtract(NULL, pixt1, pixvws), pixt2);
 
 	pixt3 = pixSelectBySize(pixt2, 25, 5, 8, L_SELECT_IF_BOTH,
 		L_SELECT_IF_GTE, NULL);
-	//pixDisplayWithTitle(pixt3, pixt3->w, pixt3->h, "t3. select", 1);
+	PIX_CALL(pixSelectBySize(pixt2, 25, 5, 8, L_SELECT_IF_BOTH, L_SELECT_IF_GTE, NULL), pixt3);
 
 	pix2mat(&pixt3, blocks.text);
-	pixtb2 = pixExpandBinaryPower2(pixt3, 2);
-	//pixDisplayWithTitle(pixtb2, pixtb2->w, pixtb2->h, "tb2. expand binary", 1);
+	//pixtb2 = pixExpandBinaryPower2(pixt3, 2);
+	PIX_CALL(pixExpandBinaryPower2(pixt3, 2), pixtb2);
 
 	pixDestroy(&pixt1);
 	pixDestroy(&pixt2);
@@ -424,8 +420,8 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 
 	/* Identify the outlines of each textblock */
 	ptaa = pixGetOuterBordersPtaa(pixtb2);
-	pixt1 = pixRenderRandomCmapPtaa(pixtb2, ptaa, 1, 8, 1);
-	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. random cmap", 1);
+	//pixt1 = pixRenderRandomCmapPtaa(pixtb2, ptaa, 1, 8, 1);
+	PIX_CALL(pixRenderRandomCmapPtaa(pixtb2, ptaa, 1, 8, 1), pixt1);
 
 	cmap = pixGetColormap(pixt1);
 	pixcmapResetColor(cmap, 0, 130, 130, 130);  /* set interior to gray */
@@ -434,17 +430,17 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 	pixDestroy(&pixt1);
 
 	/* Fill line mask (as seed) into the original */
-	pixt1 = pixSeedfillBinary(NULL, pixtm3, pixs, 8);
-	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. seed fill", 1);
-
+	//pixt1 = pixSeedfillBinary(NULL, pixtm3, pixs, 8);
+	PIX_CALL(pixSeedfillBinary(NULL, pixtm3, pixs, 8), pixt1);
+	
 	pixOr(pixtm3, pixtm3, pixt1);
 	//pixDisplayWithTitle(pixtm3, pixtm3->w, pixtm3->h, "tm3. tm3 OR t1", 1);
 
 	pixDestroy(&pixt1);
 
 	/* Fill halftone mask (as seed) into the original */
-	pixt1 = pixSeedfillBinary(NULL, pixhm2, pixs, 8);
-	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. seed fill", 1);
+	//pixt1 = pixSeedfillBinary(NULL, pixhm2, pixs, 8);
+	PIX_CALL(pixSeedfillBinary(NULL, pixhm2, pixs, 8), pixt1);
 
 	pixOr(pixhm2, pixhm2, pixt1);
 	//pixDisplayWithTitle(pixhm2, pixhm2->w, pixhm2->h, "hm2. hm2 OR t1", 1);
@@ -454,11 +450,11 @@ l_int32  img_processor::DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks
 	//pixDisplayWithTitle(pixhm2, pixhm2->w, pixhm2->h, "hm2", 1);
 
 	/* Find objects that are neither text nor halftones */
-	pixt1 = pixSubtract(NULL, pixs, pixtm3);  /* remove text pixels */
-	//pixDisplayWithTitle(pixt1, pixt1->w, pixt1->h, "t1. s - tm3", 1);
+	//pixt1 = pixSubtract(NULL, pixs, pixtm3);  /* remove text pixels */
+	PIX_CALL(pixSubtract(NULL, pixs, pixtm3), pixt1);
 
-	pixnon = pixSubtract(NULL, pixt1, pixhm2);  /* remove halftone pixels */
-	//pixDisplayWithTitle(pixnon, pixnon->w, pixnon->h, "non. t1 - hm2", 1);
+	//pixnon = pixSubtract(NULL, pixt1, pixhm2);  /* remove halftone pixels */
+	PIX_CALL(pixSubtract(NULL, pixt1, pixhm2), pixnon);
 
 	pixDestroy(&pixt1);
 	pix2mat(&pixnon, blocks.other);
@@ -789,6 +785,21 @@ bool img_processor::ConstructImage(cv::Mat& image, cv::Mat& filter, int ker_len)
 	}
 
 	image = output.clone();
+
+	return true;
+}
+
+bool img_processor::ClearImage(cv::Mat& image, cv::Mat& output) {
+	cv::Mat temp_er, temp_th, closed, se;
+	BinarizationType bin_type = BinarizationType::SAUVOLA;
+	int window = 20; 
+	int kernel = 3;
+	double k = 0.45;
+
+	cv::erode(image, temp_er, cv::Mat(), cv::Point(-1, -1), 1);
+	img_processor::ThresholdImage(temp_er, temp_th, bin_type, window, window, k);
+	se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1, 3));
+	cv::morphologyEx(temp_th, output, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 2);
 
 	return true;
 }

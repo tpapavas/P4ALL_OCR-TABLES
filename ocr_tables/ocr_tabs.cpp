@@ -5,6 +5,7 @@
 #include "auxiliary.h"
 #include "img_processor.h"
 #include "drawing_handler.h"
+#include "debug.h"
 extern "C" {
 	#include <mupdf/fitz.h>
 }
@@ -146,7 +147,7 @@ namespace ocr_tabs {
 			if (boxes[i][BOX_BOTTOM] >= page_bottom) { page_bottom = boxes[i][BOX_BOTTOM]; }
 		}
 
-		std::cout << "\nPROCESSING OVERALL DOCUMENT\n\n";
+		OCR_LOG_MSG("\nPROCESSING OVERALL DOCUMENT\n\n");
 	}
 
 	/**
@@ -154,7 +155,7 @@ namespace ocr_tabs {
 	 * @param ratio: ratio of input image resize
 	 */
 	void OCRTabsEngine::RemoveGridLines(float ratio /*=1*/) {
-		std::cout << "Remove Grid Lines...";
+		OCR_LOG_MSG("Remove Grid Lines...");
 		aux::startClock();
 
 		Mat dst;
@@ -205,7 +206,7 @@ namespace ocr_tabs {
 		//tess.Init("..\\tessdata", "eng");
 		tess.SetImage((uchar*)test.data, test.size().width, test.size().height, test.channels(), test.step1());
 		//tess.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-*()");
-		std::cout << "Recognizing...";
+		OCR_LOG_MSG("Recognizing...");
 		aux::startClock();
 
 		tess.Recognize(NULL);
@@ -220,7 +221,7 @@ namespace ocr_tabs {
 		//tesseract::PageIterator* ri = tess.AnalyseLayout();
 		tesseract::ResultIterator* ri = tess.GetIterator();
 
-		std::cout << "Get bounding Boxes...";
+		OCR_LOG_MSG("Get bounding Boxes...");
 		aux::startClock();
 		do {
 			int left, top, right, bottom;
@@ -260,7 +261,7 @@ namespace ocr_tabs {
 
 	// Find the text boundaries of the whole image
 	void OCRTabsEngine::FindTextBoundaries() {
-		std::cout << "Find text boundaries...";
+		OCR_LOG_MSG("Find text boundaries...");
 		aux::startClock();
 
 		page_bottom = page_right = 0;
@@ -279,7 +280,7 @@ namespace ocr_tabs {
 
 	// Create lines by assigning vertically-overlapping word boxes to the same unique line
 	void OCRTabsEngine::CreateTextLines() {
-		std::cout << "Find lines...";
+		OCR_LOG_MSG("Find lines...");
 		aux::startClock();
 
 		for (int i = 0; i < boxes.size(); i++) {
@@ -447,7 +448,7 @@ namespace ocr_tabs {
 	 * they will be considered as a single text segment
 	 */
 	void OCRTabsEngine::CreateLineSegments() {
-		std::cout << "Find line segments...";
+		OCR_LOG_MSG("Find line segments...");
 		aux::startClock();
 
 		float ratio = 0.6 * 2; //1.2
@@ -509,10 +510,10 @@ namespace ocr_tabs {
 	 * Type 3 - UNKNOWN : Lines with a single short segment
 	 */
 	void OCRTabsEngine::AssignLineTypes() {
-		std::cout << "Find line types...";
+		OCR_LOG_MSG("Find line types...");
 		aux::startClock();
-		lines_type = new int[lines.size()];
 
+		lines_type = new int[lines.size()];
 		float sum = 0;
 		for (int i = 0; i < lines.size(); i++) {
 			if (line_segments[i].size() > 1) { lines_type[i] = LineType::TABLE; }
@@ -588,7 +589,7 @@ namespace ocr_tabs {
 	 * Such areas include consequential type-2 and type-3 lines.
 	 */
 	void OCRTabsEngine::FindTableAreas() {
-		std::cout << "Find table areas...";
+		OCR_LOG_MSG("Find table areas...");
 		aux::startClock();
 		vector<int> tmp;
 
@@ -620,7 +621,7 @@ namespace ocr_tabs {
 	 * they are not assigned to the table, unless they are not left-aligned
 	 */
 	void OCRTabsEngine::AssignRowsToTables() {
-		std::cout << "Find table rows...";
+		OCR_LOG_MSG("Find table rows...");
 		aux::startClock();
 
 		for (int i = 0; i < table_area.size(); i++) {
@@ -648,7 +649,7 @@ namespace ocr_tabs {
 
 	// Assign Columns to each table
 	void OCRTabsEngine::CreateTableColumns() {
-		std::cout << "Find table columns...";
+		OCR_LOG_MSG("Find table columns...");
 		aux::startClock();
 
 		for (int i = 0; i < table_rows.size(); i++) {
@@ -828,7 +829,7 @@ namespace ocr_tabs {
 
 	// Create table rows that include more than one lines
 	void OCRTabsEngine::CreateTableMultiRows() {
-		cout << "Find table multiple-rows...";
+		OCR_LOG_MSG("Find table multiple-rows...");
 		aux::startClock();
 
 		// if a table line does not have a segment in the first column, and there is one-to-one column correspondence 
@@ -962,7 +963,7 @@ namespace ocr_tabs {
 	 * single segment (single segment = assigned to only one column)
 	 */
 	void OCRTabsEngine::FindColumnSize() {
-		std::cout << "Find column sizes...";
+		OCR_LOG_MSG("Find column sizes...");
 		aux::startClock();
 
 		for (int i = 0; i < table_columns.size(); i++) {
@@ -1023,7 +1024,7 @@ namespace ocr_tabs {
 	 * widen columns and rows so that there is no white space between them
 	 */ 
 	void OCRTabsEngine::FinalizeGrid() {
-		std::cout << "Finalize grid...";
+		OCR_LOG_MSG("Finalize grid...");
 		aux::startClock();
 
 		for (int i = 0; i < col_dims.size(); i++) {
@@ -1099,7 +1100,7 @@ namespace ocr_tabs {
 
 	Mat OCRTabsEngine::SegmentImage(Mat img) {
 		//Search for multi column text
-		std::cout << "Segment Image...";
+		OCR_LOG_MSG("Segment Image...");
 		aux::startClock();
 		Mat dst;
 		threshold(img, img, 200, 255, 0);
@@ -1250,7 +1251,7 @@ namespace ocr_tabs {
 	}
 
 	Mat OCRTabsEngine::PreprocessImage(Mat img) {
-		std::cout << "Process Image...";
+		OCR_LOG_MSG("Process Image...");
 		aux::startClock();
 
 		test = cv::Mat(img);
@@ -1328,7 +1329,7 @@ namespace ocr_tabs {
 
 		case FileType::IMG:
 			pages.push_back(cv::imread(filename, cv::IMREAD_GRAYSCALE));
-			if (pages[0].empty()) { std::cout << "File not available" << std::endl; return false; }
+			if (pages[0].empty()) { OCR_LOG_ERROR("File not available"); return false; }
 			break;
 
 		default:
@@ -1336,7 +1337,7 @@ namespace ocr_tabs {
 		}
 		if (withXML) {
 			//// NOT WORKING ////
-			if (!PreprocessImageWithXML(filenameXML, pages, pages_clean)) { cout << "Preprocessing with XML failed" << endl; return false; }
+			if (!PreprocessImageWithXML(filenameXML, pages, pages_clean)) { OCR_LOG_ERROR("Preprocessing with XML failed"); return false; }
 			pages.clear();
 			pages = pages_clean;  //not sure about that copying
 		}
@@ -1360,14 +1361,14 @@ namespace ocr_tabs {
 		AssignRowsToTables();
 		CreateTableColumns(); ////
 		if (fail_condition()) {
-			std::cout << std::endl << "failCondition: " << fail_msg << std::endl;
+			OCR_LOG_ERROR(fail_msg);
 			return false;
 		}
 		CreateTableMultiRows();
 		FindColumnSize();	 ////
 		FinalizeGrid(); ////
 
-		//DrawBoxes();
+		DrawBoxes();
 
 		std::string outputFilename = filename;
 		outputFilename.append(withXML ? "XML.html" : ".html");

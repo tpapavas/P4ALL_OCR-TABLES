@@ -29,6 +29,8 @@ using namespace std;
 #define uset(x,y,v)  at<unsigned char>(y,x)=v
 #define fget(x,y)    at<float>(y,x)
 #define fset(x,y,v)  at<float>(y,x)=v
+#define dget(x,y)    at<double>(y,x)
+#define dset(x,y,v)  at<double>(y,x)=v
 
 namespace img_processor {
 	enum BinarizationType {
@@ -87,4 +89,5 @@ namespace img_processor {
 	bool pixmap2mat(fz_pixmap** fzpxmap, cv::Mat& mat);
 
 	bool ConstructImage(cv::Mat& image, cv::Mat& filter, int ker_len);
+	bool ClearImage(cv::Mat& image, cv::Mat& output);
 };
