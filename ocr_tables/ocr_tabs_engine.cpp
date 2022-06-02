@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include "ocr_tabs.h"
+#include "ocr_tabs_engine.h"
 #include "auxiliary.h"
 #include "img_processor.h"
 #include "drawing_handler.h"
@@ -18,7 +18,7 @@ using namespace cv;
 #pragma warning( disable : 4244 )
 
 
-namespace ocr_tabs {
+namespace ocrt {
 	OCRTabsEngine::OCRTabsEngine() {
 		fail = false;
 		fail_msg = "";
@@ -26,6 +26,8 @@ namespace ocr_tabs {
 		//tess.Init("..\\tessdata", "eng");
 		tess.Init("tessdata", "ell");
 		//tess.Init("tessdata", "eng");
+
+		img_processor = ImageProcessor(test);
 
 		std::setlocale(LC_ALL, "el_GR.UTF-8");
 	}
@@ -1052,46 +1054,6 @@ namespace ocr_tabs {
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
-	void OCRTabsEngine::DrawBoxes() {
-		drawing_handler::DrawBoxes(test, boxes, words, confs, font_size, bold, italic, underscore, dict);
-	}
-
-	void OCRTabsEngine::DrawLines() {
-		drawing_handler::DrawLines(test, lines, page_left, page_right, page_top, page_bottom, line_dims);
-	}
-
-	void OCRTabsEngine::DrawSegments() {
-		drawing_handler::DrawSegments(test, lines, line_segments, line_dims, boxes);
-	}
-
-	void OCRTabsEngine::DrawAreas() {
-		drawing_handler::DrawAreas(test, table_area, line_dims, page_left, page_right);
-	}
-
-	void OCRTabsEngine::DrawRows() {
-		drawing_handler::DrawRows(test, multi_rows, line_dims, page_left, page_right);
-	}
-
-	void OCRTabsEngine::DrawColsPartial() {
-		drawing_handler::DrawColsPartial(test, boxes, tmp_col);
-	}
-
-	void OCRTabsEngine::DrawCols() {
-		drawing_handler::DrawCols(test, boxes, tmp_col, table_columns);
-	}
-
-	void OCRTabsEngine::DrawGrid() {
-		drawing_handler::DrawGrid(test, boxes, row_dims, col_dims, multi_rows, line_segments);
-	}
-
-	void OCRTabsEngine::DrawGridlessImage() {
-		drawing_handler::DrawGridlessImage(test);
-	}
-
-	//void ocr_tabs::DrawFootHead() {
-	//	drawing_handler::DrawFootHead(test, Lines_type, Lines, Line_dims, page_left, page_right);
-	//} 
-
 	// Resets the image to initial state.
 	void OCRTabsEngine::ResetImage() {
 		test = initial.clone();
@@ -1273,20 +1235,20 @@ namespace ocr_tabs {
 		}
 
 		RemoveGridLines(ratio);
-		img_processor::SegmentationBlocks blk;
+		SegmentationBlocks blk;
 		cv::Mat clean, clean2;
-		img_processor::PrepareAll(img, clean, blk);
+		img_processor.PrepareAll(img, clean, blk);
 
 		//if (ratio >= 0.8) cv::erode(clean, clean, cv::Mat(), cv::Point(-1, -1), 1);
 		//drawing_handler::DrawGridlessImage(clean);
-		img_processor::ExtractTextImage(clean, blk, clean2);
+		img_processor.ExtractTextImage(clean, blk, clean2);
 		//img_processor::ExtractTextImage(img, blk, clean2);
 		cv::Size orgSiz = img.size();
 		int max_org_width_height = std::max(orgSiz.width, orgSiz.height);
 		int min_org_width_height = std::min(orgSiz.width, orgSiz.height);
 		int min_max_wh_ratio = min_org_width_height / (float)max_org_width_height;
 
-		img_processor::ReorderImage(clean2, blk, img);
+		img_processor.ReorderImage(clean2, blk, img);
 
 		/*if (((std::max(orgSiz.width, orgSiz.height)) < 4200) && ((std::max(orgSiz.width, orgSiz.height)) > 2800)) {
 			std::cout << " Done in " << aux::endClock() << "s \n";
@@ -1368,8 +1330,6 @@ namespace ocr_tabs {
 		FindColumnSize();	 ////
 		FinalizeGrid(); ////
 
-		DrawBoxes();
-
 		std::string outputFilename = filename;
 		outputFilename.append(withXML ? "XML.html" : ".html");
 		WriteHTML(outputFilename);
@@ -1444,7 +1404,7 @@ namespace ocr_tabs {
 			//fz_save_pixmap_as_png(ctx, pix, "out.png");
 			fz_drop_device(ctx, dev);
 			cv::Mat input;
-			img_processor::pixmap2mat(&pix, input);
+			img_processor.pixmap2mat(&pix, input);
 			imageList.push_back(input.clone());
 			fz_drop_pixmap(ctx, pix);
 			fz_drop_page(ctx, page);

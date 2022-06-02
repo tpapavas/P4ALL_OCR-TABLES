@@ -23,15 +23,19 @@
     <ClInclude Include="ocr_tables\debug.h" />
     <ClInclude Include="ocr_tables\dll_config.h" />
     <ClInclude Include="ocr_tables\drawing_handler.h" />
+    <ClInclude Include="ocr_tables\file_handler.h" />
     <ClInclude Include="ocr_tables\img_processor.h" />
-    <ClInclude Include="ocr_tables\ocr_tabs.h" />
+    <ClInclude Include="ocr_tables\ocr_tabs_api.h" />
+    <ClInclude Include="ocr_tables\ocr_tabs_engine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp" />
     <ClCompile Include="ocr_tables\auxiliary.cpp" />
     <ClCompile Include="ocr_tables\drawing_handler.cpp" />
+    <ClCompile Include="ocr_tables\file_handler.cpp" />
     <ClCompile Include="ocr_tables\img_processor.cpp" />
-    <ClCompile Include="ocr_tables\ocr_tabs.cpp" />
+    <ClCompile Include="ocr_tables\ocr_tabs_api.cpp" />
+    <ClCompile Include="ocr_tables\ocr_tabs_engine.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

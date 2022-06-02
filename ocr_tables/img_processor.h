@@ -32,7 +32,7 @@ using namespace std;
 #define dget(x,y)    at<double>(y,x)
 #define dset(x,y,v)  at<double>(y,x)=v
 
-namespace img_processor {
+namespace ocrt {
 	enum BinarizationType {
 		NIBLACK=0,
 		SAUVOLA,
@@ -70,24 +70,39 @@ namespace img_processor {
 			return false;
 		}
 	};
-
-	bool ThresholdImage(cv::Mat& input, cv::Mat& output, BinarizationType type = SAUVOLA, int winx = 20, int winy = 20, double k = 0.2, double dR = 128);
-	double CalcLocalStats (cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy, double& mean, double& max_s, double& min_s);
-	void ApplyThreshold (cv::Mat im, cv::Mat output, BinarizationType type, int winx, int winy, double k, double dR);
 	
-	l_int32 DoPageSegmentation(PIX *pixs, SegmentationBlocks& blocks);
-	void ExtractTextImage(cv::Mat& input, SegmentationBlocks& blk, cv::Mat& output);
-	void ReorderImage(cv::Mat& input, SegmentationBlocks& blk, cv::Mat& output);
+	class ImageProcessor {
+	public:
+		ImageProcessor();
+		ImageProcessor(cv::Mat img);
+		~ImageProcessor();
 
-	void PrepareAll(cv::Mat& input, cv::Mat& thres, SegmentationBlocks& blocks);
-	void PrepareAll(fz_pixmap** fzpxmap, cv::Mat& thres, SegmentationBlocks& blocks);
-	void PrepareAll(Pix** px, cv::Mat& thres, SegmentationBlocks& blocks);
+		bool ThresholdImage(cv::Mat& input, cv::Mat& output, BinarizationType type = SAUVOLA, int winx = 20, int winy = 20, double k = 0.2, double dR = 128);
+		bool ThresholdImage(cv::Mat& output, BinarizationType type = SAUVOLA, int winx = 20, int winy = 20, double k = 0.2, double dR = 128);
+		
+		l_int32 DoPageSegmentation(PIX* pixs, SegmentationBlocks& blocks);
+		void ExtractTextImage(cv::Mat& input, SegmentationBlocks& blk, cv::Mat& output);
+		void ReorderImage(cv::Mat& input, SegmentationBlocks& blk, cv::Mat& output);
 
-	bool mat2pix(cv::Mat& mat, Pix** px);
-	bool mat2pixBinary(cv::Mat& mat, Pix** px);
-	bool pix2mat(Pix** px, cv::Mat& mat);
-	bool pixmap2mat(fz_pixmap** fzpxmap, cv::Mat& mat);
+		void PrepareAll(cv::Mat& input, cv::Mat& thres, SegmentationBlocks& blocks);
+		void PrepareAll(fz_pixmap** fzpxmap, cv::Mat& thres, SegmentationBlocks& blocks);
+		void PrepareAll(Pix** px, cv::Mat& thres, SegmentationBlocks& blocks);
 
-	bool ConstructImage(cv::Mat& image, cv::Mat& filter, int ker_len);
-	bool ClearImage(cv::Mat& image, cv::Mat& output);
+		bool mat2pix(cv::Mat& mat, Pix** px);
+		bool mat2pixBinary(cv::Mat& mat, Pix** px);
+		bool pix2mat(Pix** px, cv::Mat& mat);
+		bool pixmap2mat(fz_pixmap** fzpxmap, cv::Mat& mat);
+
+		bool ConstructImage(cv::Mat& image, cv::Mat& filter, int ker_len);
+		bool ClearImage(cv::Mat& image, cv::Mat& output);
+
+	private:
+		BinarizationType bin_type;
+		int winx, winy, k, dR;
+		cv::Mat img;
+		cv::Mat bin_img;
+
+		double CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy, double& mean, double& max_s, double& min_s);
+		void ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType type, int winx, int winy, double k, double dR);
+	};
 };

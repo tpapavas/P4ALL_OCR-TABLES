@@ -9,7 +9,7 @@ using namespace std;
 
 #define SEC_IN_MSECS 1000.0
 
-namespace ocr_tabs {
+namespace ocrt {
 	namespace aux {
 		using high_res_clock = std::chrono::high_resolution_clock;
 		using unit = std::chrono::milliseconds;

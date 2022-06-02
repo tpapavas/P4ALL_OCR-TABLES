@@ -8,7 +8,8 @@
 
 #ifdef _SERVICE //dont forget to change the subsystem
 #include <Windows.h>
-#include "../ocr_tables/ocr_tabs.h"
+#include "../ocr_tables/ocr_tabs_engine.h"
+#include "../ocr_tables/ocr_tabs_api.h"
 //#define OCR_DEBUG 1
 #include "../ocr_tables/debug.h"
 
@@ -20,17 +21,13 @@ int main(int argc, char *argv[])
 		if (filename.empty()) { 
 			return -1;
 		}
-		char buffer[MAX_PATH];
-		GetModuleFileNameA(NULL, buffer, MAX_PATH);		//get .exe path "<path-to-project>\\<exe-folder>\\<program>.exe"
-		std::string::size_type pos = std::string( buffer ).find_last_of( "\\/" );	//remove "<program>.exe" from path	
-		std::string currentPath = std::string( buffer ).substr( 0, pos);
-		pos = currentPath.find_last_of( "\\/" );
-		currentPath = std::string( buffer ).substr( 0, pos);	//remove "<exe-folder>\\" from path; point to root of project "<path-to-project>".
-		//filename = currentPath + "\\" + filename;	//get path to input file "<path-to-project>\\<relative-path-to-file>"
 
-		ocr_tabs::OCRTabsEngine tab;
-		if (((filename.find(".pdf")!=std::string::npos) && (tab.doc2html(ocr_tabs::PDF, filename, "", false))) ||  tab.doc2html(ocr_tabs::IMG, filename, "", false)) return 1;
-		else return -1;
+		ocrt::OCRTabsEngine tab;
+		ocrt::OCRTabsAPI tabs_api(filename);
+		if (tabs_api.ExtractTables()) 
+			return 1;
+		else 
+			return -1;
 	}
 	return 0;
 }

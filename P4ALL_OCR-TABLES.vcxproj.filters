@@ -30,9 +30,6 @@
     <ClInclude Include="ocr_tables\img_processor.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
-    <ClInclude Include="ocr_tables\ocr_tabs.h">
-      <Filter>Header Files\OCR_Tables</Filter>
-    </ClInclude>
     <ClInclude Include="ocr_tables\drawing_handler.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
@@ -42,12 +39,21 @@
     <ClInclude Include="ocr_tables\debug.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
+    <ClInclude Include="ocr_tables\ocr_tabs_engine.h">
+      <Filter>Header Files\OCR_Tables</Filter>
+    </ClInclude>
+    <ClInclude Include="ocr_tables\ocr_tabs_api.h">
+      <Filter>Header Files\OCR_Tables</Filter>
+    </ClInclude>
+    <ClInclude Include="ocr_tables\file_handler.h">
+      <Filter>Header Files\OCR_Tables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ocr_tables\img_processor.cpp">
       <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
-    <ClCompile Include="ocr_tables\ocr_tabs.cpp">
+    <ClCompile Include="ocr_tables\ocr_tabs_engine.cpp">
       <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
     <ClCompile Include="ocr_tables\drawing_handler.cpp">
@@ -58,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="App\main.cpp">
       <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="ocr_tables\ocr_tabs_api.cpp">
+      <Filter>Source Files\OCR_Tables</Filter>
+    </ClCompile>
+    <ClCompile Include="ocr_tables\file_handler.cpp">
+      <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

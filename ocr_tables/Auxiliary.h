@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-namespace ocr_tabs {
+namespace ocrt {
 	namespace aux {
 		void startClock();
 		double endClock();

@@ -2,25 +2,28 @@
 #include "dll_config.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-#include "auxiliary.h"
 
 #define TESSDLL_IMPORTS
+#include "tesseract/baseapi.h"
+
 #define STD_DOTS_SIZE 3500
 #define LOWER_DOTS_LIM 2800 
 #define UPPER_DOTS_LIM 4200
 
-#include "tesseract/baseapi.h"
+#include "auxiliary.h"
+#include "img_processor.h"
 
 #define ocrtabs_find(list,element) std::find(list.begin(), list.end(), element) != list.end();
 
-//class ocr_tabs
-namespace ocr_tabs {
+namespace ocrt {
 	class OCRTabsEngine {
+	friend class OCRTabsAPI;
+	
 	public:
 		OCRTABS_API OCRTabsEngine();
-		OCRTABS_API OCRTabsEngine(FileType filetype, const std::string& filename);
+		//OCRTABS_API OCRTabsEngine(FileType filetype, const std::string& filename);
 		OCRTABS_API ~OCRTabsEngine();
-		
+
 		void RemoveGridLines(float ratio = 1);
 		void OCR_Recognize();
 		void FindBoxesAndWords();
@@ -38,17 +41,6 @@ namespace ocr_tabs {
 		void PrepareMulti1();
 		void PrepareMulti2();
 
-		void DrawBoxes();
-		void DrawLines();
-		void DrawSegments();
-		void DrawAreas();
-		void DrawRows();
-		void DrawColsPartial();
-		void DrawCols();
-		void DrawGrid();
-		void DrawGridlessImage();
-		//void DrawFootHead();
-
 		void SetImage(cv::Mat img);
 		void ResetImage();
 		cv::Mat SegmentImage(cv::Mat img);
@@ -63,11 +55,10 @@ namespace ocr_tabs {
 
 		cv::Mat getInitial() { return initial; }
 		cv::Mat getRaw() { return raw; }
-
 	private:
 		cv::Mat test, initial, raw;
-		tesseract::TessBaseAPI  tess;
-		
+		tesseract::TessBaseAPI tess;
+
 		clock_t start;
 		double duration;
 
@@ -99,7 +90,9 @@ namespace ocr_tabs {
 		std::vector<std::vector<bool>> italic_;
 		std::vector<std::vector<bool>> underscore_;
 		std::vector<int> page_height, page_width;
-		
+
+		ImageProcessor img_processor;
+
 		bool fail;
 		std::string fail_msg;
 
@@ -111,20 +104,20 @@ namespace ocr_tabs {
 		template<typename T> bool Find(const std::vector<T>& list, const T& element);
 
 		enum BoxSide {
-			BOX_LEFT=0,
-			BOX_TOP=1,
-			BOX_RIGHT=2,
-			BOX_BOTTOM=3
+			BOX_LEFT = 0,
+			BOX_TOP = 1,
+			BOX_RIGHT = 2,
+			BOX_BOTTOM = 3
 		};
 
 		enum LineSide {
-			LINE_TOP=0,
-			LINE_BOTTOM=1
+			LINE_TOP = 0,
+			LINE_BOTTOM = 1
 		};
 
 		enum SegSide {
-			SEG_LEFT=0,
-			SEG_RIGHT=1
+			SEG_LEFT = 0,
+			SEG_RIGHT = 1
 		};
 	};
 }
