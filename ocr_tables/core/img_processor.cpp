@@ -12,9 +12,8 @@ namespace ocrt {
 		dR = 128;
 	}
 
-	ImageProcessor::ImageProcessor(cv::Mat img) {
-		this->img = cv::Mat(img);
-		ImageProcessor();
+	ImageProcessor::ImageProcessor(cv::Mat img) : ImageProcessor() {
+		//this->img = cv::Mat(img);
 	}
 
 	ImageProcessor::~ImageProcessor() {
@@ -256,10 +255,10 @@ namespace ocrt {
 		OCR_LOG_MSG("Thresholding Image...");
 
 		cv::Mat threshed_input, temp, closed;
-		//cv::erode(input, temp, cv::Mat(), cv::Point(-1, -1), 1);
-		//ImageProcessor::ThresholdImage(temp, output, BinarizationType::BATAINEH);  //get binary image
-		ClearImage(input, output);
-		//ocrt::drawing_handler::DrawGridlessImage(output);
+		cv::erode(input, temp, cv::Mat(), cv::Point(-1, -1), 1);
+		ImageProcessor::ThresholdImage(temp, output, BinarizationType::BATAINEH);  //get binary image
+		//ClearImage(input, output);
+		drawing_handler.DrawGridlessImage(output);
 
 		//cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 2));
 		//cv::morphologyEx(output, closed, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 2);  //new operation #1

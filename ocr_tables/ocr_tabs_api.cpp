@@ -16,6 +16,7 @@ namespace ocrt {
 
 	OCRTABS_API OCRTabsAPI::OCRTabsAPI(const std::string& filename) {
 		file_handler = FileHandler(filename);
+		tabs_engine = OCRTabsEngine(file_handler.getFiletype(), filename);
 	}
 	
 	OCRTABS_API OCRTabsAPI::~OCRTabsAPI() {
@@ -143,6 +144,6 @@ namespace ocrt {
 	}
 
 	bool OCRTabsAPI::ExtractTables() {
-		return ExtractTables(file_handler.GetFilename());
+		return ExtractTables(file_handler.getFilename());
 	}
 }

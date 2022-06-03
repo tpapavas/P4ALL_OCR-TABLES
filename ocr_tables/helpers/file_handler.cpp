@@ -9,7 +9,7 @@ namespace ocrt {
 
 	FileHandler::FileHandler(const std::string& filename) {
 		this->filename = filename;
-		ResolveAbsolutePath();
+		//ResolveAbsolutePath();
 		ReadFileType(filename);
 	}
 	

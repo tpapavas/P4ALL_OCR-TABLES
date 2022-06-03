@@ -21,6 +21,8 @@ extern "C" {
 #define NO_CONSOLE_IO
 #define DFLAG 0
 
+#include "ocr_tables/helpers/drawing_handler.h"
+
 ////probably problematic////
 using namespace std;
 //using namespace cv;
@@ -97,6 +99,8 @@ namespace ocrt {
 		int winx, winy, k, dR;
 		cv::Mat img;
 		cv::Mat bin_img;
+
+		DrawingHandler drawing_handler;
 
 		double CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy, double& mean, double& max_s, double& min_s);
 		void ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType type, int winx, int winy, double k, double dR);

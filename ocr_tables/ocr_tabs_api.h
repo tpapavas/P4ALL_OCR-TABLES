@@ -63,6 +63,7 @@ namespace ocrt {
 		bool OCRTABS_API ExtractTables(const std::string& filename);
 		bool OCRTABS_API ExtractTables();
 
+		OCRTabsEngine* getTabsEngine() { return &tabs_engine; }
 	private:
 		OCRTabsEngine tabs_engine;
 		DrawingHandler drawing_handler;

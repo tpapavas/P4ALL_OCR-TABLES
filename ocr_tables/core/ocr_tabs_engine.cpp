@@ -30,6 +30,12 @@ namespace ocrt {
 		std::setlocale(LC_ALL, "el_GR.UTF-8");
 	}
 
+	OCRTabsEngine::OCRTabsEngine(FileType filetype, const std::string& filename) : ocrt::OCRTabsEngine() {
+		std::vector<cv::Mat> pages;
+		
+		ReadImage(pages, filetype, filename, "", false);
+	}
+
 	OCRTabsEngine::~OCRTabsEngine() {
 		resetAll();
 	}
@@ -1279,9 +1285,8 @@ namespace ocrt {
 		return fail; 
 	}
 
-	bool OCRTABS_API OCRTabsEngine::doc2html(FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML) {
-		resetAll();
-		std::vector<cv::Mat> pages, pages_clean;
+	bool OCRTabsEngine::ReadImage(std::vector<cv::Mat>& pages, FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML) {
+		std::vector<cv::Mat> pages_clean;
 		switch (filetype) {
 		case FileType::PDF:
 			if (!parsePDF(filename, pages)) return false;
@@ -1301,6 +1306,17 @@ namespace ocrt {
 			pages.clear();
 			pages = pages_clean;  //not sure about that copying
 		}
+
+		raw = pages[0].clone();
+		return true;
+	}
+
+	bool OCRTABS_API OCRTabsEngine::doc2html(FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML) {
+		resetAll();
+		std::vector<cv::Mat> pages;
+		
+		if (!ReadImage(pages, filetype, filename, filenameXML, withXML))
+			return false;
 
 		for (int i = 0; i < pages.size(); i++) {
 			raw = pages[i].clone();

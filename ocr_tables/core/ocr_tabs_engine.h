@@ -21,7 +21,7 @@ namespace ocrt {
 	
 	public:
 		OCRTABS_API OCRTabsEngine();
-		//OCRTABS_API OCRTabsEngine(FileType filetype, const std::string& filename);
+		OCRTABS_API OCRTabsEngine(FileType filetype, const std::string& filename);
 		OCRTABS_API ~OCRTabsEngine();
 
 		void RemoveGridLines(float ratio = 1);
@@ -41,6 +41,7 @@ namespace ocrt {
 		void PrepareMulti1();
 		void PrepareMulti2();
 
+		bool ReadImage(std::vector<cv::Mat>&, FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML);
 		void SetImage(cv::Mat img);
 		void ResetImage();
 		cv::Mat SegmentImage(cv::Mat img);

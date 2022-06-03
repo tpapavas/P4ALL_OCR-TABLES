@@ -13,8 +13,8 @@ namespace ocrt {
 
 		FileType ReadFileType(const std::string& filename);
 
-		std::string GetFilename() { return filename; }
-		FileType GetFiletype() { return filetype; }
+		std::string getFilename() { return filename; }
+		FileType getFiletype() { return filetype; }
 	private:
 		std::string filename;  //relative path
 		std::string filepath;  //absolute path
