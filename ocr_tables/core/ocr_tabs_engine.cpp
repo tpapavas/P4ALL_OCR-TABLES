@@ -1,22 +1,20 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include "ocr_tabs_engine.h"
-#include "auxiliary.h"
-#include "img_processor.h"
-#include "drawing_handler.h"
-#include "debug.h"
+#include "ocr_tables/core/ocr_tabs_engine.h"
+#include "ocr_tables/helpers/auxiliary.h"
+#include "ocr_tables/core/img_processor.h"
+#include "ocr_tables/helpers/drawing_handler.h"
+#include "ocr_tables/debug.h"
 extern "C" {
 	#include <mupdf/fitz.h>
 }
 
 using namespace cv;
-//using namespace std;
 
 #pragma warning( disable : 4018 )
 #pragma warning( disable : 4305 )
 #pragma warning( disable : 4244 )
-
 
 namespace ocrt {
 	OCRTabsEngine::OCRTabsEngine() {

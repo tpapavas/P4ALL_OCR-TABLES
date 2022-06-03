@@ -1,5 +1,5 @@
 #pragma once 
-#include "dll_config.h"
+#include "ocr_tables/dll_config.h"
 
 //STL
 #include <stdio.h>
@@ -88,13 +88,9 @@ namespace ocrt {
 		void PrepareAll(fz_pixmap** fzpxmap, cv::Mat& thres, SegmentationBlocks& blocks);
 		void PrepareAll(Pix** px, cv::Mat& thres, SegmentationBlocks& blocks);
 
-		bool mat2pix(cv::Mat& mat, Pix** px);
-		bool mat2pixBinary(cv::Mat& mat, Pix** px);
+		bool mat2pix(cv::Mat& mat, Pix** px, bool to_binary);
 		bool pix2mat(Pix** px, cv::Mat& mat);
 		bool pixmap2mat(fz_pixmap** fzpxmap, cv::Mat& mat);
-
-		bool ConstructImage(cv::Mat& image, cv::Mat& filter, int ker_len);
-		bool ClearImage(cv::Mat& image, cv::Mat& output);
 
 	private:
 		BinarizationType bin_type;
@@ -104,5 +100,8 @@ namespace ocrt {
 
 		double CalcLocalStats(cv::Mat& im, cv::Mat& map_m, cv::Mat& map_s, int winx, int winy, double& mean, double& max_s, double& min_s);
 		void ApplyThreshold(cv::Mat im, cv::Mat output, BinarizationType type, int winx, int winy, double k, double dR);
+
+		bool ConstructImage(cv::Mat& image, cv::Mat& filter, int ker_len);
+		bool ClearImage(cv::Mat& image, cv::Mat& output);
 	};
 };

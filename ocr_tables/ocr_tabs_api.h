@@ -1,12 +1,12 @@
 #pragma once
-#include "dll_config.h"
+#include "ocr_tables/dll_config.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-#include "auxiliary.h"
-#include "ocr_tabs_engine.h"
-#include "drawing_handler.h"
-#include "img_processor.h"
-#include "file_handler.h"
+#include "ocr_tables/helpers/auxiliary.h"
+#include "ocr_tables/helpers/drawing_handler.h"
+#include "ocr_tables/helpers/file_handler.h"
+#include "ocr_tables/core/ocr_tabs_engine.h"
+#include "ocr_tables/core/img_processor.h"
 
 #define STD_DOTS_SIZE 3500
 #define LOWER_DOTS_LIM 2800 

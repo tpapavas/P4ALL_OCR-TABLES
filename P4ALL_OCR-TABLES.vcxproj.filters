@@ -22,54 +22,66 @@
     <Filter Include="Source Files\App">
       <UniqueIdentifier>{6f493dff-16a5-4af3-9764-7e723201419c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\OCR_Tables\core">
+      <UniqueIdentifier>{98164929-819b-4176-af30-c7c5a4450da7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\OCR_Tables\helpers">
+      <UniqueIdentifier>{1392bf0f-d22b-4223-8c70-234862044fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OCR_Tables\core">
+      <UniqueIdentifier>{80915bb0-7dbb-4645-a349-b12257736b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OCR_Tables\helpers">
+      <UniqueIdentifier>{ab07fdb9-7686-4625-bc41-1816c349a9f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ocr_tables\dll_config.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
-    <ClInclude Include="ocr_tables\img_processor.h">
-      <Filter>Header Files\OCR_Tables</Filter>
-    </ClInclude>
-    <ClInclude Include="ocr_tables\drawing_handler.h">
-      <Filter>Header Files\OCR_Tables</Filter>
-    </ClInclude>
-    <ClInclude Include="ocr_tables\auxiliary.h">
-      <Filter>Header Files\OCR_Tables</Filter>
-    </ClInclude>
     <ClInclude Include="ocr_tables\debug.h">
-      <Filter>Header Files\OCR_Tables</Filter>
-    </ClInclude>
-    <ClInclude Include="ocr_tables\ocr_tabs_engine.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
     <ClInclude Include="ocr_tables\ocr_tabs_api.h">
       <Filter>Header Files\OCR_Tables</Filter>
     </ClInclude>
-    <ClInclude Include="ocr_tables\file_handler.h">
-      <Filter>Header Files\OCR_Tables</Filter>
+    <ClInclude Include="ocr_tables\core\img_processor.h">
+      <Filter>Header Files\OCR_Tables\core</Filter>
+    </ClInclude>
+    <ClInclude Include="ocr_tables\core\ocr_tabs_engine.h">
+      <Filter>Header Files\OCR_Tables\core</Filter>
+    </ClInclude>
+    <ClInclude Include="ocr_tables\helpers\auxiliary.h">
+      <Filter>Header Files\OCR_Tables\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ocr_tables\helpers\drawing_handler.h">
+      <Filter>Header Files\OCR_Tables\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ocr_tables\helpers\file_handler.h">
+      <Filter>Header Files\OCR_Tables\helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ocr_tables\img_processor.cpp">
-      <Filter>Source Files\OCR_Tables</Filter>
-    </ClCompile>
-    <ClCompile Include="ocr_tables\ocr_tabs_engine.cpp">
-      <Filter>Source Files\OCR_Tables</Filter>
-    </ClCompile>
-    <ClCompile Include="ocr_tables\drawing_handler.cpp">
-      <Filter>Source Files\OCR_Tables</Filter>
-    </ClCompile>
-    <ClCompile Include="ocr_tables\auxiliary.cpp">
-      <Filter>Source Files\OCR_Tables</Filter>
-    </ClCompile>
     <ClCompile Include="App\main.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
     <ClCompile Include="ocr_tables\ocr_tabs_api.cpp">
       <Filter>Source Files\OCR_Tables</Filter>
     </ClCompile>
-    <ClCompile Include="ocr_tables\file_handler.cpp">
-      <Filter>Source Files\OCR_Tables</Filter>
+    <ClCompile Include="ocr_tables\helpers\auxiliary.cpp">
+      <Filter>Source Files\OCR_Tables\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ocr_tables\helpers\drawing_handler.cpp">
+      <Filter>Source Files\OCR_Tables\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ocr_tables\helpers\file_handler.cpp">
+      <Filter>Source Files\OCR_Tables\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ocr_tables\core\img_processor.cpp">
+      <Filter>Source Files\OCR_Tables\core</Filter>
+    </ClCompile>
+    <ClCompile Include="ocr_tables\core\ocr_tabs_engine.cpp">
+      <Filter>Source Files\OCR_Tables\core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

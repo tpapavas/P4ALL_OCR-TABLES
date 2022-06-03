@@ -3,7 +3,7 @@
 #include <fstream>
 #include <chrono>
 #include <algorithm>
-#include "auxiliary.h"
+#include "ocr_tables/helpers/auxiliary.h"
 
 using namespace std;
 

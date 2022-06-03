@@ -1,11 +1,11 @@
 #pragma once 
-#include "img_processor.h"
-#include "drawing_handler.h"
-#include "debug.h"
+#include "ocr_tables/core/img_processor.h"
+#include "ocr_tables/helpers/drawing_handler.h"
+#include "ocr_tables/debug.h"
 
 namespace ocrt {
 	ImageProcessor::ImageProcessor() {
-		bin_type = SAUVOLA;
+		bin_type = BinarizationType::SAUVOLA;
 		winx = 20;
 		winy = 20;
 		k = 0.2;
@@ -14,6 +14,7 @@ namespace ocrt {
 
 	ImageProcessor::ImageProcessor(cv::Mat img) {
 		this->img = cv::Mat(img);
+		ImageProcessor();
 	}
 
 	ImageProcessor::~ImageProcessor() {
@@ -51,9 +52,7 @@ namespace ocrt {
 		if (img.empty())
 			return false;
 
-		ThresholdImage(img, output, type, winx, winy, k, dR);
-	
-		return true;
+		return ThresholdImage(img, output, type, winx, winy, k, dR);
 	}
 
 	/**
@@ -272,7 +271,7 @@ namespace ocrt {
 
 		Pix* px = NULL;
 		cv::erode(output, threshed_input, cv::Mat(), cv::Point(-1, -1), 3);
-		ImageProcessor::mat2pixBinary(threshed_input, &px);
+		ImageProcessor::mat2pix(threshed_input, &px, true);
 		ImageProcessor::DoPageSegmentation(px, blocks);
 
 		OCR_LOG_MSG("Done!\n");
@@ -698,39 +697,28 @@ namespace ocrt {
 		}
 	}
 
-	bool ImageProcessor::mat2pix(cv::Mat& mat, Pix** px) {
+	bool ImageProcessor::mat2pix(cv::Mat& mat, Pix** px, bool to_binary) {
 		if ((mat.type() != CV_8UC1) || (mat.empty())) return false;
 
-		*px = pixCreate(mat.cols, mat.rows, 8);
 		uchar* data = mat.data;
-
-		for (int i = 0; i < mat.rows; i++) {
-			unsigned idx = i * mat.cols;
-			for (int j = 0; j < mat.cols; j++) {
-				pixSetPixel(*px, j, i, (l_uint32)data[idx + j]);
+		if (to_binary) {
+			*px = pixCreate(mat.cols, mat.rows, 1);
+			for (int i = 0; i < mat.rows; i++) {
+				unsigned idx = i * mat.cols;
+				for (int j = 0; j < mat.cols; j++) {
+					pixSetPixel(*px, j, i, 1 - (l_uint32)(data[idx + j] / 255));
+				}
+			}
+		} else {
+			*px = pixCreate(mat.cols, mat.rows, 8);
+			for (int i = 0; i < mat.rows; i++) {
+				unsigned idx = i * mat.cols;
+				for (int j = 0; j < mat.cols; j++) {
+					pixSetPixel(*px, j, i, (l_uint32)data[idx + j]);
+				}
 			}
 		}
-		return true;
-	}
 
-	/**
-	 * @brief Creates a binary pix from mat
-	 * @param mat: input mat
-	 * @param px: output pix
-	 * @return
-	 */
-	bool ImageProcessor::mat2pixBinary(cv::Mat& mat, Pix** px) {
-		if ((mat.type() != CV_8UC1) || (mat.empty())) return false;
-
-		*px = pixCreate(mat.cols, mat.rows, 1);
-		uchar* data = mat.data;
-
-		for (int i = 0; i < mat.rows; i++) {
-			unsigned idx = i * mat.cols;
-			for (int j = 0; j < mat.cols; j++) {
-				pixSetPixel(*px, j, i, 1 - (l_uint32)(data[idx + j] / 255));
-			}
-		}
 		return true;
 	}
 
@@ -750,8 +738,7 @@ namespace ocrt {
 					data[idx + j] = (uchar)val;
 				}
 			}
-		}
-		else {
+		} else {
 			for (int i = 0; i < mat.rows; i++) {
 				unsigned idx = i * mat.cols;
 				for (int j = 0; j < mat.cols; j++) {
@@ -761,6 +748,7 @@ namespace ocrt {
 				}
 			}
 		}
+
 		return true;
 	}
 
@@ -830,5 +818,4 @@ namespace ocrt {
 
 		return true;
 	}
-
 }

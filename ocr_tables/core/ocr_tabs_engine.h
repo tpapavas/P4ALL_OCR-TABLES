@@ -1,5 +1,5 @@
 #pragma once
-#include "dll_config.h"
+#include "ocr_tables/dll_config.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
@@ -10,8 +10,8 @@
 #define LOWER_DOTS_LIM 2800 
 #define UPPER_DOTS_LIM 4200
 
-#include "auxiliary.h"
-#include "img_processor.h"
+#include "ocr_tables/helpers/auxiliary.h"
+#include "ocr_tables/core/img_processor.h"
 
 #define ocrtabs_find(list,element) std::find(list.begin(), list.end(), element) != list.end();
 

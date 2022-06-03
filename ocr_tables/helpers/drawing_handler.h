@@ -1,5 +1,5 @@
 #pragma once
-#include "dll_config.h"
+#include "ocr_tables/dll_config.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include <ctime>

@@ -1,4 +1,4 @@
-#include "drawing_handler.h"
+#include "ocr_tables/helpers/drawing_handler.h"
 
 #include <iostream>
 #include <fstream>

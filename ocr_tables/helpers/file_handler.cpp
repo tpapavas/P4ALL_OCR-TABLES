@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include "file_handler.h"
+#include "ocr_tables/helpers/file_handler.h"
 
 namespace ocrt {
 	FileHandler::FileHandler() {
@@ -9,7 +9,7 @@ namespace ocrt {
 
 	FileHandler::FileHandler(const std::string& filename) {
 		this->filename = filename;
-		CreateFilepath();
+		ResolveAbsolutePath();
 		ReadFileType(filename);
 	}
 	
@@ -28,7 +28,7 @@ namespace ocrt {
 	}
 
 	// probably windows only
-	void FileHandler::CreateFilepath() {
+	void FileHandler::ResolveAbsolutePath() {
 		char buffer[MAX_PATH];
 		GetModuleFileNameA(NULL, buffer, MAX_PATH);		//get .exe path "<path-to-project>\\<exe-folder>\\<program>.exe"
 		std::string::size_type pos = std::string(buffer).find_last_of("\\/");	//remove "<program>.exe" from path	

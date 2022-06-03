@@ -19,23 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ocr_tables\auxiliary.h" />
+    <ClInclude Include="ocr_tables\core\img_processor.h" />
+    <ClInclude Include="ocr_tables\core\ocr_tabs_engine.h" />
     <ClInclude Include="ocr_tables\debug.h" />
     <ClInclude Include="ocr_tables\dll_config.h" />
-    <ClInclude Include="ocr_tables\drawing_handler.h" />
-    <ClInclude Include="ocr_tables\file_handler.h" />
-    <ClInclude Include="ocr_tables\img_processor.h" />
+    <ClInclude Include="ocr_tables\helpers\auxiliary.h" />
+    <ClInclude Include="ocr_tables\helpers\drawing_handler.h" />
+    <ClInclude Include="ocr_tables\helpers\file_handler.h" />
     <ClInclude Include="ocr_tables\ocr_tabs_api.h" />
-    <ClInclude Include="ocr_tables\ocr_tabs_engine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp" />
-    <ClCompile Include="ocr_tables\auxiliary.cpp" />
-    <ClCompile Include="ocr_tables\drawing_handler.cpp" />
-    <ClCompile Include="ocr_tables\file_handler.cpp" />
-    <ClCompile Include="ocr_tables\img_processor.cpp" />
+    <ClCompile Include="ocr_tables\core\img_processor.cpp" />
+    <ClCompile Include="ocr_tables\core\ocr_tabs_engine.cpp" />
+    <ClCompile Include="ocr_tables\helpers\auxiliary.cpp" />
+    <ClCompile Include="ocr_tables\helpers\drawing_handler.cpp" />
+    <ClCompile Include="ocr_tables\helpers\file_handler.cpp" />
     <ClCompile Include="ocr_tables\ocr_tabs_api.cpp" />
-    <ClCompile Include="ocr_tables\ocr_tabs_engine.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -108,7 +108,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\OpenCV–2.4.13.6\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt-x86\5.15.2\msvc2019\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\OpenCV–2.4.13.6\build\include;C:\dev\mupdf-1.19.0-source\include;C:\Qt-x86\5.15.2\msvc2019\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>C:\OpenCV–2.4.13.6\build\x86\vc14\lib;C:\dev\mupdf-1.19.0-source\platform\win32\Debug;C:\Qt-x86\5.15.2\msvc2019\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

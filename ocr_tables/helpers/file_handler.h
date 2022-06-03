@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "auxiliary.h"
+#include "ocr_tables/helpers/auxiliary.h"
 
 
 namespace ocrt {
@@ -16,11 +16,11 @@ namespace ocrt {
 		std::string GetFilename() { return filename; }
 		FileType GetFiletype() { return filetype; }
 	private:
-		std::string filename;
-		std::string filepath;
+		std::string filename;  //relative path
+		std::string filepath;  //absolute path
 		FileType filetype;
 
-		void CreateFilepath();
+		void ResolveAbsolutePath();
 	};
 
 }

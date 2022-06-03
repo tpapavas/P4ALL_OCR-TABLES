@@ -1,10 +1,9 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include "ocr_tabs_api.h"
-#include "auxiliary.h"
-#include "img_processor.h"
-#include "drawing_handler.h"
+#include "ocr_tables/ocr_tabs_api.h"
+#include "ocr_tables/helpers/auxiliary.h"
+#include "ocr_tables/helpers/drawing_handler.h"
 #include "debug.h"
 extern "C" {
 #include <mupdf/fitz.h>

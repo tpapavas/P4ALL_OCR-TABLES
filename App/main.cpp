@@ -8,8 +8,8 @@
 
 #ifdef _SERVICE //dont forget to change the subsystem
 #include <Windows.h>
-#include "../ocr_tables/ocr_tabs_engine.h"
-#include "../ocr_tables/ocr_tabs_api.h"
+#include "ocr_tables/core/ocr_tabs_engine.h"
+#include "ocr_tables/ocr_tabs_api.h"
 //#define OCR_DEBUG 1
 #include "../ocr_tables/debug.h"
 
