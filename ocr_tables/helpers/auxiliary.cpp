@@ -44,26 +44,26 @@ namespace ocrt {
 		 * @param words 
 		 * @param font_size 
 		 */
-		bool WriteHTML(std::string& filename, const std::vector<std::vector<std::vector<std::vector<int>>>>& table_columns, const std::vector<std::vector<std::vector<int>>>& multi_rows, const std::vector<std::vector<std::vector<int>>>& line_segments, const int* lines_type, const std::vector<char*>& words, const std::vector<int>& font_size) {
+		bool WriteHTML(std::string& filename, const ocrt::Document doc) {
 			std::cout << "Create HTML...";
 			aux::startClock();
 
 			//find average font size
 			vector<int> tmp_size;
 
-			tmp_size = font_size;
+			//tmp_size = font_size;
 
-			size_t n = tmp_size.size() / 2;
-			nth_element(tmp_size.begin(), tmp_size.begin() + n, tmp_size.end());
-			int font_size_avg = tmp_size[n];
+			size_t n = doc.words.size() / 2;
+			//nth_element(doc.words.begin(), doc.words.begin() + n, doc.words.end());
+			int font_size_avg = doc.words[n].font_size;
 			float ratio = (float)12 / font_size_avg;
 			font_size_avg = 12;
-			tmp_size[0] = 1;
-			tmp_size[1] = 2;
+			//tmp_size[0] = 1;
+			//tmp_size[1] = 2;
 
 			// create font for words
 			vector<vector<string>> font;
-			for (int i = 0; i < font_size.size(); i++) {
+			for (int i = 0; i < doc.words.size(); i++) {
 				//font_size[i]=font_size[i]*ratio;
 				vector<string> tmp;
 				//if (font_size[i]<(font_size_avg-3))
@@ -125,11 +125,11 @@ namespace ocrt {
 			if (file.is_open()) {
 				file << "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<html>\n<body>\n";
 				file << "<p>\n";
-				for (int x = 0; x < line_segments.size(); x++) {
-					if (lines_type[x] != LineType::TABLE) {
-						for (int j = 0; j < line_segments[x].size(); j++) {
-							for (int k = 0; k < line_segments[x][j].size(); k++) {
-								file << font[line_segments[x][j][k]][0] << words[line_segments[x][j][k]] << " " << font[line_segments[x][j][k]][1];
+				for (int x = 0; x < doc.lines.size(); x++) {
+					if (doc.lines[x].type != LineType::TABLE) {
+						for (int j = 0; j < doc.lines[x].segments.size(); j++) {
+							for (int k = 0; k < doc.lines[x].segments[j].size(); k++) {
+								file << font[doc.lines[x].segments[j][k]][0] << doc.words[doc.lines[x].segments[j][k]].name << " " << font[doc.lines[x].segments[j][k]][1];
 							}
 						}
 						file << "<br>";
@@ -137,30 +137,30 @@ namespace ocrt {
 					else {
 						file << "\n</p>\n";
 						file << "<table border=\"1\">\n";
-						for (int i = 0; i < multi_rows[table_num].size(); i++) {
+						for (int i = 0; i < doc.tables[table_num].multi_rows.size(); i++) {
 							file << "<tr>\n";
 							vector<vector<vector<int>>> col_tmp;
-							for (int j = 0; j < table_columns[table_num].size(); j++) {
+							for (int j = 0; j < doc.tables[table_num].columns.size(); j++) {
 								vector<vector<int>> ctmp;
 								col_tmp.push_back(ctmp);
 							}
-							for (int j = 0; j < multi_rows[table_num][i].size(); j++) {
-								for (int k = 0; k < line_segments[multi_rows[table_num][i][j]].size(); k++) {
-									for (int s = 0; s < table_columns[table_num].size(); s++) {
-										if (std::find(table_columns[table_num][s].begin(), table_columns[table_num][s].end(), line_segments[multi_rows[table_num][i][j]][k]) != table_columns[table_num][s].end()) {
-											col_tmp[s].push_back(line_segments[multi_rows[table_num][i][j]][k]);
+							for (int j = 0; j < doc.tables[table_num].multi_rows[i].size(); j++) {
+								for (int k = 0; k < doc.lines[doc.tables[table_num].multi_rows[i][j]].segments.size(); k++) {
+									for (int s = 0; s < doc.tables[table_num].columns.size(); s++) {
+										if (std::find(doc.tables[table_num].columns[s].begin(), doc.tables[table_num].columns[s].end(), doc.lines[doc.tables[table_num].multi_rows[i][j]].segments[k]) != doc.tables[table_num].columns[s].end()) {
+											col_tmp[s].push_back(doc.lines[doc.tables[table_num].multi_rows[i][j]].segments[k]);
 										}
 									}
 								}
 							}
-							for (int j = 0; j < table_columns[table_num].size(); j++) {
+							for (int j = 0; j < doc.tables[table_num].columns.size(); j++) {
 								file << "<td";
 								int colspan = 1;
 								if (col_tmp[j].size() == 0) {
 									file << ">";
 								}
 								else {
-									for (int h = j + 1; h < table_columns[table_num].size(); h++) {
+									for (int h = j + 1; h < doc.tables[table_num].columns.size(); h++) {
 										if (col_tmp[h].size() != 0) {
 											for (int aa = 0; aa < col_tmp[j].size(); aa++) {
 												if (std::find(col_tmp[h].begin(), col_tmp[h].end(), col_tmp[j][aa]) != col_tmp[h].end()) {
@@ -186,7 +186,7 @@ namespace ocrt {
 								}
 								for (int k = 0; k < col_tmp[j].size(); k++) {
 									for (int s = 0; s < col_tmp[j][k].size(); s++) {
-										file << font[col_tmp[j][k][s]][0] << words[col_tmp[j][k][s]] << " " << font[col_tmp[j][k][s]][1];
+										file << font[col_tmp[j][k][s]][0] << doc.words[col_tmp[j][k][s]].name << " " << font[col_tmp[j][k][s]][1];
 									}
 									if (col_tmp[j].size() > (k + 1)) {
 										file << "<br>";
@@ -198,7 +198,7 @@ namespace ocrt {
 							file << "</tr>\n";
 						}
 						file << "</table>\n<p>\n";
-						while (lines_type[x] == LineType::TABLE) { x++; }
+						while (doc.lines[x].type == LineType::TABLE) { x++; }
 						x--;
 						table_num++;
 					}

@@ -23,29 +23,29 @@ namespace ocrt {
 
 	}
 
-	void DrawingHandler::DrawBoxes(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<char*>& words, std::vector<float>& confs, std::vector<int>& font_size, std::vector<bool>& bold, std::vector<bool>& italic, std::vector<bool>& underscore, std::vector<bool>& dict) {
+	void DrawingHandler::DrawBoxes(cv::Mat& test, const Document& doc) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
-		for (int i = 0; i < boxes.size(); i++) {
-			int top = boxes[i][1];
-			int bottom = boxes[i][3];
-			int left = boxes[i][0];
-			int right = boxes[i][2];
+		for (int i = 0; i < doc.words.size(); i++) {
+			int top = doc.words[i].box[1];
+			int bottom = doc.words[i].box[3];
+			int left = doc.words[i].box[0];
+			int right = doc.words[i].box[2];
 
 			line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
 			line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
 			line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
 			line(test, Point2i(left, bottom), Point2i(left, top), Scalar(0, 0, 0), 2);
 
-			std::cout << "\n" << words[i] << "\t\t" << confs[i] << "  " << font_size[i] << " ";
+			std::cout << "\n" << doc.words[i].name << "\t\t" << doc.words[i].conf << "  " << doc.words[i].font_size << " ";
 
-			if (bold[i]) { std::cout << "bold  "; }
-			if (italic[i]) { std::cout << "italic  "; }
-			if (underscore[i]) { std::cout << "underlined  "; }
-			if (dict[i]) { std::cout << "in dictionary  "; }
+			if (doc.words[i].bold) { std::cout << "bold  "; }
+			if (doc.words[i].italic) { std::cout << "italic  "; }
+			if (doc.words[i].underscore) { std::cout << "underlined  "; }
+			if (doc.words[i].dict) { std::cout << "in dictionary  "; }
 
-			std::cout << boxes[i][0] << "|" << boxes[i][1] << "|" << boxes[i][2] << "|" << boxes[i][3];
+			std::cout << doc.words[i].box[0] << "|" << doc.words[i].box[1] << "|" << doc.words[i].box[2] << "|" << doc.words[i].box[3];
 			std::cout << "\n";
 
 			imshow("img", test);
@@ -53,30 +53,30 @@ namespace ocrt {
 		}
 	}
 
-	void DrawingHandler::DrawLines(cv::Mat& test, std::vector<std::vector<int>>& Lines, int page_left, int page_right, int page_top, int page_bottom, std::vector<int*>& Line_dims) {
+	void DrawingHandler::DrawLines(cv::Mat& test, const Document& doc) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
-		for (int i = 0; i < Lines.size(); i++) {
-			line(test, Point2i(page_left, Line_dims[i][0]), Point2i(page_right, Line_dims[i][0]), Scalar(0, 0, 0), 2);
-			line(test, Point2i(page_right, Line_dims[i][0]), Point2i(page_right, Line_dims[i][1]), Scalar(0, 0, 0), 2);
-			line(test, Point2i(page_right, Line_dims[i][1]), Point2i(page_left, Line_dims[i][1]), Scalar(0, 0, 0), 2);
-			line(test, Point2i(page_left, Line_dims[i][1]), Point2i(page_left, Line_dims[i][0]), Scalar(0, 0, 0), 2);
+		for (int i = 0; i < doc.lines.size(); i++) {
+			line(test, Point2i(doc.page_left, doc.lines[i].dims[0]), Point2i(doc.page_right, doc.lines[i].dims[0]), Scalar(0, 0, 0), 2);
+			line(test, Point2i(doc.page_right, doc.lines[i].dims[0]), Point2i(doc.page_right, doc.lines[i].dims[1]), Scalar(0, 0, 0), 2);
+			line(test, Point2i(doc.page_right, doc.lines[i].dims[1]), Point2i(doc.page_left, doc.lines[i].dims[1]), Scalar(0, 0, 0), 2);
+			line(test, Point2i(doc.page_left, doc.lines[i].dims[1]), Point2i(doc.page_left, doc.lines[i].dims[0]), Scalar(0, 0, 0), 2);
 			imshow("img", test);
 			char c = waitKey(0);
 		}
 	}
 
-	void DrawingHandler::DrawSegments(cv::Mat& test, std::vector<std::vector<int>>& Lines, std::vector<std::vector<std::vector<int>>>& Lines_segments, std::vector<int*>& Line_dims, std::vector<std::vector<int>>& boxes) {
+	void DrawingHandler::DrawSegments(cv::Mat& test, const Document& doc) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
-		for (int i = 0; i < Lines.size(); i++) {
-			for (int j = 0; j < Lines_segments[i].size(); j++) {
-				int top = Line_dims[i][0];
-				int bottom = Line_dims[i][1];
-				int left = boxes[Lines_segments[i][j][0]][0];
-				int right = boxes[Lines_segments[i][j][Lines_segments[i][j].size() - 1]][2];
+		for (int i = 0; i < doc.lines.size(); i++) {
+			for (int j = 0; j < doc.lines[i].segments.size(); j++) {
+				int top = doc.lines[i].dims[0];
+				int bottom = doc.lines[i].dims[1];
+				int left = doc.words[doc.lines[i].segments[j][0]].box[0];
+				int right = doc.words[doc.lines[i].segments[j][doc.lines[i].segments[j].size() - 1]].box[2];
 				line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
 				line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
 				line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
@@ -87,16 +87,16 @@ namespace ocrt {
 		}
 	}
 
-	void DrawingHandler::DrawAreas(cv::Mat& test, std::vector<std::vector<int>>& table_area, std::vector<int*>& Line_dims, int page_left, int page_right) {
+	void DrawingHandler::DrawAreas(cv::Mat& test, const Document& doc, std::vector<std::vector<int>>& table_area) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 
 		for (int i = 0; i < table_area.size(); i++) {
-			int top = Line_dims[table_area[i][0]][0];
-			int bottom = Line_dims[table_area[i][table_area[i].size() - 1]][1];
-			int left = page_left;
-			int right = page_right;
+			int top = doc.lines[table_area[i][0]].dims[0];
+			int bottom = doc.lines[table_area[i][table_area[i].size() - 1]].dims[1];
+			int left = doc.page_left;
+			int right = doc.page_right;
 			line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
 			line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
 			line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
@@ -106,18 +106,18 @@ namespace ocrt {
 		}
 	}
 
-	void DrawingHandler::DrawRows(cv::Mat& test, std::vector<std::vector<std::vector<int>>>& multi_Rows, std::vector<int*>& Line_dims, int page_left, int page_right) {
+	void DrawingHandler::DrawRows(cv::Mat& test, const Document& doc) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 
-		for (int i = 0; i < multi_Rows.size(); i++) {
-			for (int j = 0; j < multi_Rows[i].size(); j++) {
+		for (int i = 0; i < doc.tables.size(); i++) {
+			for (int j = 0; j < doc.tables[i].multi_rows.size(); j++) {
 
-				int top = Line_dims[multi_Rows[i][j][0]][0];
-				int bottom = Line_dims[multi_Rows[i][j][multi_Rows[i][j].size() - 1]][1];
-				int left = page_left;
-				int right = page_right;
+				int top = doc.lines[doc.tables[i].multi_rows[j][0]].dims[0];
+				int bottom = doc.lines[doc.tables[i].multi_rows[j][doc.tables[i].multi_rows[j].size() - 1]].dims[1];
+				int left = doc.page_left;
+				int right = doc.page_right;
 				line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
 				line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
 				line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
@@ -128,17 +128,17 @@ namespace ocrt {
 		}
 	}
 
-	void DrawingHandler::DrawColsPartial(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<std::vector<int>>>& tmp_col) {
+	void DrawingHandler::DrawColsPartial(cv::Mat& test, const Document& doc, std::vector<std::vector<std::vector<int>>>& tmp_col) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 
 		for (int i = 0; i < tmp_col.size(); i++) {
 			for (int j = 0; j < tmp_col[i].size(); j++) {
-				int top = boxes[tmp_col[i][j][0]][1];
-				int bottom = boxes[tmp_col[i][j][0]][3];
-				int left = boxes[tmp_col[i][j][0]][0];
-				int right = boxes[tmp_col[i][j][tmp_col[i][j].size() - 1]][2];
+				int top = doc.words[tmp_col[i][j][0]].box[1];
+				int bottom = doc.words[tmp_col[i][j][0]].box[3];
+				int left = doc.words[tmp_col[i][j][0]].box[0];
+				int right = doc.words[tmp_col[i][j][tmp_col[i][j].size() - 1]].box[2];
 				line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
 				line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
 				line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
@@ -149,20 +149,20 @@ namespace ocrt {
 		}
 	}
 
-	void DrawingHandler::DrawCols(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<std::vector<int>>>& tmp_col, std::vector<std::vector<std::vector<std::vector<int>>>>& table_Columns) {
+	void DrawingHandler::DrawCols(cv::Mat& test, const Document& doc) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 
-		for (int i = 0; i < table_Columns.size(); i++) {
-			for (int j = 0; j < table_Columns[i].size(); j++) {
-				for (int k = 0; k < table_Columns[i][j].size(); k++) {
-					int tmp = table_Columns[i][j][k][0];
-					int bottom = boxes[tmp][3];
-					int top = boxes[tmp][1];
-					int left = boxes[tmp][0];
-					tmp = table_Columns[i][j][k][table_Columns[i][j][k].size() - 1];
-					int right = boxes[tmp][2];
+		for (int i = 0; i < doc.tables.size(); i++) {
+			for (int j = 0; j < doc.tables[i].columns.size(); j++) {
+				for (int k = 0; k < doc.tables[j].columns.size(); k++) {
+					int tmp = doc.tables[i].columns[j][k][0];
+					int bottom = doc.words[tmp].box[3];
+					int top = doc.words[tmp].box[1];
+					int left = doc.words[tmp].box[0];
+					tmp = doc.tables[i].columns[j][k][doc.tables[i].columns[j][k].size() - 1];
+					int right = doc.words[tmp].box[2];
 					line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
 					line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
 					line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
@@ -174,42 +174,42 @@ namespace ocrt {
 		}
 	}
 
-	void DrawingHandler::DrawGrid(cv::Mat& test, std::vector<std::vector<int>>& boxes, std::vector<std::vector<int*>>& row_dims, std::vector<std::vector<int*>>& col_dims, std::vector<std::vector<std::vector<int>>>& multi_Rows, std::vector<std::vector<std::vector<int>>>& Lines_segments) {
+	void DrawingHandler::DrawGrid(cv::Mat& test, const Document& doc) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 
-		for (int i = 0; i < col_dims.size(); i++) {
-			for (int j = 0; j < row_dims[i].size(); j++) {
-				int top = row_dims[i][j][0];
-				int bottom = row_dims[i][j][1];
-				for (int k = 0; k < col_dims[i].size(); k++) {
-					int left = col_dims[i][k][0];
-					int right = col_dims[i][k][1];
+		for (int i = 0; i < doc.col_dims.size(); i++) {
+			for (int j = 0; j < doc.row_dims[i].size(); j++) {
+				int top = doc.row_dims[i][j][0];
+				int bottom = doc.row_dims[i][j][1];
+				for (int k = 0; k < doc.col_dims[i].size(); k++) {
+					int left = doc.col_dims[i][k][0];
+					int right = doc.col_dims[i][k][1];
 
 					line(test, Point2i(left, top), Point2i(right, top), Scalar(0, 0, 0), 2);
 					line(test, Point2i(right, top), Point2i(right, bottom), Scalar(0, 0, 0), 2);
 					line(test, Point2i(right, bottom), Point2i(left, bottom), Scalar(0, 0, 0), 2);
 					line(test, Point2i(left, bottom), Point2i(left, top), Scalar(0, 0, 0), 2);
 				}
-				for (int k = 0; k < multi_Rows[i][j].size(); k++) {
-					for (int h = 0; h < Lines_segments[multi_Rows[i][j][k]].size(); h++) {
-						int left = boxes[Lines_segments[multi_Rows[i][j][k]][h][0]][0];
-						int right = boxes[Lines_segments[multi_Rows[i][j][k]][h][Lines_segments[multi_Rows[i][j][k]][h].size() - 1]][2];
+				for (int k = 0; k < doc.tables[i].multi_rows[j].size(); k++) {
+					for (int h = 0; h < doc.lines[doc.tables[i].multi_rows[j][k]].segments.size(); h++) {
+						int left = doc.words[doc.lines[doc.tables[i].multi_rows[j][k]].segments[h][0]].box[0];
+						int right = doc.words[doc.lines[doc.tables[i].multi_rows[j][k]].segments[h][doc.lines[doc.tables[i].multi_rows[j][k]].segments[h].size() - 1]].box[2];
 						int col_left = -1;
 						int col_right = -1;
 
-						for (int z = 0; z < col_dims[i].size(); z++) {
-							if ((left <= col_dims[i][z][1]) && (col_left == -1)) {
+						for (int z = 0; z < doc.col_dims[i].size(); z++) {
+							if ((left <= doc.col_dims[i][z][1]) && (col_left == -1)) {
 								col_left = z;
 							}
-							if ((right <= col_dims[i][z][1]) && (col_right == -1)) {
+							if ((right <= doc.col_dims[i][z][1]) && (col_right == -1)) {
 								col_right = z;
 							}
 						}
 						if (col_left != col_right) {
 							for (int z = col_left + 1; z <= col_right; z++) {
-								int point = col_dims[i][z][0];
+								int point = doc.col_dims[i][z][0];
 								line(test, Point2i(point, top + (bottom - top) * 0.1), Point2i(point, bottom), Scalar(255, 255, 255), 2);
 							}
 						}
@@ -230,17 +230,17 @@ namespace ocrt {
 		waitKey(0);
 	}
 
-	void DrawingHandler::DrawFootHead(cv::Mat& test, int* Lines_type, std::vector<std::vector<int>>& Lines, std::vector<int*>& Line_dims, int page_left, int page_right) {
+	void DrawingHandler::DrawFootHead(cv::Mat& test, const Document& doc) {
 		namedWindow("img", 0);
 		float ratio = (float)(std::max(test.cols, test.rows)) / 850;
 		resizeWindow("img", (test.cols) / ratio, (test.rows) / ratio);
 
-		for (int i = 0; i < Lines.size(); i++) {
-			if (Lines_type[i] == 4) {
-				line(test, Point2i(page_left, Line_dims[i][0]), Point2i(page_right, Line_dims[i][0]), Scalar(0, 0, 0), 2);
-				line(test, Point2i(page_right, Line_dims[i][0]), Point2i(page_right, Line_dims[i][1]), Scalar(0, 0, 0), 2);
-				line(test, Point2i(page_right, Line_dims[i][1]), Point2i(page_left, Line_dims[i][1]), Scalar(0, 0, 0), 2);
-				line(test, Point2i(page_left, Line_dims[i][1]), Point2i(page_left, Line_dims[i][0]), Scalar(0, 0, 0), 2);
+		for (int i = 0; i < doc.lines.size(); i++) {
+			if (doc.lines[i].type == 4) {
+				line(test, Point2i(doc.page_left, doc.lines[i].dims[0]), Point2i(doc.page_right, doc.lines[i].dims[0]), Scalar(0, 0, 0), 2);
+				line(test, Point2i(doc.page_right, doc.lines[i].dims[0]), Point2i(doc.page_right, doc.lines[i].dims[1]), Scalar(0, 0, 0), 2);
+				line(test, Point2i(doc.page_right, doc.lines[i].dims[1]), Point2i(doc.page_left, doc.lines[i].dims[1]), Scalar(0, 0, 0), 2);
+				line(test, Point2i(doc.page_left, doc.lines[i].dims[1]), Point2i(doc.page_left, doc.lines[i].dims[0]), Scalar(0, 0, 0), 2);
 			}
 		}
 		imshow("img", test);

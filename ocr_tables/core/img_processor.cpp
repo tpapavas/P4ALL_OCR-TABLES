@@ -30,7 +30,7 @@ namespace ocrt {
 	 */
 	bool ImageProcessor::ThresholdImage(cv::Mat& input, cv::Mat& output, BinarizationType type, int winx, int winy, double k, double dR) {
 		if ((input.rows <= 0) || (input.cols <= 0)) {
-			cerr << "*** ERROR: Invalid input Image " << endl;
+			std::cerr << "*** ERROR: Invalid input Image " << std::endl;
 			return false;
 		}
 
@@ -187,7 +187,7 @@ namespace ocrt {
 					break;
 
 				default:
-					cerr << "Unknown threshold type in ImageProcessor::ApplyThreshold()\n";
+					std::cerr << "Unknown threshold type in ImageProcessor::ApplyThreshold()\n";
 					exit(1);
 				}
 
@@ -237,11 +237,12 @@ namespace ocrt {
 
 		//apply threshold to each pixel
 		for (int y = 0; y < im.rows; ++y)
-			for (int x = 0; x < im.cols; ++x)
+			for (int x = 0; x < im.cols; ++x) {
 				if (im.uget(x, y) >= thsurf.fget(x, y))
 					output.uset(x, y, 255);
 				else
 					output.uset(x, y, 0);
+			}
 
 	}
 
@@ -256,14 +257,14 @@ namespace ocrt {
 
 		cv::Mat threshed_input, temp, closed;
 		cv::erode(input, temp, cv::Mat(), cv::Point(-1, -1), 1);
-		ImageProcessor::ThresholdImage(temp, output, BinarizationType::BATAINEH);  //get binary image
+		ImageProcessor::ThresholdImage(temp, output, BinarizationType::SAUVOLA);  //get binary image
 		//ClearImage(input, output);
-		drawing_handler.DrawGridlessImage(output);
+		//drawing_handler.DrawGridlessImage(output);
 
-		//cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 2));
-		//cv::morphologyEx(output, closed, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 2);  //new operation #1
+		cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));
+		cv::morphologyEx(output, output, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 2);  //new operation #1
 		//ImageProcessor::ConstructImage(output, closed, 3);  //new operation #2
-		//ocr_tabs::drawing_handler::DrawGridlessImage(output);
+		drawing_handler.DrawGridlessImage(output);
 
 		OCR_LOG_MSG("Done!\n");
 		OCR_LOG_MSG("Segmenting Page...");
@@ -816,5 +817,124 @@ namespace ocrt {
 		cv::morphologyEx(temp_th, output, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 2);
 
 		return true;
+	}
+
+	void ImageProcessor::ApplyAdaptiveContrast(cv::Mat im, cv::Mat output, BinarizationType type, int winx, int winy, double k, double dR) {
+		double m, s, max_s, min_s;
+		double th = 0;
+		double min_I, max_I;
+		int wxh = winx / 2;
+		int wyh = winy / 2;
+		int x_firstth = wxh;
+		int x_lastth = im.cols - wxh - 1;
+		int y_lastth = im.rows - wyh - 1;
+		int y_firstth = wyh;
+		//int mx, my;
+		double mean, s_adaptive;
+
+		// Create local statistics and store them in a double matrices
+		cv::Mat map_m = cv::Mat::zeros(im.rows, im.cols, CV_32F);
+		cv::Mat map_s = cv::Mat::zeros(im.rows, im.cols, CV_32F);
+		max_s = CalcLocalStats(im, map_m, map_s, winx, winy, mean, max_s, min_s);
+
+		minMaxLoc(im, &min_I, &max_I);
+
+		cv::Mat thsurf(im.rows, im.cols, CV_32F);
+
+		// Create the threshold surface, including border processing
+		// ----------------------------------------------------
+		for (int j = y_firstth; j <= y_lastth; j++) {
+			// NORMAL, NON-BORDER AREA IN THE MIDDLE OF THE WINDOW:
+			for (int i = 0; i <= im.cols - winx; i++) {
+				m = map_m.fget(i + wxh, j);
+				s = map_s.fget(i + wxh, j);
+
+				// Calculate the threshold
+				switch (type) {
+				case NIBLACK:
+					th = m + k * s;
+					break;
+
+				case SAUVOLA:
+					th = m * (1 + k * (s / dR - 1));
+					break;
+
+				case WOLFJOLION:
+					th = m + k * (s / max_s - 1) * (m - min_I);
+					break;
+
+				case BATAINEH:
+					s_adaptive = (s - min_s) / (max_s - min_s);
+					th = m - (m * m - s) / ((mean + s) * (s_adaptive + s));
+					break;
+
+				default:
+					std::cerr << "Unknown threshold type in ImageProcessor::ApplyThreshold()\n";
+					exit(1);
+				}
+
+				thsurf.fset(i + wxh, j, th);
+
+				if (i == 0) {
+					// LEFT BORDER
+					for (int i = 0; i <= x_firstth; ++i)
+						thsurf.fset(i, j, th);
+					// LEFT-UPPER CORNER
+					if (j == y_firstth)
+						for (int u = 0; u < y_firstth; ++u)
+							for (int i = 0; i <= x_firstth; ++i)
+								thsurf.fset(i, u, th);
+					// LEFT-LOWER CORNER
+					if (j == y_lastth)
+						for (int u = y_lastth + 1; u < im.rows; ++u)
+							for (int i = 0; i <= x_firstth; ++i)
+								thsurf.fset(i, u, th);
+				}
+
+				// UPPER BORDER
+				if (j == y_firstth)
+					for (int u = 0; u < y_firstth; ++u)
+						thsurf.fset(i + wxh, u, th);
+				// LOWER BORDER
+				if (j == y_lastth)
+					for (int u = y_lastth + 1; u < im.rows; ++u)
+						thsurf.fset(i + wxh, u, th);
+			}
+
+			// RIGHT BORDER
+			for (int i = x_lastth; i < im.cols; ++i)
+				thsurf.fset(i, j, th);
+			// RIGHT-UPPER CORNER
+			if (j == y_firstth)
+				for (int u = 0; u < y_firstth; ++u)
+					for (int i = x_lastth; i < im.cols; ++i)
+						thsurf.fset(i, u, th);
+			// RIGHT-LOWER CORNER
+			if (j == y_lastth)
+				for (int u = y_lastth + 1; u < im.rows; ++u)
+					for (int i = x_lastth; i < im.cols; ++i)
+						thsurf.fset(i, u, th);
+		}
+		//cerr << "surface created" << endl;
+
+		float thv, pv, pinit;
+		//apply threshold to each pixel
+		for (int y = 0; y < im.rows; ++y)
+			for (int x = 0; x < im.cols; ++x) {
+				thv = thsurf.fget(x, y);
+				pv = im.uget(x, y);
+				pinit = pv;
+				if (im.uget(x, y) < thsurf.fget(x, y)) {
+					pv = pv * pv / thv;
+					output.uset(x, y, pv);
+				} else {
+					thv = 255 - thv;
+					pv = 255 - pv;
+					pv = pv * pv / thv;
+					pv = 255 - pv;
+					output.uset(x, y, pv);
+				}
+				//std::cout << pinit << " " << thv << " " << pv << std::endl;
+			}
 	}
 }

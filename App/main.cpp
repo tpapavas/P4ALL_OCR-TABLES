@@ -19,15 +19,14 @@ int main(int argc, char *argv[])
 	{
 		std::string filename(argv[1]);
 		if (filename.empty()) { 
-			return -1;
+			return 1;
 		}
 
-		ocrt::OCRTabsEngine tab;
 		ocrt::OCRTabsAPI tabs_api(filename);
 		if (tabs_api.ExtractTables()) 
-			return 1;
+			return 0;
 		else 
-			return -1;
+			return 1;
 	}
 	return 0;
 }

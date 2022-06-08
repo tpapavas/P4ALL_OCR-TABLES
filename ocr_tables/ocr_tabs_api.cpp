@@ -4,6 +4,7 @@
 #include "ocr_tables/ocr_tabs_api.h"
 #include "ocr_tables/helpers/auxiliary.h"
 #include "ocr_tables/helpers/drawing_handler.h"
+#include "ocr_tables/core/document.h";
 #include "debug.h"
 extern "C" {
 #include <mupdf/fitz.h>
@@ -14,9 +15,8 @@ namespace ocrt {
 
 	}
 
-	OCRTABS_API OCRTabsAPI::OCRTabsAPI(const std::string& filename) {
-		file_handler = FileHandler(filename);
-		tabs_engine = OCRTabsEngine(file_handler.getFiletype(), filename);
+	OCRTABS_API OCRTabsAPI::OCRTabsAPI(const std::string& filename) : file_handler(filename), tabs_engine(file_handler.getFiletype(), filename) {
+	
 	}
 	
 	OCRTABS_API OCRTabsAPI::~OCRTabsAPI() {
@@ -98,35 +98,35 @@ namespace ocrt {
 	void OCRTabsAPI::Draw(DrawMode mode) {
 		switch (mode) {
 		case DrawMode::Boxes:
-			drawing_handler.DrawBoxes(tabs_engine.test, tabs_engine.boxes, tabs_engine.words, tabs_engine.confs, tabs_engine.font_size, tabs_engine.bold, tabs_engine.italic, tabs_engine.underscore, tabs_engine.dict);
+			drawing_handler.DrawBoxes(tabs_engine.test, tabs_engine.doc);
 			break;
 
 		case DrawMode::Lines:
-			drawing_handler.DrawLines(tabs_engine.test, tabs_engine.lines, tabs_engine.page_left, tabs_engine.page_right, tabs_engine.page_top, tabs_engine.page_bottom, tabs_engine.line_dims);
+			drawing_handler.DrawLines(tabs_engine.test, tabs_engine.doc);
 			break;
 
 		case DrawMode::Segments:
-			drawing_handler.DrawSegments(tabs_engine.test, tabs_engine.lines, tabs_engine.line_segments, tabs_engine.line_dims, tabs_engine.boxes);
+			drawing_handler.DrawSegments(tabs_engine.test, tabs_engine.doc);
 			break;
 
 		case DrawMode::Areas:
-			drawing_handler.DrawAreas(tabs_engine.test, tabs_engine.table_area, tabs_engine.line_dims, tabs_engine.page_left, tabs_engine.page_right);
+			drawing_handler.DrawAreas(tabs_engine.test, tabs_engine.doc, tabs_engine.table_area);
 			break;
 
 		case DrawMode::Rows:
-			drawing_handler.DrawRows(tabs_engine.test, tabs_engine.multi_rows, tabs_engine.line_dims, tabs_engine.page_left, tabs_engine.page_right);
+			drawing_handler.DrawRows(tabs_engine.test, tabs_engine.doc);
 			break;
 
 		case DrawMode::ColsPartial:
-			drawing_handler.DrawColsPartial(tabs_engine.test, tabs_engine.boxes, tabs_engine.tmp_col);
+			drawing_handler.DrawColsPartial(tabs_engine.test, tabs_engine.doc, tabs_engine.tmp_col);
 			break;
 
 		case DrawMode::Cols:
-			drawing_handler.DrawCols(tabs_engine.test, tabs_engine.boxes, tabs_engine.tmp_col, tabs_engine.table_columns);
+			drawing_handler.DrawCols(tabs_engine.test, tabs_engine.doc);
 			break;
 
 		case DrawMode::Grid:
-			drawing_handler.DrawGrid(tabs_engine.test, tabs_engine.boxes, tabs_engine.row_dims, tabs_engine.col_dims, tabs_engine.multi_rows, tabs_engine.line_segments);
+			drawing_handler.DrawGrid(tabs_engine.test, tabs_engine.doc);
 			break;
 
 		case DrawMode::GridlessImage:
@@ -134,7 +134,7 @@ namespace ocrt {
 			break;
 
 		case DrawMode::FootHead:
-			drawing_handler.DrawFootHead(tabs_engine.test, tabs_engine.lines_type, tabs_engine.lines, tabs_engine.line_dims, tabs_engine.page_left, tabs_engine.page_right);
+			drawing_handler.DrawFootHead(tabs_engine.test, tabs_engine.doc);
 			break;
 		}
 	}

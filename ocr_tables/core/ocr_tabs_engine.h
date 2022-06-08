@@ -41,7 +41,7 @@ namespace ocrt {
 		void PrepareMulti1();
 		void PrepareMulti2();
 
-		bool ReadImage(std::vector<cv::Mat>&, FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML);
+		bool ReadImage(std::vector<cv::Mat>&, std::vector<cv::Mat>&, FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML);
 		void SetImage(cv::Mat img);
 		void ResetImage();
 		cv::Mat SegmentImage(cv::Mat img);
@@ -56,6 +56,7 @@ namespace ocrt {
 
 		cv::Mat getInitial() { return initial; }
 		cv::Mat getRaw() { return raw; }
+		ocrt::Document getDoc() { return doc; }
 	private:
 		cv::Mat test, initial, raw;
 		tesseract::TessBaseAPI tess;
@@ -63,36 +64,14 @@ namespace ocrt {
 		clock_t start;
 		double duration;
 
-		std::vector<char*> words;
-		std::vector<std::vector<int>> boxes, lines, table_area, table_rows;
-		std::vector<std::vector<std::vector<int>>> multi_rows;
-		std::vector<int*> line_dims;
-		std::vector<std::vector<std::vector<int>>> line_segments;
-		std::vector<std::vector<std::vector<int>>> line_segments_dims;
-		std::vector<std::vector<std::vector<std::vector<int>>>> table_columns;
-		std::vector<std::vector<int*>> col_dims, row_dims;
-		std::vector<std::vector<std::vector<int>>> tmp_col;
-		std::vector<float> confs;
-		std::vector<bool> bold;
-		std::vector<bool> dict;
-		std::vector<bool> italic;
-		std::vector<bool> underscore;
-		std::vector<int> font_size;
-		int page_left, page_right, page_top, page_bottom;
-		int* lines_type;
-
-		std::vector<std::vector<char*>> words_;
-		std::vector<std::vector<std::vector<int>>> lines_;
-		std::vector<std::vector<std::vector<int>>> boxes_;
-		std::vector<std::vector<float>> confs_;
-		std::vector<std::vector<int>> font_size_;
-		std::vector<std::vector<bool>> bold_;
-		std::vector<std::vector<bool>> dict_;
-		std::vector<std::vector<bool>> italic_;
-		std::vector<std::vector<bool>> underscore_;
-		std::vector<int> page_height, page_width;
-
+		ocrt::Document doc;
 		ImageProcessor img_processor;
+
+		std::vector<std::vector<std::vector<int>>> tmp_col;
+		std::vector<std::vector<int>> table_area;
+
+		std::vector<std::vector<Word>> words_;
+		std::vector<std::vector<Line>> lines_;
 
 		bool fail;
 		std::string fail_msg;

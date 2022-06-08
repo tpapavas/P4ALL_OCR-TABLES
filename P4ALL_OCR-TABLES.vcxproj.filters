@@ -60,6 +60,9 @@
     <ClInclude Include="ocr_tables\helpers\file_handler.h">
       <Filter>Header Files\OCR_Tables\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="ocr_tables\core\document.h">
+      <Filter>Header Files\OCR_Tables\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">

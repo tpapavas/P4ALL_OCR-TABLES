@@ -24,7 +24,7 @@ extern "C" {
 #include "ocr_tables/helpers/drawing_handler.h"
 
 ////probably problematic////
-using namespace std;
+//using namespace std;
 //using namespace cv;
 
 #define uget(x,y)    at<unsigned char>(y,x)
@@ -93,6 +93,10 @@ namespace ocrt {
 		bool mat2pix(cv::Mat& mat, Pix** px, bool to_binary);
 		bool pix2mat(Pix** px, cv::Mat& mat);
 		bool pixmap2mat(fz_pixmap** fzpxmap, cv::Mat& mat);
+
+
+		//new functionality
+		void ApplyAdaptiveContrast(cv::Mat image, cv::Mat output, BinarizationType type, int winx, int winy, double k, double dR);
 
 	private:
 		BinarizationType bin_type;
