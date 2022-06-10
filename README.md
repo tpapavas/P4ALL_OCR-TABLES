@@ -7,7 +7,7 @@ A module that exports scanned documents (image or .pdf files) to .html, recogniz
 - [Repo](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#repo)
 - [Dependencies](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#dependencies)
 - [Building](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#building)
-- [DLL Usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessingdll-usage)
+- [DLL Usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#dll-usage)
 - [Standalone App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing/README.md#standalone-app-usage)
 - [WebService App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing/README.md#webservice-app-usage)
 - [Current limitations (to be updated in next version)](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing/README.md#current-limitations-to-be-updated-in-next-version)
