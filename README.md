@@ -36,6 +36,11 @@ liblept171.lib
 qtmain.lib, Qt5Core.lib, Qt5Gui.lib, Qt5Widgets.lib.   
 Also don't forget to copy Qt's "platforms" directory in the same folder as the executable
 
+### Building
+
+For Windows and VisualStudio 2019, just run **CreateSolution.bat** to create Solution/Project files.
+Dependencies are coming within the repo.
+
 ### DLL Usage
 
 ```
