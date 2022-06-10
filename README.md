@@ -8,11 +8,11 @@ A module that exports scanned documents (image or .pdf files) to .html, recogniz
 - [Dependencies](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#dependencies)
 - [Building](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#building)
 - [DLL Usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#dll-usage)
-- [Standalone App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing/README.md#standalone-app-usage)
-- [WebService App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing/README.md#webservice-app-usage)
-- [Current limitations (to be updated in next version)](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing/README.md#current-limitations-to-be-updated-in-next-version)
-- [Citation](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing/README.md#citation)
-- [Funding Acknowledgement](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing/README.md#funding-acknowledgement)
+- [Standalone App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#standalone-app-usage)
+- [WebService App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#webservice-app-usage)
+- [Current limitations (to be updated in next version)](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#current-limitations-to-be-updated-in-next-version)
+- [Citation](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#citation)
+- [Funding Acknowledgement](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#funding-acknowledgement)
 
 ### Repo
 
