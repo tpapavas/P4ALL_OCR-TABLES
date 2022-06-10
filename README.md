@@ -56,9 +56,14 @@ Also don't forget to copy Qt's "platforms" directory in the same folder as the e
 For VisualStudio 2019, just run **CreateSolution.bat** to create Solution/Project files.
 
 #### Windows/Linux
-You can also run from repo directory 
+You can also run from repo directory \
+[Windows]
 ```
 vendor\bin\premake\premake5.exe [action]
+```
+[Linux]
+```
+vendor\bin\premake\premake5 [action]
 ```
 where [action] can get values for **Visual Studio** or **make** (Only vs2019 action is tested). \
 See full list in Premake Docs [Using Premake](https://premake.github.io/docs/Using-Premake). \
