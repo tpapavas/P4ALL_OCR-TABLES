@@ -1,6 +1,20 @@
-### P4A_OCR-TABLES
+## P4A_OCR-TABLES
 
 A module that exports scanned documents (image or .pdf files) to .html, recognizing tabular structures. A description of the recognition algorithm can be found here: [Extraction of Tabular Data from Document Images](https://doi.org/10.1145/3058555.3058581)
+
+### Contents
+
+- [Repo](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#repo)
+- [Dependencies](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#dependencies)
+- [Building](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#building)
+- [DLL Usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#dll-usage)
+- [Standalone App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#standalone-app-usage)
+- [WebService App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#webservice-app-usage)
+- [Current limitations (to be updated in next version)](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#current-limitations-to-be-updated-in-next-version)
+- [Citation](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#citation)
+- [Funding Acknowledgement](https://github.com/tpapavas/P4ALL_OCR-TABLES/edit/img-preprocessing/README.md#funding-acknowledgement)
+
+### Repo
 
 The repository contains 5 directories
 
@@ -38,7 +52,16 @@ Also don't forget to copy Qt's "platforms" directory in the same folder as the e
 
 ### Building
 
-For Windows and VisualStudio 2019, just run **CreateSolution.bat** to create Solution/Project files.
+#### Windows 
+For VisualStudio 2019, just run **CreateSolution.bat** to create Solution/Project files.
+
+#### Windows/Linux
+You can also run from repo directory 
+```
+vendor\bin\premake\premake5.exe [action]
+```
+where [action] can get values for **Visual Studio** or **make** (Only vs2019 action is tested). \
+See full list in Premake Docs [Using Premake](https://premake.github.io/docs/Using-Premake). \
 Dependencies are coming within the repo.
 
 ### DLL Usage
