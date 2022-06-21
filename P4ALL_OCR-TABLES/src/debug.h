@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <leptonica\allheaders.h>
+#include <leptonica/allheaders.h>
 
 #define OCR_DEBUG 1
 #define OCR_PIX_DEBUG 0

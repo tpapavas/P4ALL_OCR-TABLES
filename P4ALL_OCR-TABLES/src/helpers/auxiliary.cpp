@@ -68,7 +68,8 @@ namespace ocrt {
 				vector<string> tmp;
 				//if (font_size[i]<(font_size_avg-3))
 				//{
-				//	tmp.push_back("<font size=\"1\">");
+				//	tmp.push_back("<font size=
+				// "1\">");
 				//	tmp.push_back("</font>");
 				//}
 				//else if (font_size[i]<(font_size_avg-2))
