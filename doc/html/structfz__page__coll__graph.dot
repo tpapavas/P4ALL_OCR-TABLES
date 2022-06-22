@@ -1,0 +1,11 @@
+digraph "fz_page"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{fz_page\n|+ refs\l+ chapter\l+ number\l+ incomplete\l+ drop_page\l+ bound_page\l+ run_page_contents\l+ run_page_annots\l+ run_page_widgets\l+ load_links\land 6 more...\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +doc" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{fz_document\n|+ refs\l+ drop_document\l+ needs_password\l+ authenticate_password\l+ has_permission\l+ load_outline\l+ layout\l+ make_bookmark\l+ lookup_bookmark\l+ resolve_link\land 8 more...\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__document.html",tooltip=" "];
+  Node1 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +open" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node1 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +next\n+prev" ,arrowhead="odiamond",fontname="Helvetica"];
+}

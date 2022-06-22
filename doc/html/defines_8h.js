@@ -1,0 +1,76 @@
+var defines_8h =
+[
+    [ "FLANN_ARRAY_LEN", "defines_8h.html#ac11b531d7e1667e44f02da19d39e540c", null ],
+    [ "FLANN_DEPRECATED", "defines_8h.html#a7c6f4b56c7a5c676e28c6c6ce0c94fe1", null ],
+    [ "FLANN_EXPORT", "defines_8h.html#a1181cf89269bbc2bd59e0f37951731e8", null ],
+    [ "FLANN_PLATFORM_32_BIT", "defines_8h.html#a937fff3bcfffa227a5948587cdb89da3", null ],
+    [ "flann_algorithm_t", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817", [
+      [ "FLANN_INDEX_LINEAR", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a3a0f593ce3b1d39e7d7afae0b204f77b", null ],
+      [ "FLANN_INDEX_KDTREE", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817af67e191e4866496ff7db55c24277f4a4", null ],
+      [ "FLANN_INDEX_KMEANS", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a8f59fc67e6deef84edfaf55506bb8466", null ],
+      [ "FLANN_INDEX_COMPOSITE", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a342a8501fb6a01e8c73e527d705855a5", null ],
+      [ "FLANN_INDEX_KDTREE_SINGLE", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a0fda72a4e7d3403cb4f5246d231957ed", null ],
+      [ "FLANN_INDEX_HIERARCHICAL", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a1a25f0fc90210817c9009dbbe91d0fee", null ],
+      [ "FLANN_INDEX_LSH", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a50d47941b69e28bd17f8ca1622420634", null ],
+      [ "FLANN_INDEX_SAVED", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a9d374f42db169047708b5818cbfa6a23", null ],
+      [ "FLANN_INDEX_AUTOTUNED", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a0a2909e1f5cc0d4a556a9c3df532b5bd", null ],
+      [ "LINEAR", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a706a9f2a18a0cbe5e0de7ffdc8d692d9", null ],
+      [ "KDTREE", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a8d8fc6994c7902aa89b3bee1167e4b26", null ],
+      [ "KMEANS", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a2a3aa75e2261b4270c3d31b24ce1a549", null ],
+      [ "COMPOSITE", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a7abde3beb12747d90a636eeae37213cc", null ],
+      [ "KDTREE_SINGLE", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817a9ce29b6d19e25c61d50b4a492f3d9cb8", null ],
+      [ "SAVED", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817af30380e5373fe44861951d356a1f43a4", null ],
+      [ "AUTOTUNED", "defines_8h.html#a4e3e6c98d774ea77fd7f0045c9bc7817aef8622927b8a938976f6da27a7dcffdb", null ]
+    ] ],
+    [ "flann_centers_init_t", "defines_8h.html#a0ad8b53e8b203599f13d67e54c197703", [
+      [ "FLANN_CENTERS_RANDOM", "defines_8h.html#a0ad8b53e8b203599f13d67e54c197703a2cec6d6a56fac53c140b2f8f28a14aef", null ],
+      [ "FLANN_CENTERS_GONZALES", "defines_8h.html#a0ad8b53e8b203599f13d67e54c197703a8f42551d6005b25200e6e239d7e1f036", null ],
+      [ "FLANN_CENTERS_KMEANSPP", "defines_8h.html#a0ad8b53e8b203599f13d67e54c197703a99f2e3471f856cda026b4d922275e60b", null ],
+      [ "CENTERS_RANDOM", "defines_8h.html#a0ad8b53e8b203599f13d67e54c197703ab095d19f60989752478f9d4a44f84cb2", null ],
+      [ "CENTERS_GONZALES", "defines_8h.html#a0ad8b53e8b203599f13d67e54c197703a03b98d4ec57601a8cda560d2f834d8d5", null ],
+      [ "CENTERS_KMEANSPP", "defines_8h.html#a0ad8b53e8b203599f13d67e54c197703a25ddb80fd5ab89de152c857954150b9f", null ]
+    ] ],
+    [ "flann_datatype_t", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdb", [
+      [ "FLANN_INT8", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdbabeca8ce04ef5f77f2843627153d546ca", null ],
+      [ "FLANN_INT16", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdbaf075be28484d3641fd69862a7bb15090", null ],
+      [ "FLANN_INT32", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdbad643d08578ddc87316fc6738bc22cfa4", null ],
+      [ "FLANN_INT64", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdba9364c67fa64235c23892c19254b5537c", null ],
+      [ "FLANN_UINT8", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdba539d20c852d09052cce5971547e1e04c", null ],
+      [ "FLANN_UINT16", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdbad8e7cc27385b0f69416467c39b5551ab", null ],
+      [ "FLANN_UINT32", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdba332f07a7eaf277333125fde0655d34d2", null ],
+      [ "FLANN_UINT64", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdba7626348c31c2afc2db9649d41180365b", null ],
+      [ "FLANN_FLOAT32", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdba44cb380618b4b7d2e02ea59ec069c75d", null ],
+      [ "FLANN_FLOAT64", "defines_8h.html#a88c00eb61998ec9fcfba6f9db2987fdba10766e25f6c23bd81f0753c73dcf52bc", null ]
+    ] ],
+    [ "flann_distance_t", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1", [
+      [ "FLANN_DIST_EUCLIDEAN", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1af5f3c59a927fcf96a272c5ca7d492834", null ],
+      [ "FLANN_DIST_L2", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a9055ddc89ed93a93e6412239986600d9", null ],
+      [ "FLANN_DIST_MANHATTAN", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a2053b9d3564d59bbf0ed1ea2be9a8055", null ],
+      [ "FLANN_DIST_L1", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a11fce77f2ac6cf1286c2cedf745c725f", null ],
+      [ "FLANN_DIST_MINKOWSKI", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a966053e612aec8d257f03fb07af51adf", null ],
+      [ "FLANN_DIST_MAX", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a21b7b495448c1b23de19b7e4a6d20e73", null ],
+      [ "FLANN_DIST_HIST_INTERSECT", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a8941b5d1524f9552b72af832866ad5cb", null ],
+      [ "FLANN_DIST_HELLINGER", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a49b216f106829dfd07cc1c131a7642df", null ],
+      [ "FLANN_DIST_CHI_SQUARE", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a651f2b932369fa1998e2a2481f54b70d", null ],
+      [ "FLANN_DIST_CS", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1aba706a5b92e8eb714b35ed1167d081cb", null ],
+      [ "FLANN_DIST_KULLBACK_LEIBLER", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1ab201790b841394a98cc0069daca882ec", null ],
+      [ "FLANN_DIST_KL", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a5d3d01a9a61cc4d804fc024d95eb4ea0", null ],
+      [ "FLANN_DIST_HAMMING", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a471dc23a5a9bc15d29c2652526475bc7", null ],
+      [ "EUCLIDEAN", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1ac7f8d392367f7c72e61744c4245311ce", null ],
+      [ "MANHATTAN", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1af7c29971f527df6f3b9279a7608c3862", null ],
+      [ "MINKOWSKI", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1aeaf8417a4e1389212df9e73f8af46227", null ],
+      [ "MAX_DIST", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a5e71dcdc1803389b9725c736bac4db70", null ],
+      [ "HIST_INTERSECT", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a30cc68122740b5dcc78308a091f1bcb7", null ],
+      [ "HELLINGER", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a722c4198af93c2fa6a10845c60aeedce", null ],
+      [ "CS", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a5f3697a43383a7977c74f7c4ca825f3e", null ],
+      [ "KL", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a0f02dd0471a8c55561697fd89bf14d33", null ],
+      [ "KULLBACK_LEIBLER", "defines_8h.html#aaf5ebd053bd32f6b924e6e59868a1ee1a9f03895ed4ed752e694d6bcb03cb4040", null ]
+    ] ],
+    [ "flann_log_level_t", "defines_8h.html#a66d3d2cd0c117c07dafb83b179204ae5", [
+      [ "FLANN_LOG_NONE", "defines_8h.html#a66d3d2cd0c117c07dafb83b179204ae5a218555ba4e1fe1f97ea74a471153849f", null ],
+      [ "FLANN_LOG_FATAL", "defines_8h.html#a66d3d2cd0c117c07dafb83b179204ae5a78f4a1b618756f0743caa9fd6a66018b", null ],
+      [ "FLANN_LOG_ERROR", "defines_8h.html#a66d3d2cd0c117c07dafb83b179204ae5aa890c4eb36804e6d91f5ea513810cbb6", null ],
+      [ "FLANN_LOG_WARN", "defines_8h.html#a66d3d2cd0c117c07dafb83b179204ae5a4d2b1af39e949f15efa9a9da0e6c7866", null ],
+      [ "FLANN_LOG_INFO", "defines_8h.html#a66d3d2cd0c117c07dafb83b179204ae5a4155037f567c966e9cd5900678bd2e16", null ]
+    ] ]
+];

@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['q_0',['q',['../structcv_1_1of2_1_1_fab_map_f_b_o_1_1_word_stats.html#aa30b1af6bd5a967a5ff6140c0edf0ce2',1,'cv::of2::FabMapFBO::WordStats']]],
+  ['q_1',['Q',['../calib3d_2calib3d_8hpp.html#a29d14baac63d86e6bbb0b03861384e2c',1,'calib3d.hpp']]],
+  ['qangle_2',['qangle',['../structcv_1_1gpu_1_1_h_o_g_descriptor.html#a706ce2936996876619084fac54e61464',1,'cv::gpu::HOGDescriptor::qangle()'],['../structcv_1_1ocl_1_1_h_o_g_descriptor.html#a35ab7536fc22a7751c929d63543e31cc',1,'cv::ocl::HOGDescriptor::qangle()']]],
+  ['qangle_5fbuf_3',['qangle_buf',['../structcv_1_1gpu_1_1_h_o_g_descriptor.html#a23ecc6bada4c3f54dfc4e9d67caaf5ad',1,'cv::gpu::HOGDescriptor']]],
+  ['qp_5flevel_5finterb_4',['QP_Level_InterB',['../structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a1414850923c34e0e0325944400c68cf6',1,'cv::gpu::VideoWriter_GPU::EncoderParams']]],
+  ['qp_5flevel_5finterp_5',['QP_Level_InterP',['../structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a8ca625f276ae370de7acbd3e49976743',1,'cv::gpu::VideoWriter_GPU::EncoderParams']]],
+  ['qp_5flevel_5fintra_6',['QP_Level_Intra',['../structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#aa2c27da41d1d6d971946ee3febfef652',1,'cv::gpu::VideoWriter_GPU::EncoderParams']]],
+  ['quad_7',['quad',['../structfz__stext__char.html#a20cf3a77d1ad1d564462d7b2d5d4f76e',1,'fz_stext_char::quad()'],['../struct_cv_stereo_camera.html#a1aa915655877e47f119825c0cace5473',1,'CvStereoCamera::quad()']]],
+  ['quad1_8',['quad1',['../legacy_8hpp.html#a3488b929b553c414867cf862fe1eba0c',1,'legacy.hpp']]],
+  ['quad2_9',['quad2',['../legacy_8hpp.html#a38a586e4637b95b9cd03c2590dbde40e',1,'legacy.hpp']]],
+  ['quadedge_5fsize_10',['quadedge_size',['../legacy_8hpp.html#a8c0a403d8ed5517d0fb3d74e8ed63984',1,'legacy.hpp']]],
+  ['quadto_11',['quadto',['../structfz__path__walker.html#aee316a0c03ba6b26373b3bf6047da243',1,'fz_path_walker']]],
+  ['quality_5flevel_12',['quality_level',['../imgproc__c_8h.html#a8d2a3c6f6473a32a7a4d6df5bc38c57d',1,'imgproc_c.h']]],
+  ['qualitylevel_13',['qualityLevel',['../classcv_1_1gpu_1_1_good_features_to_track_detector___g_p_u.html#a9f5f8a99c745336967c83605ab01adf4',1,'cv::gpu::GoodFeaturesToTrackDetector_GPU::qualityLevel()'],['../classcv_1_1ocl_1_1_good_features_to_track_detector___o_c_l.html#a19ac1b83bc6602c6a1a966e904ca215f',1,'cv::ocl::GoodFeaturesToTrackDetector_OCL::qualityLevel()']]],
+  ['quantizationlevels_14',['quantizationLevels',['../classcv_1_1gpu_1_1_g_m_g___g_p_u.html#a562b4ad84c3c15f6c952e26304a854f1',1,'cv::gpu::GMG_GPU::quantizationLevels()'],['../classcv_1_1_background_subtractor_g_m_g.html#a224018fca5b296390d4c94943c19202a',1,'cv::BackgroundSubtractorGMG::quantizationLevels()']]],
+  ['query_5fpoints_15',['query_points',['../legacy_8hpp.html#afda9b18eb394e7ba7c2a99ccba0dfa03',1,'legacy.hpp']]],
+  ['queryidx_16',['queryIdx',['../structcv_1_1of2_1_1_i_match.html#a380026520adf3bc4f23d88e555c0c416',1,'cv::of2::IMatch']]]
+];

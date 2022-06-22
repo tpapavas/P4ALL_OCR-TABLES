@@ -1,0 +1,7 @@
+digraph "cv::gpu::device::vec_math_detail::SatCastHelper&lt; 2, VecD &gt;"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::gpu::device::vec\l_math_detail::SatCastHelper\l\< 2, VecD \>\n||+ cast()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

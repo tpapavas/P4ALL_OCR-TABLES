@@ -1,0 +1,7 @@
+digraph "fz_output"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{fz_output\n|+ state\l+ write\l+ seek\l+ tell\l+ close\l+ drop\l+ as_stream\l+ truncate\l+ bp\l+ wp\l+ ep\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

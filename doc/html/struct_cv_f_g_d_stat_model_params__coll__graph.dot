@@ -1,0 +1,7 @@
+digraph "CvFGDStatModelParams"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{CvFGDStatModelParams\n|+ Lc\l+ N1c\l+ N2c\l+ Lcc\l+ N1cc\l+ N2cc\l+ is_obj_without_holes\l+ perform_morphing\l+ alpha1\l+ alpha2\l+ alpha3\l+ delta\l+ T\l+ minArea\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

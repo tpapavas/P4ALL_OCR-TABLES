@@ -1,0 +1,20 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="cv::videostab::InpainterBase",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1videostab_1_1_inpainter_base.html",tooltip=" "];
+  Node0 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 [label="cv::videostab::ColorAverage\lInpainter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1videostab_1_1_color_average_inpainter.html",tooltip=" "];
+  Node0 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="cv::videostab::ColorInpainter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1videostab_1_1_color_inpainter.html",tooltip=" "];
+  Node0 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="cv::videostab::Consistent\lMosaicInpainter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1videostab_1_1_consistent_mosaic_inpainter.html",tooltip=" "];
+  Node0 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="cv::videostab::Inpainting\lPipeline",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1videostab_1_1_inpainting_pipeline.html",tooltip=" "];
+  Node0 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="cv::videostab::MotionInpainter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1videostab_1_1_motion_inpainter.html",tooltip=" "];
+  Node0 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="cv::videostab::NullInpainter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1videostab_1_1_null_inpainter.html",tooltip=" "];
+}

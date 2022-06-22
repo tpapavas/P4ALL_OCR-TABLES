@@ -1,0 +1,14 @@
+digraph "fz_default_colorspaces"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{fz_default_colorspaces\n|+ refs\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +cmyk\n+gray\n+oi\n+rgb" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{fz_colorspace\n|+ type\l+ flags\l+ n\l+ name\l+ high\l+ lookup\l+ indexed\l+ eval\l+ drop\l+ tint\l+ colorant\l+ separation\l+ u\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__colorspace.html",tooltip=" "];
+  Node3 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +key_storable" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{fz_key_storable\n|+ store_key_refs\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__key__storable.html",tooltip=" "];
+  Node4 -> Node3 [color="grey25",fontsize="10",style="solid",label=" +storable" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{fz_storable\n|+ refs\l+ drop\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__storable.html",tooltip=" "];
+  Node2 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +base" ,arrowhead="odiamond",fontname="Helvetica"];
+}

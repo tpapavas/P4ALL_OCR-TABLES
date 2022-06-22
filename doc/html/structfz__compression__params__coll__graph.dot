@@ -1,0 +1,7 @@
+digraph "fz_compression_params"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{fz_compression_params\n|+ type\l+ color_transform\l+ jpeg\l+ smask_in_data\l+ jpx\l+ globals\l+ embedded\l+ jbig2\l+ columns\l+ rows\land 14 more...\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

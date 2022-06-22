@@ -1,0 +1,21 @@
+digraph "fz_context"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{fz_context\n|+ user\l+ seed48\l+ throw_on_repair\l+ handler\l+ style\l+ tuning\l+ font\l+ colorspace\l+ store\l+ glyph_cache\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +alloc" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{fz_alloc_context\n|+ user\l+ malloc\l+ realloc\l+ free\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__alloc__context.html",tooltip=" "];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +locks" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{fz_locks_context\n|+ user\l+ lock\l+ unlock\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__locks__context.html",tooltip=" "];
+  Node4 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +error" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{fz_error_context\n|+ errcode\l+ print_user\l+ print\l+ message\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__error__context.html",tooltip=" "];
+  Node5 -> Node4 [color="grey25",fontsize="10",style="solid",label=" +stack\n+top" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{fz_error_stack_slot\n|+ state\l+ code\l+ buffer\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__error__stack__slot.html",tooltip=" "];
+  Node6 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +warn" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{fz_warn_context\n|+ print_user\l+ print\l+ count\l+ message\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__warn__context.html",tooltip=" "];
+  Node7 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +aa" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{fz_aa_context\n|+ hscale\l+ vscale\l+ scale\l+ bits\l+ text_bits\l+ min_line_width\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__aa__context.html",tooltip=" "];
+  Node8 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +stddbg" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node8 [label="{fz_output\n|+ state\l+ write\l+ seek\l+ tell\l+ close\l+ drop\l+ as_stream\l+ truncate\l+ bp\l+ wp\l+ ep\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__output.html",tooltip=" "];
+}

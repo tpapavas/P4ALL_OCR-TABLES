@@ -1,0 +1,13 @@
+<map id="tesseract::TessResultRenderer" name="tesseract::TessResultRenderer">
+<area shape="rect" id="node1" title=" " alt="" coords="1018,5,1219,303"/>
+<area shape="rect" id="node2" href="$classtesseract_1_1_tess_alto_renderer.html" title=" " alt="" coords="5,358,192,479"/>
+<area shape="rect" id="node3" href="$classtesseract_1_1_tess_box_text_renderer.html" title=" " alt="" coords="217,373,429,465"/>
+<area shape="rect" id="node4" href="$classtesseract_1_1_tess_h_ocr_renderer.html" title=" " alt="" coords="453,351,648,487"/>
+<area shape="rect" id="node5" href="$classtesseract_1_1_tess_l_s_t_m_box_renderer.html" title=" " alt="" coords="672,373,893,465"/>
+<area shape="rect" id="node6" href="$classtesseract_1_1_tess_osd_renderer.html" title=" " alt="" coords="918,373,1106,465"/>
+<area shape="rect" id="node7" href="$classtesseract_1_1_tess_p_d_f_renderer.html" title=" " alt="" coords="1130,358,1321,479"/>
+<area shape="rect" id="node8" href="$classtesseract_1_1_tess_text_renderer.html" title=" " alt="" coords="1345,373,1535,465"/>
+<area shape="rect" id="node9" href="$classtesseract_1_1_tess_tsv_renderer.html" title=" " alt="" coords="1559,351,1742,487"/>
+<area shape="rect" id="node10" href="$classtesseract_1_1_tess_unlv_renderer.html" title=" " alt="" coords="1766,373,1954,465"/>
+<area shape="rect" id="node11" href="$classtesseract_1_1_tess_word_str_box_renderer.html" title=" " alt="" coords="1978,365,2171,472"/>
+</map>

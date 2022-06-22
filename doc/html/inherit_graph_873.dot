@@ -1,0 +1,28 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="tesseract::TessResultRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_result_renderer.html",tooltip=" "];
+  Node0 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 [label="tesseract::TessAltoRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_alto_renderer.html",tooltip=" "];
+  Node0 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="tesseract::TessBoxTextRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_box_text_renderer.html",tooltip=" "];
+  Node0 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="tesseract::TessHOcrRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_h_ocr_renderer.html",tooltip=" "];
+  Node0 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="tesseract::TessLSTMBoxRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_l_s_t_m_box_renderer.html",tooltip=" "];
+  Node0 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="tesseract::TessOsdRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_osd_renderer.html",tooltip=" "];
+  Node0 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="tesseract::TessPDFRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_p_d_f_renderer.html",tooltip=" "];
+  Node0 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="tesseract::TessTextRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_text_renderer.html",tooltip=" "];
+  Node0 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="tesseract::TessTsvRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_tsv_renderer.html",tooltip=" "];
+  Node0 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="tesseract::TessUnlvRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_unlv_renderer.html",tooltip=" "];
+  Node0 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="tesseract::TessWordStrBox\lRenderer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classtesseract_1_1_tess_word_str_box_renderer.html",tooltip=" "];
+}

@@ -1,0 +1,9 @@
+digraph "fz_error_context"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{fz_error_context\n|+ errcode\l+ print_user\l+ print\l+ message\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +stack\n+top" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{fz_error_stack_slot\n|+ state\l+ code\l+ buffer\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__error__stack__slot.html",tooltip=" "];
+}

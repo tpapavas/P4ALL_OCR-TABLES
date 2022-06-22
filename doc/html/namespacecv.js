@@ -1,0 +1,37 @@
+var namespacecv =
+[
+    [ "detail", "namespacecv_1_1detail.html", "namespacecv_1_1detail" ],
+    [ "gpu", "namespacecv_1_1gpu.html", "namespacecv_1_1gpu" ],
+    [ "ocl", "namespacecv_1_1ocl.html", "namespacecv_1_1ocl" ],
+    [ "of2", "namespacecv_1_1of2.html", "namespacecv_1_1of2" ],
+    [ "superres", "namespacecv_1_1superres.html", "namespacecv_1_1superres" ],
+    [ "videostab", "namespacecv_1_1videostab.html", "namespacecv_1_1videostab" ],
+    [ "BackgroundSubtractor", "classcv_1_1_background_subtractor.html", "classcv_1_1_background_subtractor" ],
+    [ "BackgroundSubtractorGMG", "classcv_1_1_background_subtractor_g_m_g.html", "classcv_1_1_background_subtractor_g_m_g" ],
+    [ "BackgroundSubtractorMOG", "classcv_1_1_background_subtractor_m_o_g.html", "classcv_1_1_background_subtractor_m_o_g" ],
+    [ "BackgroundSubtractorMOG2", "classcv_1_1_background_subtractor_m_o_g2.html", "classcv_1_1_background_subtractor_m_o_g2" ],
+    [ "CompressedRectilinearPortraitWarper", "classcv_1_1_compressed_rectilinear_portrait_warper.html", "classcv_1_1_compressed_rectilinear_portrait_warper" ],
+    [ "CompressedRectilinearWarper", "classcv_1_1_compressed_rectilinear_warper.html", "classcv_1_1_compressed_rectilinear_warper" ],
+    [ "CylindricalWarper", "classcv_1_1_cylindrical_warper.html", "classcv_1_1_cylindrical_warper" ],
+    [ "CylindricalWarperGpu", "classcv_1_1_cylindrical_warper_gpu.html", "classcv_1_1_cylindrical_warper_gpu" ],
+    [ "FisheyeWarper", "classcv_1_1_fisheye_warper.html", "classcv_1_1_fisheye_warper" ],
+    [ "MercatorWarper", "classcv_1_1_mercator_warper.html", "classcv_1_1_mercator_warper" ],
+    [ "PaniniPortraitWarper", "classcv_1_1_panini_portrait_warper.html", "classcv_1_1_panini_portrait_warper" ],
+    [ "PaniniWarper", "classcv_1_1_panini_warper.html", "classcv_1_1_panini_warper" ],
+    [ "PlaneWarper", "classcv_1_1_plane_warper.html", "classcv_1_1_plane_warper" ],
+    [ "PlaneWarperGpu", "classcv_1_1_plane_warper_gpu.html", "classcv_1_1_plane_warper_gpu" ],
+    [ "Retina", "classcv_1_1_retina.html", "classcv_1_1_retina" ],
+    [ "SphericalWarper", "classcv_1_1_spherical_warper.html", "classcv_1_1_spherical_warper" ],
+    [ "SphericalWarperGpu", "classcv_1_1_spherical_warper_gpu.html", "classcv_1_1_spherical_warper_gpu" ],
+    [ "StereographicWarper", "classcv_1_1_stereographic_warper.html", "classcv_1_1_stereographic_warper" ],
+    [ "Stitcher", "classcv_1_1_stitcher.html", "classcv_1_1_stitcher" ],
+    [ "TransverseMercatorWarper", "classcv_1_1_transverse_mercator_warper.html", "classcv_1_1_transverse_mercator_warper" ],
+    [ "WarperCreator", "classcv_1_1_warper_creator.html", "classcv_1_1_warper_creator" ],
+    [ "RETINA_COLORSAMPLINGMETHOD", "namespacecv.html#a1009b8eb0eac217a128fb5752f887287", [
+      [ "RETINA_COLOR_RANDOM", "namespacecv.html#a1009b8eb0eac217a128fb5752f887287a60a491295228ec02bc9f039fd43bef69", null ],
+      [ "RETINA_COLOR_DIAGONAL", "namespacecv.html#a1009b8eb0eac217a128fb5752f887287a2603090974ddec4844d916c501ef8363", null ],
+      [ "RETINA_COLOR_BAYER", "namespacecv.html#a1009b8eb0eac217a128fb5752f887287ae25654a2d7593d5c498cc9229374895a", null ]
+    ] ],
+    [ "initModule_nonfree", "namespacecv.html#a1f895e87da11c1f66d7e450a70ee0545", null ],
+    [ "PrintTo", "namespacecv.html#aee3bd5d97ac1f1e04c83aa742c7065f0", null ]
+];

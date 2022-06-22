@@ -1,0 +1,26 @@
+var structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params =
+[
+    [ "EncoderParams", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#ac6403ce2c85b153e57b344e06a699947", null ],
+    [ "EncoderParams", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#ac087b9a5755f5a1134b7f0bc66396ece", null ],
+    [ "load", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a042642bf72e282fe922043ef5cff5985", null ],
+    [ "save", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#af591c3117f83dd3f9993a709d9e4ff2e", null ],
+    [ "AvgBitrate", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a5657bdc4de3af96ee035224dd51b2393", null ],
+    [ "ClearStat", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a4ef869f90a92ed5a0b8d2006be7ab8a5", null ],
+    [ "DeblockMode", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a712c6a083474dbb952938a79b60494da", null ],
+    [ "DIMode", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a1357785fd66cf9bbeb59f53c9f26d272", null ],
+    [ "DisableCabac", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a18d86a510a2cbfc3ce1d3472d25f95ea", null ],
+    [ "DisableSPSPPS", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a17662d6c7d0b1f3589def107beca90e5", null ],
+    [ "DynamicGOP", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#aae0defd9124971f130a87e290e1192a6", null ],
+    [ "ForceIDR", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#ab2b29f99a5b143efafaaf743e29a4726", null ],
+    [ "ForceIntra", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a309ba8d5e846e37b7d4c81fa33c2d8e8", null ],
+    [ "IDR_Period", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a3f54de95350cd16c19eca4d94c67220b", null ],
+    [ "NaluFramingType", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a981c1acdb0268ffba66b07a69aff7ee5", null ],
+    [ "P_Interval", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#af6b2b5aaffb429643ac6fdb3a97995c9", null ],
+    [ "PeakBitrate", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a572b0afd18117efae3803ae2d8a503cd", null ],
+    [ "Presets", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#ae06f33b98e491272074a44dafd794191", null ],
+    [ "ProfileLevel", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#ac93bcbbd6eb30a44da3f8a47e30dbb14", null ],
+    [ "QP_Level_InterB", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a1414850923c34e0e0325944400c68cf6", null ],
+    [ "QP_Level_InterP", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#a8ca625f276ae370de7acbd3e49976743", null ],
+    [ "QP_Level_Intra", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#aa2c27da41d1d6d971946ee3febfef652", null ],
+    [ "RCType", "structcv_1_1gpu_1_1_video_writer___g_p_u_1_1_encoder_params.html#acf99e6f1c0a59c82c0dfdb7e7d09240f", null ]
+];

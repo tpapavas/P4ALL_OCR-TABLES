@@ -1,0 +1,15 @@
+digraph "P4ALL_OCR-TABLES/vendor/leptonica/include"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_a3bd05f65bdec180ad3650e522ccccd3 {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", style="filled,dashed,", label="leptonica", fontname="Helvetica", fontsize="10", URL="dir_a3bd05f65bdec180ad3650e522ccccd3.html"]
+  subgraph clusterdir_b520adec55946b588962862c15d273f3 {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", style="filled,bold,", label="", fontname="Helvetica", fontsize="10", URL="dir_b520adec55946b588962862c15d273f3.html"]
+    dir_b520adec55946b588962862c15d273f3 [shape=plaintext, label="include"];
+  dir_1f50342970f6ff5285a1a6b056b03baf [shape=box, label="leptonica", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_1f50342970f6ff5285a1a6b056b03baf.html"];
+  }
+  }
+}

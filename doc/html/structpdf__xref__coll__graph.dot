@@ -1,0 +1,19 @@
+digraph "pdf_xref"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{pdf_xref\n|+ num_objects\l+ trailer\l+ pre_repair_trailer\l+ end_ofs\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +subsec" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{pdf_xref_subsec\n|+ len\l+ start\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpdf__xref__subsec.html",tooltip=" "];
+  Node2 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +next" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +table" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{pdf_xref_entry\n|+ type\l+ marked\l+ gen\l+ num\l+ ofs\l+ stm_ofs\l+ obj\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpdf__xref__entry.html",tooltip=" "];
+  Node4 -> Node3 [color="grey25",fontsize="10",style="solid",label=" +stm_buf" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{fz_buffer\n|+ refs\l+ data\l+ cap\l+ len\l+ unused_bits\l+ shared\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__buffer.html",tooltip=" "];
+  Node5 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +unsaved_sigs\n+unsaved_sigs_end" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{pdf_unsaved_sig\n|+ field\l+ byte_range_start\l+ byte_range_end\l+ contents_start\l+ contents_end\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpdf__unsaved__sig.html",tooltip=" "];
+  Node6 -> Node5 [color="grey25",fontsize="10",style="solid",label=" +signer" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{pdf_pkcs7_signer\n|+ keep\l+ drop\l+ get_signing_name\l+ max_digest_size\l+ create_digest\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpdf__pkcs7__signer.html",tooltip=" "];
+  Node5 -> Node5 [color="grey25",fontsize="10",style="solid",label=" +next" ,arrowhead="odiamond",fontname="Helvetica"];
+}

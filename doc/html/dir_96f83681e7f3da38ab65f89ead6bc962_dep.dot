@@ -1,0 +1,18 @@
+digraph "P4ALL_OCR-TABLES/vendor/OpenCV/build/include/opencv2/gpu/device"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_c5592f7875483e77b6458e0a4db5ccc2 {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", style="filled,dashed,", label="gpu", fontname="Helvetica", fontsize="10", URL="dir_c5592f7875483e77b6458e0a4db5ccc2.html"]
+  subgraph clusterdir_96f83681e7f3da38ab65f89ead6bc962 {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", style="filled,bold,", label="", fontname="Helvetica", fontsize="10", URL="dir_96f83681e7f3da38ab65f89ead6bc962.html"]
+    dir_96f83681e7f3da38ab65f89ead6bc962 [shape=plaintext, label="device"];
+  dir_6b8bd7f8cd24623d2aa3bb3db95567e9 [shape=box, label="detail", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_6b8bd7f8cd24623d2aa3bb3db95567e9.html"];
+  }
+  }
+  dir_d0a90bd216adce98fc120e9c5b54a47b [shape=box, label="core", style="", fillcolor="#edf0f7", color="grey50", URL="dir_d0a90bd216adce98fc120e9c5b54a47b.html"];
+  dir_96f83681e7f3da38ab65f89ead6bc962->dir_6b8bd7f8cd24623d2aa3bb3db95567e9 [headlabel="6", labeldistance=1.5 headhref="dir_000010_000008.html"];
+  dir_96f83681e7f3da38ab65f89ead6bc962->dir_d0a90bd216adce98fc120e9c5b54a47b [headlabel="1", labeldistance=1.5 headhref="dir_000010_000006.html"];
+}

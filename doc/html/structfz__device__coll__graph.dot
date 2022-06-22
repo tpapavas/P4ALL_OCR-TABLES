@@ -1,0 +1,12 @@
+digraph "fz_device"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{fz_device\n|+ refs\l+ hints\l+ flags\l+ close_device\l+ drop_device\l+ fill_path\l+ stroke_path\l+ clip_path\l+ clip_stroke_path\l+ fill_text\land 21 more...\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +d1_rect" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{fz_rect\n|+ x0\l+ y0\l+ x1\l+ y1\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__rect.html",tooltip=" "];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +container" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{fz_device_container\l_stack\n|+ type\l+ user\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__device__container__stack.html",tooltip=" "];
+  Node2 -> Node3 [color="grey25",fontsize="10",style="solid",label=" +scissor" ,arrowhead="odiamond",fontname="Helvetica"];
+}

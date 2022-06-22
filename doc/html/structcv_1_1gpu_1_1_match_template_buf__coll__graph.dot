@@ -1,0 +1,9 @@
+digraph "cv::gpu::MatchTemplateBuf"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::gpu::MatchTemplateBuf\n|+ imagef\l+ templf\l+ images\l+ image_sums\l+ image_sqsums\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +user_block_size" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{Size\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",tooltip=" "];
+}

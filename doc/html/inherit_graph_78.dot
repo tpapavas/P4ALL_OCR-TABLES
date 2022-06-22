@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="cv::gpu::device::color\l_detail::Lab2RGB\< T, scn,\l dcn, srgb, blueIdx \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcv_1_1gpu_1_1device_1_1color__detail_1_1_lab2_r_g_b.html",tooltip=" "];
+}

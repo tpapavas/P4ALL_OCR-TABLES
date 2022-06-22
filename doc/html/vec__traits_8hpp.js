@@ -1,0 +1,26 @@
+var vec__traits_8hpp =
+[
+    [ "cv::gpu::device::double8", "structcv_1_1gpu_1_1device_1_1double8.html", "structcv_1_1gpu_1_1device_1_1double8" ],
+    [ "cv::gpu::device::TypeVec< schar, 1 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_011_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_011_01_4" ],
+    [ "cv::gpu::device::TypeVec< schar, 2 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_012_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_012_01_4" ],
+    [ "cv::gpu::device::TypeVec< schar, 3 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_013_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_013_01_4" ],
+    [ "cv::gpu::device::TypeVec< schar, 4 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_014_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_014_01_4" ],
+    [ "cv::gpu::device::TypeVec< schar, 8 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_018_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01schar_00_018_01_4" ],
+    [ "cv::gpu::device::TypeVec< bool, 1 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_011_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_011_01_4" ],
+    [ "cv::gpu::device::TypeVec< bool, 2 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_012_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_012_01_4" ],
+    [ "cv::gpu::device::TypeVec< bool, 3 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_013_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_013_01_4" ],
+    [ "cv::gpu::device::TypeVec< bool, 4 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_014_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_014_01_4" ],
+    [ "cv::gpu::device::TypeVec< bool, 8 >", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_018_01_4.html", "structcv_1_1gpu_1_1device_1_1_type_vec_3_01bool_00_018_01_4" ],
+    [ "cv::gpu::device::VecTraits< char >", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char_01_4.html", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char_01_4" ],
+    [ "cv::gpu::device::VecTraits< schar >", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01schar_01_4.html", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01schar_01_4" ],
+    [ "cv::gpu::device::VecTraits< char1 >", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char1_01_4.html", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char1_01_4" ],
+    [ "cv::gpu::device::VecTraits< char2 >", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char2_01_4.html", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char2_01_4" ],
+    [ "cv::gpu::device::VecTraits< char3 >", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char3_01_4.html", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char3_01_4" ],
+    [ "cv::gpu::device::VecTraits< char4 >", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char4_01_4.html", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char4_01_4" ],
+    [ "cv::gpu::device::VecTraits< char8 >", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char8_01_4.html", "structcv_1_1gpu_1_1device_1_1_vec_traits_3_01char8_01_4" ],
+    [ "OPENCV_GPU_IMPLEMENT_TYPE_VEC", "vec__traits_8hpp.html#a750fca5c408f0ac4aff7f83d865e6b16", null ],
+    [ "OPENCV_GPU_IMPLEMENT_VEC_TRAITS", "vec__traits_8hpp.html#abc3da4592179ba1fe4b6425eb0d52168", null ],
+    [ "__align__", "vec__traits_8hpp.html#a3fed59ae9a2b88f5e6810f4332f983a8", null ],
+    [ "__align__", "vec__traits_8hpp.html#aabdc5ba76ff95d501a031b01e6af98cc", null ],
+    [ "__align__", "vec__traits_8hpp.html#afc5ac17654c1cd59f78d1d2ab43cfae8", null ]
+];

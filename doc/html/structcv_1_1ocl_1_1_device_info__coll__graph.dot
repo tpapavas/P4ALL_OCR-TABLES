@@ -1,0 +1,12 @@
+digraph "cv::ocl::DeviceInfo"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::ocl::DeviceInfo\n|+ _id\l+ deviceType\l+ deviceVendorId\l+ maxWorkGroupSize\l+ maxWorkItemSizes\l+ maxComputeUnits\l+ localMemorySize\l+ maxMemAllocSize\l+ deviceVersionMajor\l+ deviceVersionMinor\l+ haveDoubleSupport\l+ isUnifiedMemory\l+ isIntelDevice\l|+ DeviceInfo()\l+ ~DeviceInfo()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +compilationExtraOptions\n+deviceDriverVersion\n+deviceExtensions\n+deviceName\n+deviceProfile\n+deviceVendor\n+deviceVersion" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{string\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",tooltip=" "];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +platform" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{cv::ocl::PlatformInfo\n|+ _id\l+ platformVersionMajor\l+ platformVersionMinor\l+ devices\l|+ PlatformInfo()\l+ ~PlatformInfo()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcv_1_1ocl_1_1_platform_info.html",tooltip=" "];
+  Node2 -> Node3 [color="grey25",fontsize="10",style="solid",label=" +platformExtensons\n+platformName\n+platformProfile\n+platformVendor\n+platformVersion" ,arrowhead="odiamond",fontname="Helvetica"];
+}

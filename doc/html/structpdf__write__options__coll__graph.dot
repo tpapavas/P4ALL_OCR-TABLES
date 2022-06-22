@@ -1,0 +1,7 @@
+digraph "pdf_write_options"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{pdf_write_options\n|+ do_incremental\l+ do_pretty\l+ do_ascii\l+ do_compress\l+ do_compress_images\l+ do_compress_fonts\l+ do_decompress\l+ do_garbage\l+ do_linear\l+ do_clean\land 8 more...\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

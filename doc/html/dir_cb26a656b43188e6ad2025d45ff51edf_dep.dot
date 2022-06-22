@@ -1,0 +1,11 @@
+digraph "P4ALL_OCR-TABLES/vendor/MuPDF/include/mupdf/fitz"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_682a3544a28d06ab7707c6573cece4d1 {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", style="filled,dashed,", label="mupdf", fontname="Helvetica", fontsize="10", URL="dir_682a3544a28d06ab7707c6573cece4d1.html"]
+  dir_cb26a656b43188e6ad2025d45ff51edf [shape=box, label="fitz", style="filled,bold,", fillcolor="#edf0f7", color="grey25", URL="dir_cb26a656b43188e6ad2025d45ff51edf.html"];
+  }
+}
