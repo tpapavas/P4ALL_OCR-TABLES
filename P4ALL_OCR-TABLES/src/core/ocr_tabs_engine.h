@@ -66,6 +66,7 @@ namespace ocrt {
 
 		ocrt::Document doc;
 		ImageProcessor img_processor;
+		DrawingHandler drawing_handler;
 
 		std::vector<std::vector<std::vector<int>>> tmp_col;
 		std::vector<std::vector<int>> table_area;

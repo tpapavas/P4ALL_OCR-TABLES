@@ -156,7 +156,7 @@ namespace ocrt {
 
 		for (int i = 0; i < doc.tables.size(); i++) {
 			for (int j = 0; j < doc.tables[i].columns.size(); j++) {
-				for (int k = 0; k < doc.tables[j].columns.size(); k++) {
+				for (int k = 0; k < doc.tables[i].columns[j].size(); k++) {
 					int tmp = doc.tables[i].columns[j][k][0];
 					int bottom = doc.words[tmp].box[3];
 					int top = doc.words[tmp].box[1];

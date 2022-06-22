@@ -7,6 +7,7 @@ workspace "P4ALL_OCR-TABLES"
     }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+dependencesdir ="C:/dev"
 
 project "P4ALL_OCR-TABLES"
     location "P4ALL_OCR-TABLES"
@@ -29,10 +30,10 @@ project "P4ALL_OCR-TABLES"
     }
 
     libdirs {
-        "%{prj.name}/vendor/OpenCV/build/x86/vc14/lib",
-        "%{prj.name}/vendor/MuPDF/platform/win32/Debug",
-        "%{prj.name}/vendor/tesseract/lib",
-        "%{prj.name}/vendor/leptonica/leptonica/lib"
+        "C:/OpenCV–2.4.13.6/build/x86/vc14/lib",
+        dependencesdir .. "/mupdf-1.19.0/platform/win32/Debug",
+        dependencesdir .. "/vcpkg/packages/tesseract_x86-windows/lib",
+        dependencesdir .. "/vcpkg/packages/leptonica_x86-windows/lib"
     }
 
     links {

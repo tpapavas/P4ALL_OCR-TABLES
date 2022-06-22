@@ -468,8 +468,10 @@ namespace ocrt {
 
 			tmp_seg_dims.push_back(doc.words[FindMinLeftBoxInSegment(tmp)].box[BOX_LEFT]);
 			tmp_seg_dims.push_back(doc.words[FindMaxRightBoxInSegment(tmp)].box[BOX_RIGHT]);
-			doc.lines[i].segments.push_back(tmp);
-			doc.lines[i].segments_dims.push_back(tmp_seg_dims);
+			segments.push_back(tmp);
+			segments_dims.push_back(tmp_seg_dims);
+			doc.lines[i].segments = segments;
+			doc.lines[i].segments_dims = segments_dims;
 			
 			/*cout << endl << endl;
 			for (int k = 0; k < line_segments_dims.size(); k++) {
@@ -839,8 +841,8 @@ namespace ocrt {
 									if (doc.lines[doc.tables[i].rows[j - 1]].segments[z] == doc.tables[i].columns[s][h]) {
 										exist0 = true;
 										if ((k < doc.lines[doc.tables[i].rows[j]].segments.size() - 1) &&
-											/*(words[line_segments[table_rows[i][j - 1]][z][line_segments[table_rows[i][j - 1]][z].size() - 1]][BOX_RIGHT] >= words[line_segments[table_rows[i][j]][k + 1][0]][BOX_LEFT])*/
-											doc.lines[doc.tables[i].rows[j - 1]].segments_dims[z][SEG_RIGHT] >= doc.lines[doc.tables[i].rows[j]].segments_dims[k + 1][SEG_LEFT]) {
+											(doc.words[doc.lines[doc.tables[i].rows[j - 1]].segments[z][doc.lines[doc.tables[i].rows[j - 1]].segments[z].size() - 1]].box[BOX_RIGHT] >= doc.words[doc.lines[doc.tables[i].rows[j]].segments[k + 1][0]].box[BOX_LEFT])
+											/*doc.lines[doc.tables[i].rows[j - 1]].segments_dims[z][SEG_RIGHT] >= doc.lines[doc.tables[i].rows[j]].segments_dims[k + 1][SEG_LEFT]*/) {
 											exist0 = false;
 										}
 									}
@@ -923,14 +925,10 @@ namespace ocrt {
 		for (int i = doc.tables.size() - 1; i >= 0; i--) {
 			if ((doc.tables[i].multi_rows.size() < 2) && (doc.tables[i].multi_rows[0].size() < 2 || doc.tables[i].columns[0].size() < 2)) {
 				for (unsigned s = 0; s < doc.tables[i].multi_rows[0].size(); s++) { doc.lines[doc.tables[i].multi_rows[0][s]].type = LineType::TEXT; }
-				doc.tables[i].multi_rows.erase(doc.tables[i].multi_rows.begin() + i);
-				doc.tables[i].columns.erase(doc.tables[i].columns.begin() + i);
 				doc.tables.erase(doc.tables.begin() + i);
 			} else if ((doc.tables[i].multi_rows.size() < 3) && (doc.tables[i].multi_rows[0].size() < 2) && (doc.tables[i].multi_rows[1].size() < 2)) {
 				for (unsigned s = 0; s < doc.tables[i].multi_rows[0].size(); s++) { doc.lines[doc.tables[i].multi_rows[0][s]].type = LineType::TEXT; }
 				for (unsigned s = 0; s < doc.tables[i].multi_rows[1].size(); s++) { doc.lines[doc.tables[i].multi_rows[1][s]].type = LineType::TEXT; }
-				doc.tables[i].multi_rows.erase(doc.tables[i].multi_rows.begin() + i);
-				doc.tables[i].columns.erase(doc.tables[i].columns.begin() + i);
 				doc.tables.erase(doc.tables.begin() + i);
 			}
 		}
@@ -993,6 +991,7 @@ namespace ocrt {
 					//table_Rows.erase(table_Rows.begin()+i);
 					doc.tables[i].multi_rows.erase(doc.tables[i].multi_rows.begin() + i);
 					doc.col_dims.erase(doc.col_dims.begin() + i);
+					doc.tables.erase(doc.tables.begin() + i);
 				}
 			}
 		}
@@ -1316,6 +1315,7 @@ namespace ocrt {
 			return false;
 		}
 		CreateTableMultiRows();
+		//drawing_handler.DrawRows(this->test, this->doc);
 		FindColumnSize();	 ////
 		FinalizeGrid(); ////
 
@@ -1590,11 +1590,9 @@ namespace ocrt {
 		// Tables that end up having only one column, are discarded and treated as simple text
 		for (int i = doc.tables.size() - 1; i >= 0; i--) {
 			if (doc.tables[i].columns.size() < 2) {
-				doc.tables[i].columns.erase(doc.tables[i].columns.begin() + i);
 				for (int j = 0; j < doc.tables[i].rows.size(); j++) {
 					doc.lines[doc.tables[i].rows[j]].type = LineType::TEXT;
 				}
-				doc.tables[i].rows.erase(doc.tables[i].rows.begin() + i);
 				doc.tables.erase(doc.tables.begin() + i);
 			}
 		}
@@ -1670,7 +1668,6 @@ namespace ocrt {
 				for (int k = 0; k < doc.tables[i].rows.size(); k++) {
 					doc.lines[doc.tables[i].rows[k]].type = LineType::TEXT;
 				}
-				doc.tables[i].rows.erase(doc.tables[i].rows.begin() + i);
 				doc.tables.erase(doc.tables.begin() + i);
 			}
 		}

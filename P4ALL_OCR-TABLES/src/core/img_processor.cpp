@@ -260,7 +260,6 @@ namespace ocrt {
 		ImageProcessor::ThresholdImage(temp, output, BinarizationType::SAUVOLA);  //get binary image
 		//ClearImage(input, output);
 		//drawing_handler.DrawGridlessImage(output);
-		cv::erode(output, output, cv::Mat(), cv::Point(-1, -1), 3);
 
 		//cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));
 		//cv::morphologyEx(output, output, cv::MORPH_CLOSE, se, cv::Point(-1, -1), 2);  //new operation #1
@@ -277,7 +276,7 @@ namespace ocrt {
 
 		OCR_LOG_MSG("Done!\n");
 		pixDestroy(&px); 
-		ImageProcessor::ThresholdImage(temp, output, BinarizationType::SAUVOLA);
+		ImageProcessor::ThresholdImage(input, output, BinarizationType::SAUVOLA);
 
 		//ImageProcessor::ThresholdImage(input, output);
 	}

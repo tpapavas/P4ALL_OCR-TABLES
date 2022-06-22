@@ -199,7 +199,8 @@ namespace ocrt {
 							file << "</tr>\n";
 						}
 						file << "</table>\n<p>\n";
-						while (doc.lines[x].type == LineType::TABLE) { x++; }
+						int num_of_lines = doc.lines.size();
+						while (x < num_of_lines && doc.lines[x].type == LineType::TABLE) { x++; }
 						x--;
 						table_num++;
 					}
