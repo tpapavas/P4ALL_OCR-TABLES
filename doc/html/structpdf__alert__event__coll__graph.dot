@@ -1,7 +1,0 @@
-digraph "pdf_alert_event"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{pdf_alert_event\n|+ message\l+ icon_type\l+ button_group_type\l+ title\l+ check_box_message\l+ initially_checked\l+ finally_checked\l+ button_pressed\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-}

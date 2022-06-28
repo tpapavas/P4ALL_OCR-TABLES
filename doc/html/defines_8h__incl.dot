@@ -1,9 +1,0 @@
-digraph "P4ALL_OCR-TABLES/vendor/OpenCV/build/include/opencv2/flann/defines.h"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="P4ALL_OCR-TABLES/vendor\l/OpenCV/build/include\l/opencv2/flann/defines.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="config.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_open_c_v_2build_2include_2opencv2_2flann_2config_8h.html",tooltip=" "];
-}

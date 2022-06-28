@@ -59,6 +59,7 @@ namespace ocrt {
 		ocrt::Document getDoc() { return doc; }
 	private:
 		cv::Mat test, initial, raw;
+		std::vector<cv::Mat> img_pages;
 		tesseract::TessBaseAPI tess;
 
 		clock_t start;
@@ -70,7 +71,6 @@ namespace ocrt {
 
 		std::vector<std::vector<std::vector<int>>> tmp_col;
 		std::vector<std::vector<int>> table_area;
-
 		std::vector<std::vector<Word>> words_;
 		std::vector<std::vector<Line>> lines_;
 

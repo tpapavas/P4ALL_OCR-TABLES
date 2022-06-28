@@ -50,4 +50,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ocr_tabs_api.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>

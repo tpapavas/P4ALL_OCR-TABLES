@@ -1,7 +1,0 @@
-digraph "fz_pcl_options"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{fz_pcl_options\n|+ features\l+ odd_page_init\l+ even_page_init\l+ tumble\l+ duplex_set\l+ duplex\l+ paper_size\l+ manual_feed_set\l+ manual_feed\l+ media_position_set\l+ media_position\l+ orientation\l+ page_count\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-}

@@ -1,8 +1,0 @@
-<map id="cv::detail::SphericalWarperGpu" name="cv::detail::SphericalWarperGpu">
-<area shape="rect" id="node1" title=" " alt="" coords="51,848,253,984"/>
-<area shape="rect" id="node2" href="$classcv_1_1detail_1_1_spherical_warper.html" title=" " alt="" coords="63,707,241,799"/>
-<area shape="rect" id="node3" href="$classcv_1_1detail_1_1_rotation_warper_base.html" title=" " alt="" coords="59,448,245,657"/>
-<area shape="rect" id="node4" href="$classcv_1_1detail_1_1_rotation_warper.html" title=" " alt="" coords="5,205,176,385"/>
-<area shape="rect" id="node5" href="$structcv_1_1detail_1_1_spherical_projector.html" title=" " alt="" coords="200,249,387,341"/>
-<area shape="rect" id="node6" href="$structcv_1_1detail_1_1_projector_base.html" title=" " alt="" coords="212,5,375,156"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="cv::gpu::BruteForceMatcher_GPU_base" name="cv::gpu::BruteForceMatcher_GPU_base">
-<area shape="rect" id="node1" title=" " alt="" coords="309,5,491,435"/>
-<area shape="rect" id="node2" href="$classcv_1_1gpu_1_1_b_f_matcher___g_p_u.html" title=" " alt="" coords="5,497,176,575"/>
-<area shape="rect" id="node3" href="$classcv_1_1gpu_1_1_brute_force_matcher___g_p_u_3_01_hamming_01_4.html" title=" " alt="" coords="201,483,389,589"/>
-<area shape="rect" id="node4" href="$classcv_1_1gpu_1_1_brute_force_matcher___g_p_u_3_01_l1_3_01_t_01_4_01_4.html" title=" " alt="" coords="413,483,601,589"/>
-<area shape="rect" id="node5" href="$classcv_1_1gpu_1_1_brute_force_matcher___g_p_u_3_01_l2_3_01_t_01_4_01_4.html" title=" " alt="" coords="625,483,813,589"/>
-</map>

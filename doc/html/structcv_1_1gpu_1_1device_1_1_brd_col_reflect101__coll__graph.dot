@@ -1,7 +1,0 @@
-digraph "cv::gpu::device::BrdColReflect101&lt; D &gt;"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{cv::gpu::device::BrdColReflect101\< D \>\n|+ last_row\l|+ BrdColReflect101()\l+ BrdColReflect101()\l+ idx_row_low()\l+ idx_row_high()\l+ idx_row()\l+ at_low()\l+ at_high()\l+ at()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-}

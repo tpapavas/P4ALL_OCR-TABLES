@@ -1,8 +1,0 @@
-<map id="cv::detail::PlaneWarperGpu" name="cv::detail::PlaneWarperGpu">
-<area shape="rect" id="node1" title=" " alt="" coords="22,921,202,1116"/>
-<area shape="rect" id="node2" href="$classcv_1_1detail_1_1_plane_warper.html" title=" " alt="" coords="34,707,190,872"/>
-<area shape="rect" id="node3" href="$classcv_1_1detail_1_1_rotation_warper_base.html" title=" " alt="" coords="19,448,205,657"/>
-<area shape="rect" id="node4" href="$classcv_1_1detail_1_1_rotation_warper.html" title=" " alt="" coords="5,205,176,385"/>
-<area shape="rect" id="node5" href="$structcv_1_1detail_1_1_plane_projector.html" title=" " alt="" coords="201,249,367,341"/>
-<area shape="rect" id="node6" href="$structcv_1_1detail_1_1_projector_base.html" title=" " alt="" coords="203,5,365,156"/>
-</map>

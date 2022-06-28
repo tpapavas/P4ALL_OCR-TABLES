@@ -1,9 +1,0 @@
-digraph "fz_store_hash"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{fz_store_hash\n|+ drop\l+ ptr\l+ i\l+ pi\l+ pir\l+ id\l+ has_shape\l+ has_group_alpha\l+ m\l+ ptr\land 13 more...\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +r" ,arrowhead="odiamond",fontname="Helvetica"];
-  Node2 [label="{fz_irect\n|+ x0\l+ y0\l+ x1\l+ y1\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfz__irect.html",tooltip=" "];
-}

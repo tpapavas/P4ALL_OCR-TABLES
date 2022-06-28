@@ -1,7 +1,0 @@
-digraph "CvStereoLineCoeff"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{CvStereoLineCoeff\n|+ Xcoef\l+ XcoefA\l+ XcoefB\l+ XcoefAB\l+ Ycoef\l+ YcoefA\l+ YcoefB\l+ YcoefAB\l+ Zcoef\l+ ZcoefA\l+ ZcoefB\l+ ZcoefAB\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-}

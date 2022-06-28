@@ -8,15 +8,12 @@
 
 #ifdef _SERVICE //dont forget to change the subsystem
 #include <Windows.h>
-#include "core/ocr_tabs_engine.h"
 #include "ocr_tabs_api.h"
 //#define OCR_DEBUG 1
 #include "debug.h"
 
-int main(int argc, char *argv[])
-{
-	if (argc>1) 
-	{
+int main(int argc, char *argv[]) {
+	if (argc>1) {
 		std::string filename(argv[1]);
 		if (filename.empty()) { 
 			return 1;

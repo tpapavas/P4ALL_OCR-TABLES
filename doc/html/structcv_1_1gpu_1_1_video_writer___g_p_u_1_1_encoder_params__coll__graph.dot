@@ -1,7 +1,0 @@
-digraph "cv::gpu::VideoWriter_GPU::EncoderParams"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{cv::gpu::VideoWriter\l_GPU::EncoderParams\n|+ P_Interval\l+ IDR_Period\l+ DynamicGOP\l+ RCType\l+ AvgBitrate\l+ PeakBitrate\l+ QP_Level_Intra\l+ QP_Level_InterP\l+ QP_Level_InterB\l+ DeblockMode\land 9 more...\l|+ EncoderParams()\l+ EncoderParams()\l+ load()\l+ save()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-}

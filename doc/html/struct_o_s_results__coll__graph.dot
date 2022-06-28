@@ -1,9 +1,0 @@
-digraph "OSResults"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{OSResults\n|+ orientations\l+ scripts_na\l+ unicharset\l|+ OSResults()\l+ update_best_orientation()\l+ set_best_orientation()\l+ update_best_script()\l+ get_best_script()\l+ accumulate()\l+ print_scores()\l+ print_scores()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +best_result" ,arrowhead="odiamond",fontname="Helvetica"];
-  Node2 [label="{OSBestResult\n|+ orientation_id\l+ script_id\l+ sconfidence\l+ oconfidence\l|+ OSBestResult()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_o_s_best_result.html",tooltip=" "];
-}

@@ -1,7 +1,0 @@
-digraph "cv::Retina::RetinaParameters::IplMagnoParameters"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{cv::Retina::RetinaParameters\l::IplMagnoParameters\n|+ normaliseOutput\l+ parasolCells_beta\l+ parasolCells_tau\l+ parasolCells_k\l+ amacrinCellsTemporalCutFrequency\l+ V0CompressionParameter\l+ localAdaptintegration_tau\l+ localAdaptintegration_k\l|+ IplMagnoParameters()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-}

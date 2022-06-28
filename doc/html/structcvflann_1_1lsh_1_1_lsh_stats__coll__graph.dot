@@ -1,7 +1,0 @@
-digraph "cvflann::lsh::LshStats"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{cvflann::lsh::LshStats\n|+ bucket_sizes_\l+ n_buckets_\l+ bucket_size_mean_\l+ bucket_size_median_\l+ bucket_size_min_\l+ bucket_size_max_\l+ bucket_size_std_dev\l+ size_histogram_\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-}

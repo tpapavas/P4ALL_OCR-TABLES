@@ -21,8 +21,8 @@ namespace ocrt {
 		fail = false;
 		fail_msg = "";
 		//tess.Init("..\\tessdata", "eng");
-		tess.Init("tessdata", "ell");
-		//tess.Init("tessdata", "eng");
+		//tess.Init("tessdata", "ell");
+		tess.Init("tessdata", "eng");
 
 		img_processor = ImageProcessor(test);
 
@@ -47,6 +47,7 @@ namespace ocrt {
 		//test=SegmentImage(img);
 		test = img.clone();
 		initial = test.clone();
+		img_pages.push_back(test);
 	}
 
 	/**
@@ -139,6 +140,7 @@ namespace ocrt {
 			if (doc.words[i].box[BOX_BOTTOM] >= doc.page_bottom) { doc.page_bottom = doc.words[i].box[BOX_BOTTOM]; }
 		}
 
+		vconcat(img_pages, test); //concatenate image pages in one Mat
 		OCR_LOG_MSG("\nPROCESSING OVERALL DOCUMENT\n\n");
 	}
 
@@ -620,7 +622,6 @@ namespace ocrt {
 		for (int i = 0; i < doc.tables.size(); i++) {
 			if (doc.tables[i].rows.size() < 2) {
 				doc.lines[doc.tables[i].rows[0]].type = LineType::TEXT;
-				doc.tables[i].rows.erase(doc.tables[i].rows.begin() + i);
 				doc.tables.erase(doc.tables.begin() + i);
 			}
 		}
@@ -841,8 +842,8 @@ namespace ocrt {
 									if (doc.lines[doc.tables[i].rows[j - 1]].segments[z] == doc.tables[i].columns[s][h]) {
 										exist0 = true;
 										if ((k < doc.lines[doc.tables[i].rows[j]].segments.size() - 1) &&
-											(doc.words[doc.lines[doc.tables[i].rows[j - 1]].segments[z][doc.lines[doc.tables[i].rows[j - 1]].segments[z].size() - 1]].box[BOX_RIGHT] >= doc.words[doc.lines[doc.tables[i].rows[j]].segments[k + 1][0]].box[BOX_LEFT])
-											/*doc.lines[doc.tables[i].rows[j - 1]].segments_dims[z][SEG_RIGHT] >= doc.lines[doc.tables[i].rows[j]].segments_dims[k + 1][SEG_LEFT]*/) {
+											/*(doc.words[doc.lines[doc.tables[i].rows[j - 1]].segments[z][doc.lines[doc.tables[i].rows[j - 1]].segments[z].size() - 1]].box[BOX_RIGHT] >= doc.words[doc.lines[doc.tables[i].rows[j]].segments[k + 1][0]].box[BOX_LEFT])*/
+											doc.lines[doc.tables[i].rows[j - 1]].segments_dims[z][SEG_RIGHT] >= doc.lines[doc.tables[i].rows[j]].segments_dims[k + 1][SEG_LEFT]) {
 											exist0 = false;
 										}
 									}
@@ -1249,7 +1250,7 @@ namespace ocrt {
 		}
 
 		std::cout << " Done in " << aux::endClock() << "s \n";
-		return (img);
+		return img;
 	}
 
 	void OCRTabsEngine::WriteHTML(std::string& filename) {
@@ -1315,7 +1316,6 @@ namespace ocrt {
 			return false;
 		}
 		CreateTableMultiRows();
-		//drawing_handler.DrawRows(this->test, this->doc);
 		FindColumnSize();	 ////
 		FinalizeGrid(); ////
 

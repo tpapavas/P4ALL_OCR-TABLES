@@ -1,4 +1,0 @@
-var structcv_1_1gpu_1_1device_1_1reduce__key__val__detail_1_1_static_if_3_01true_00_01_t1_00_01_t2_01_4 =
-[
-    [ "type", "structcv_1_1gpu_1_1device_1_1reduce__key__val__detail_1_1_static_if_3_01true_00_01_t1_00_01_t2_01_4.html#ae82f0beb7fa469571389e209bdd5eee5", null ]
-];

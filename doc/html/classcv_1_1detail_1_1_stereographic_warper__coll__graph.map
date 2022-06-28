@@ -1,7 +1,0 @@
-<map id="cv::detail::StereographicWarper" name="cv::detail::StereographicWarper">
-<area shape="rect" id="node1" title=" " alt="" coords="30,707,194,799"/>
-<area shape="rect" id="node2" href="$classcv_1_1detail_1_1_rotation_warper_base.html" title=" " alt="" coords="8,448,216,657"/>
-<area shape="rect" id="node3" href="$classcv_1_1detail_1_1_rotation_warper.html" title=" " alt="" coords="5,205,176,385"/>
-<area shape="rect" id="node4" href="$structcv_1_1detail_1_1_stereographic_projector.html" title=" " alt="" coords="201,242,362,349"/>
-<area shape="rect" id="node5" href="$structcv_1_1detail_1_1_projector_base.html" title=" " alt="" coords="200,5,363,156"/>
-</map>

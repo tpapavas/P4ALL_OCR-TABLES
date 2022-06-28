@@ -1,7 +1,0 @@
-<map id="cv::detail::Estimator" name="cv::detail::Estimator">
-<area shape="rect" id="node1" title=" " alt="" coords="251,5,389,112"/>
-<area shape="rect" id="node2" href="$classcv_1_1detail_1_1_bundle_adjuster_base.html" title=" " alt="" coords="99,160,309,545"/>
-<area shape="rect" id="node5" href="$classcv_1_1detail_1_1_homography_based_estimator.html" title=" " alt="" coords="333,307,541,399"/>
-<area shape="rect" id="node3" href="$classcv_1_1detail_1_1_bundle_adjuster_ray.html" title=" " alt="" coords="5,601,197,678"/>
-<area shape="rect" id="node4" href="$classcv_1_1detail_1_1_bundle_adjuster_reproj.html" title=" " alt="" coords="222,593,391,685"/>
-</map>

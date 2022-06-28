@@ -1,7 +1,0 @@
-digraph "EANYCODE_CHAR"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{EANYCODE_CHAR\n|+ char_code\l+ left\l+ right\l+ top\l+ bottom\l+ font_index\l+ confidence\l+ point_size\l+ blanks\l+ formatting\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-}

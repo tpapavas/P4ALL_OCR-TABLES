@@ -1,8 +1,0 @@
-digraph "Graphical Class Hierarchy"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node0 [label="cv::gpu::device::vec\l_distance_detail::VecDiffCached\lCalculator\< THREAD_DIM, MAX\l_LEN, false \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcv_1_1gpu_1_1device_1_1vec__distance__detail_1_1_vec_diff_cached_calculator_3_01_t_h_r_e_a6c0c11556125441119979a09d593b6c4.html",tooltip=" "];
-}
