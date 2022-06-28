@@ -17,35 +17,37 @@ See [CHANGES.md](docs/CHANGES.md) for changes on version 1.1.
 ### Repo
 The repository contains 5 directories
 
-1) [ocr_tables](https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/ocr_tables) : This includes the source code that generates the OCR_TABLES.dll.
+1) [ocr_tables](P4ALL_OCR-TABLES/src) : This includes the source code that generates the OCR_TABLES.dll.
 
-2) [App](https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/App) : This includes the source code for a sample Qt-based app to test the module.
+2) [App](App) : This includes the source code for a sample Qt-based app to test the module.
 
-3) [tessdata](https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/tessdata) : This includes the traindata necessary for the OCR engine. The tessdata folder must be in the same directory as the executable.
+3) [tessdata](P4ALL_OCR-TABLES/tessdata) : This includes the traindata necessary for the OCR engine. The tessdata folder must be in the same directory as the executable.
 
-4) [test files](https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/test%20files) : This includes some sample files to test the module.
+4) [test files](P4ALL_OCR-TABLES/test%20files) : This includes some sample files to test the module.
 
-5) [WebService](https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/WebService) : This includes the .php files for a sample webservice implementation.
+5) [WebService](WebService) : This includes the .php files for a sample webservice implementation.
 
 ### Dependencies
 The following libraries were used to build and test the module. Older subversions may also be compatible.
 
-[OpenCV 2.4.9](http://opencv.org/) : Used by the ocr_tables module for image processing.\
-opencv_core249.lib, opencv_highgui249.lib, opencv_imgproc249.lib.
+[OpenCV 2.4.13](http://opencv.org/) : Used by the ocr_tables module for image processing.\
+opencv_core2413.lib, opencv_highgui2413.lib, opencv_imgproc2413.lib.
 
-[MuPDF 1.7](http://mupdf.com/) : Used by the ocr_tables module for pdf processing.\
+[MuPDF 1.19.0](http://mupdf.com/) : Used by the ocr_tables module for pdf processing.\
 libmupdf.lib, libthirdparty.lib.\
 Also set /NODEFAULTLIB:"libcmt.lib".
 
-[Tesseract-OCR 3.0.4](https://github.com/tesseract-ocr/tesseract) : Used by the ocr_tables module for OCR.\
-libtesseract304.lib
+[Tesseract-OCR 4.1](https://github.com/tesseract-ocr/tesseract) : Used by the ocr_tables module for OCR.\
+tesseract41.lib
 
-[Leptonica 1.7.1](http://www.leptonica.com/) : Used by Tesseract-OCR for image processing, and for Document Image Analysis  
-liblept171.lib
+[Leptonica 1.82.0](http://www.leptonica.com/) : Used by Tesseract-OCR for image processing, and for Document Image Analysis  
+leptonica-1.82.0.lib
 
-[Qt 5.1.0](http://www.qt.io/download-open-source/) : Used to build the sample App.\
+[Qt 5.15.2](http://www.qt.io/download-open-source/) : Used to build the sample App.\
 qtmain.lib, Qt5Core.lib, Qt5Gui.lib, Qt5Widgets.lib.\
 Also don't forget to copy Qt's "platforms" directory in the same folder as the executable.
+
+See [INSTALL_DEPS.md](docs/INSTALL_DEPS.md) for installation instuctions on dependencies.
 
 ### Building
 #### Windows 
@@ -61,13 +63,21 @@ See full list in Premake Docs [Using Premake](https://premake.github.io/docs/Usi
 ### DLL Usage
 ```
 //include header file
-#include "ocr_tabs.h"
-//create object  
-ocr_tabs* tab = new ocr_tabs();
-//process pdf file
-tab->pdf2html(filename.toStdString();
-//process image file
-tab->img2html(filename.toStdString();
+#include <iostream>
+#include "ocr_tabs_api.h"
+
+int main(int argc, char *argv[]) {
+  std::string filename = "test files/001.png";
+
+	// Extract tables and creates html file
+  // with OCRTabsAPI object
+  ocrt::OCRTabsAPI tabs_api(filename);
+  tabs_api.ExtractTables();  
+
+  // or with OCRTabsEngine object  
+  ocrt::OCRTabsEngine tab = ocrt::OCRTabsEngine();
+  tab.doc2html(ocrt::IMG, filename, "", false);
+}
 ```
 
 ### Standalone App usage
