@@ -1,0 +1,7 @@
+digraph "cv::gpu::device::transform_detail::OpUnroller&lt; 1 &gt;"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::gpu::device::transform\l_detail::OpUnroller\< 1 \>\n||+ unroll()\l+ unroll()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

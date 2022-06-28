@@ -1,0 +1,5 @@
+<map id="ocrt::OCRTabsEngine::AssignRowsToTables" name="ocrt::OCRTabsEngine::AssignRowsToTables">
+<area shape="rect" id="node1" title="Assign Rows to tables. Each table must start with a type&#45;2 line. So if there are initially type&#45;3 wit..." alt="" coords="5,23,160,65"/>
+<area shape="rect" id="node2" href="$namespaceocrt_1_1aux.html#aea68d4931191f826f0649b3afd73d5c8" title="Counts time units passed since last call of startClock()." alt="" coords="211,5,345,32"/>
+<area shape="rect" id="node3" href="$namespaceocrt_1_1aux.html#a011f97881ac2c9c396731e1116b19d7d" title="&quot;Starts the clock&quot;; Save current time." alt="" coords="208,56,348,83"/>
+</map>

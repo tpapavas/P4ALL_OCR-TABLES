@@ -1,0 +1,19 @@
+digraph "cvtest::TestInfo"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cvtest::TestInfo\n|+ code\l+ rng_seed\l+ rng_seed0\l+ test_case_idx\l|+ TestInfo()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +test" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{cvtest::BaseTest\n|# test_case_count\l|+ BaseTest()\l+ ~BaseTest()\l+ run()\l+ safe_run()\l+ get_name()\l+ can_do_fast_forward()\l+ clear()\l# read_params()\l# get_test_case_count()\l# prepare_test_case()\l# validate_test_results()\l# run_func()\l# update_progress()\l# find_param()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcvtest_1_1_base_test.html",tooltip=" "];
+  Node3 -> Node2 [color="grey25",fontsize="10",style="solid",label=" #name" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{string\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",tooltip=" "];
+  Node4 -> Node2 [color="grey25",fontsize="10",style="solid",label=" #ts" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{cvtest::TS\n||+ TS()\l+ ~TS()\l+ init()\l+ printf()\l+ vprintf()\l+ update_context()\l+ get_current_test_info()\l+ set_failed_test_info()\l+ set_gtest_status()\l+ get_file_storage()\l+ get_rng()\l+ get_err_code()\l+ get_test_case_count\l_scale()\l+ get_data_path()\l+ ptr()\l+ str_from_code()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcvtest_1_1_t_s.html",tooltip=" "];
+  Node5 -> Node4 [color="grey25",fontsize="10",style="solid",label=" #rng" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{RNG\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",tooltip=" "];
+  Node1 -> Node4 [color="grey25",fontsize="10",style="solid",label=" #current_test_info" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 -> Node4 [color="grey25",fontsize="10",style="solid",label=" #data_path\n#output_buf" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 -> Node4 [color="grey25",fontsize="10",style="solid",label=" #params" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{cvtest::TSParams\n|+ rng_seed\l+ use_optimized\l+ test_case_count_scale\l|+ TSParams()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcvtest_1_1_t_s_params.html",tooltip=" "];
+}

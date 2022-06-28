@@ -1,0 +1,7 @@
+digraph "cv::gpu::device::BrdRowReplicate&lt; D &gt;"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::gpu::device::BrdRowReplicate\< D \>\n|+ last_col\l|+ BrdRowReplicate()\l+ BrdRowReplicate()\l+ idx_col_low()\l+ idx_col_high()\l+ idx_col()\l+ at_low()\l+ at_high()\l+ at()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

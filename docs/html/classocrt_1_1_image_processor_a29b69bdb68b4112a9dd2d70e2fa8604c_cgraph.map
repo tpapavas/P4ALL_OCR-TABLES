@@ -1,0 +1,6 @@
+<map id="ocrt::ImageProcessor::DoPageSegmentation" name="ocrt::ImageProcessor::DoPageSegmentation">
+<area shape="rect" id="node1" title="Segment input pix and extract segmentation blocks." alt="" coords="5,71,161,112"/>
+<area shape="rect" id="node2" href="$structocrt_1_1_segmentation_blocks.html#a04600e302d96795f7f78e342668ee082" title=" " alt="" coords="209,5,381,47"/>
+<area shape="rect" id="node3" href="$classocrt_1_1_image_processor.html#ac5de8f8149199ada4be9a8458ca6ae39" title=" " alt="" coords="222,71,369,112"/>
+<area shape="rect" id="node4" href="$structocrt_1_1_segmentation_blocks.html#aa91c32a620f5cdaf9cef2a34b4180cc2" title=" " alt="" coords="209,136,381,177"/>
+</map>

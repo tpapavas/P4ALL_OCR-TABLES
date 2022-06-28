@@ -1,0 +1,21 @@
+<map id="ocrt::OCRTabsAPI::OCRTabsEngineCall" name="ocrt::OCRTabsAPI::OCRTabsEngineCall">
+<area shape="rect" id="node1" title=" " alt="" coords="5,496,199,537"/>
+<area shape="rect" id="node2" href="$classocrt_1_1_o_c_r_tabs_engine.html#a625d781c911058d65551d3d3746de239" title=" " alt="" coords="257,136,405,177"/>
+<area shape="rect" id="node5" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3728b58200e59ace7d14ead9f3ffd51e" title="Assign Rows to tables. Each table must start with a type&#45;2 line. So if there are initially type&#45;3 wit..." alt="" coords="253,201,408,243"/>
+<area shape="rect" id="node6" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3cdae3b684e8055ec441c83e1e0b9c54" title="Create text Segments for each line. If the horizontal distance between two word boxes is smaller than..." alt="" coords="255,267,406,308"/>
+<area shape="rect" id="node7" href="$classocrt_1_1_o_c_r_tabs_engine.html#a23d4265bea1b3513ce65486d1d3fff84" title=" " alt="" coords="255,332,406,373"/>
+<area shape="rect" id="node8" href="$classocrt_1_1_o_c_r_tabs_engine.html#a8aefc470b0855e9e740a603231791356" title=" " alt="" coords="251,397,410,439"/>
+<area shape="rect" id="node9" href="$classocrt_1_1_o_c_r_tabs_engine.html#a1cf0c1eed2c3995e61e6ce196e931772" title=" " alt="" coords="257,463,405,504"/>
+<area shape="rect" id="node10" href="$classocrt_1_1_o_c_r_tabs_engine.html#ad3f88dc0c1f45427eba8da9f6f29f211" title=" " alt="" coords="257,528,405,569"/>
+<area shape="rect" id="node11" href="$classocrt_1_1_o_c_r_tabs_engine.html#a7b59ff20001dab4189f7d687c3e7ef9c" title="Retrieve all the recognized words and their bounding boxes from tesseract." alt="" coords="254,593,407,635"/>
+<area shape="rect" id="node12" href="$classocrt_1_1_o_c_r_tabs_engine.html#afbcf9e08d79372342c255e6161f5d509" title="Find the sizes of the columns. Each columns spans from the leftest single segment to the rightest sin..." alt="" coords="257,659,405,700"/>
+<area shape="rect" id="node13" href="$classocrt_1_1_o_c_r_tabs_engine.html#a953d4b7b3497ae173f296ac5cdc304c3" title="Find areas that can potentially be real tables. Such areas include consequential type&#45;2 and type&#45;3 li..." alt="" coords="257,724,405,765"/>
+<area shape="rect" id="node14" href="$classocrt_1_1_o_c_r_tabs_engine.html#a9f86a413776f7b5cf515f4c9cd6102a7" title=" " alt="" coords="257,789,405,831"/>
+<area shape="rect" id="node15" href="$classocrt_1_1_o_c_r_tabs_engine.html#a56fc69309eade1aa00bf30b43d810a12" title="Tesseract recognizes all data in the image." alt="" coords="257,5,405,47"/>
+<area shape="rect" id="node16" href="$classocrt_1_1_o_c_r_tabs_engine.html#a6c0dea9e380342799c44fb5be73d57c1" title=" " alt="" coords="257,855,405,896"/>
+<area shape="rect" id="node17" href="$classocrt_1_1_o_c_r_tabs_engine.html#a2f38f2408fad6c0f7969bfaa13a748bf" title="Preprocessing for multiple pages Concatenate pages (boxes, lines etc) as if there was one large page." alt="" coords="257,920,405,961"/>
+<area shape="rect" id="node18" href="$classocrt_1_1_o_c_r_tabs_engine.html#a365ff7ad2deb753a499fdc235d8a7381" title="Removes grid lines, because tesseract has a problem recognizing words when there are dark,..." alt="" coords="257,71,405,112"/>
+<area shape="rect" id="node19" href="$classocrt_1_1_o_c_r_tabs_engine.html#aac48b39ad09187a5cbd282e73a5d8a08" title=" " alt="" coords="247,985,415,1027"/>
+<area shape="rect" id="node3" href="$namespaceocrt_1_1aux.html#aea68d4931191f826f0649b3afd73d5c8" title="Counts time units passed since last call of startClock()." alt="" coords="465,379,600,406"/>
+<area shape="rect" id="node4" href="$namespaceocrt_1_1aux.html#a011f97881ac2c9c396731e1116b19d7d" title="&quot;Starts the clock&quot;; Save current time." alt="" coords="463,430,603,457"/>
+</map>

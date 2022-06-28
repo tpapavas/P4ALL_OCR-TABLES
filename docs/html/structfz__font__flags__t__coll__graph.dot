@@ -1,0 +1,7 @@
+digraph "fz_font_flags_t"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{fz_font_flags_t\n|+ is_mono\l+ is_serif\l+ is_bold\l+ is_italic\l+ ft_substitute\l+ ft_stretch\l+ fake_bold\l+ fake_italic\l+ has_opentype\l+ invalid_bbox\l+ cjk\l+ cjk_lang\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

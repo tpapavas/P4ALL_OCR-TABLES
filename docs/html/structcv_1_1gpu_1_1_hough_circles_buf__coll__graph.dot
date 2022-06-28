@@ -1,0 +1,9 @@
+digraph "cv::gpu::HoughCirclesBuf"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::gpu::HoughCirclesBuf\n|+ edges\l+ accum\l+ list\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="HoughCircles."];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +cannyBuf" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{cv::gpu::CannyBuf\n|+ dx\l+ dy\l+ mag\l+ map\l+ st1\l+ st2\l+ unused\l+ filterDX\l+ filterDY\l|+ create()\l+ release()\l+ CannyBuf()\l+ CannyBuf()\l+ CannyBuf()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcv_1_1gpu_1_1_canny_buf.html",tooltip=" "];
+}

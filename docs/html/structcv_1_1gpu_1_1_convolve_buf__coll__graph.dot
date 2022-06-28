@@ -1,0 +1,9 @@
+digraph "cv::gpu::ConvolveBuf"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::gpu::ConvolveBuf\n|+ spect_len\l+ image_spect\l+ templ_spect\l+ result_spect\l+ image_block\l+ templ_block\l+ result_data\l|+ create()\l+ estimateBlockSize()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +block_size\n+dft_size\n+result_size\n+user_block_size" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{Size\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",tooltip=" "];
+}

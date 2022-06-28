@@ -1,0 +1,11 @@
+digraph "cv::gpu::device::color_detail::RGB2HLS&lt; float, scn, dcn, bidx, hr &gt;"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::gpu::device::color\l_detail::RGB2HLS\< float,\l scn, dcn, bidx, hr \>\n||+ operator()()\l+ RGB2HLS()\l+ RGB2HLS()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{cv::gpu::device::unary\l_function\< TypeVec\< float,\l scn \>::vec_type, TypeVec\l\< float, dcn \>::vec_type \>\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcv_1_1gpu_1_1device_1_1unary__function.html",tooltip=" "];
+  Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node3 [label="{std::unary_function\l\< TypeVec\< float, scn\l \>::vec_type, TypeVec\l\< float, dcn \>::vec_type \>\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",tooltip=" "];
+}

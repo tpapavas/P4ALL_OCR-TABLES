@@ -1,0 +1,16 @@
+<map id="ocrt::OCRTabsEngine::PreprocessImage" name="ocrt::OCRTabsEngine::PreprocessImage">
+<area shape="rect" id="node1" title=" " alt="" coords="5,132,153,173"/>
+<area shape="rect" id="node2" href="$namespaceocrt_1_1aux.html#aea68d4931191f826f0649b3afd73d5c8" title="Counts time units passed since last call of startClock()." alt="" coords="408,21,543,47"/>
+<area shape="rect" id="node3" href="$classocrt_1_1_image_processor.html#aa39666d62dc575d499e8529c504f491c" title="Extracts image that contains only text areas, based on input blocks. It basically clears non text are..." alt="" coords="202,37,349,79"/>
+<area shape="rect" id="node4" href="$classocrt_1_1_image_processor.html#aee7429285deff50bb06773d8b150c208" title="Binarize and segment image." alt="" coords="202,223,349,264"/>
+<area shape="rect" id="node12" href="$classocrt_1_1_o_c_r_tabs_engine.html#a365ff7ad2deb753a499fdc235d8a7381" title="Removes grid lines, because tesseract has a problem recognizing words when there are dark,..." alt="" coords="201,103,349,144"/>
+<area shape="rect" id="node13" href="$namespaceocrt_1_1aux.html#a011f97881ac2c9c396731e1116b19d7d" title="&quot;Starts the clock&quot;; Save current time." alt="" coords="405,107,545,134"/>
+<area shape="rect" id="node14" href="$classocrt_1_1_image_processor.html#aa00b8b1759b5bc38c9d3107ec346337a" title=" " alt="" coords="202,288,349,329"/>
+<area shape="rect" id="node5" href="$classocrt_1_1_image_processor.html#a29b69bdb68b4112a9dd2d70e2fa8604c" title="Segment input pix and extract segmentation blocks." alt="" coords="397,289,553,331"/>
+<area shape="rect" id="node9" href="$classocrt_1_1_drawing_handler.html#a233a1b8c77f57a285978d814ba2d90f8" title=" " alt="" coords="404,355,547,396"/>
+<area shape="rect" id="node10" href="$classocrt_1_1_image_processor.html#a6e5373b441124f1a0a2553aff407db8d" title=" " alt="" coords="402,159,549,200"/>
+<area shape="rect" id="node11" href="$classocrt_1_1_image_processor.html#aeca052d12f5ff85d81e3c55a3ead40b3" title="Outputs a binary image." alt="" coords="402,224,549,265"/>
+<area shape="rect" id="node6" href="$structocrt_1_1_segmentation_blocks.html#a04600e302d96795f7f78e342668ee082" title=" " alt="" coords="601,224,773,265"/>
+<area shape="rect" id="node7" href="$classocrt_1_1_image_processor.html#ac5de8f8149199ada4be9a8458ca6ae39" title=" " alt="" coords="614,289,761,331"/>
+<area shape="rect" id="node8" href="$structocrt_1_1_segmentation_blocks.html#aa91c32a620f5cdaf9cef2a34b4180cc2" title=" " alt="" coords="601,355,773,396"/>
+</map>

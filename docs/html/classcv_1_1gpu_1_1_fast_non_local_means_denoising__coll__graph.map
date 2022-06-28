@@ -1,0 +1,3 @@
+<map id="cv::gpu::FastNonLocalMeansDenoising" name="cv::gpu::FastNonLocalMeansDenoising">
+<area shape="rect" id="node1" title="Fast (but approximate)version of non&#45;local means algorith similar to CPU function (running sums techn..." alt="" coords="5,5,196,112"/>
+</map>

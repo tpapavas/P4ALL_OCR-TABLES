@@ -1,0 +1,43 @@
+<map id="main" name="main">
+<area shape="rect" id="node1" title=" " alt="" coords="5,657,56,683"/>
+<area shape="rect" id="node2" href="$classocrt_1_1_o_c_r_tabs_a_p_i.html#acf8f2a3030580cc5c72b9ffc51b32f4e" title=" " alt="" coords="104,649,283,691"/>
+<area shape="rect" id="node3" href="$classocrt_1_1_o_c_r_tabs_engine.html#ab44bbb26a8574deb4da2fd168e81174d" title=" " alt="" coords="331,616,479,657"/>
+<area shape="rect" id="node41" href="$classocrt_1_1_file_handler.html#a5e8127f6446a163b1e246fb2e2594b20" title=" " alt="" coords="342,681,467,723"/>
+<area shape="rect" id="node4" href="$classocrt_1_1_o_c_r_tabs_engine.html#a625d781c911058d65551d3d3746de239" title=" " alt="" coords="760,645,908,687"/>
+<area shape="rect" id="node7" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3728b58200e59ace7d14ead9f3ffd51e" title="Assign Rows to tables. Each table must start with a type&#45;2 line. So if there are initially type&#45;3 wit..." alt="" coords="757,711,911,752"/>
+<area shape="rect" id="node8" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3cdae3b684e8055ec441c83e1e0b9c54" title="Create text Segments for each line. If the horizontal distance between two word boxes is smaller than..." alt="" coords="759,5,909,47"/>
+<area shape="rect" id="node9" href="$classocrt_1_1_o_c_r_tabs_engine.html#a23d4265bea1b3513ce65486d1d3fff84" title=" " alt="" coords="759,71,909,112"/>
+<area shape="rect" id="node10" href="$classocrt_1_1_o_c_r_tabs_engine.html#a8aefc470b0855e9e740a603231791356" title=" " alt="" coords="755,136,913,177"/>
+<area shape="rect" id="node11" href="$classocrt_1_1_o_c_r_tabs_engine.html#a1cf0c1eed2c3995e61e6ce196e931772" title=" " alt="" coords="760,201,908,243"/>
+<area shape="rect" id="node12" href="$classocrt_1_1_o_c_r_tabs_engine.html#a39b7e0e160aed3ea3bac82024ec997b3" title=" " alt="" coords="537,836,685,877"/>
+<area shape="rect" id="node13" href="$classocrt_1_1_o_c_r_tabs_engine.html#ad3f88dc0c1f45427eba8da9f6f29f211" title=" " alt="" coords="760,267,908,308"/>
+<area shape="rect" id="node14" href="$classocrt_1_1_o_c_r_tabs_engine.html#a7b59ff20001dab4189f7d687c3e7ef9c" title="Retrieve all the recognized words and their bounding boxes from tesseract." alt="" coords="757,332,911,373"/>
+<area shape="rect" id="node15" href="$classocrt_1_1_o_c_r_tabs_engine.html#afbcf9e08d79372342c255e6161f5d509" title="Find the sizes of the columns. Each columns spans from the leftest single segment to the rightest sin..." alt="" coords="760,397,908,439"/>
+<area shape="rect" id="node16" href="$classocrt_1_1_o_c_r_tabs_engine.html#a953d4b7b3497ae173f296ac5cdc304c3" title="Find areas that can potentially be real tables. Such areas include consequential type&#45;2 and type&#45;3 li..." alt="" coords="760,463,908,504"/>
+<area shape="rect" id="node17" href="$classocrt_1_1_o_c_r_tabs_engine.html#a56fc69309eade1aa00bf30b43d810a12" title="Tesseract recognizes all data in the image." alt="" coords="760,528,908,569"/>
+<area shape="rect" id="node18" href="$classocrt_1_1_o_c_r_tabs_engine.html#a6c0dea9e380342799c44fb5be73d57c1" title=" " alt="" coords="537,901,685,943"/>
+<area shape="rect" id="node19" href="$classocrt_1_1_o_c_r_tabs_engine.html#a2f38f2408fad6c0f7969bfaa13a748bf" title="Preprocessing for multiple pages Concatenate pages (boxes, lines etc) as if there was one large page." alt="" coords="537,967,685,1008"/>
+<area shape="rect" id="node20" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3b9c63550aba6a81bddc94b347edad98" title=" " alt="" coords="537,771,685,812"/>
+<area shape="rect" id="node32" href="$classocrt_1_1_o_c_r_tabs_engine.html#adbe11d56116b3cc330ac902ce5cd400d" title=" " alt="" coords="537,1032,685,1073"/>
+<area shape="rect" id="node36" href="$classocrt_1_1_o_c_r_tabs_engine.html#aac48b39ad09187a5cbd282e73a5d8a08" title=" " alt="" coords="527,1097,695,1139"/>
+<area shape="rect" id="node37" href="$classocrt_1_1_o_c_r_tabs_engine.html#a35004efca2e243723eb682de171002f6" title=" " alt="" coords="537,1163,685,1204"/>
+<area shape="rect" id="node38" href="$classocrt_1_1_o_c_r_tabs_engine.html#a21968f121f3902bb99f7159c819addf2" title="Sets the Mat img we will work on from input img (Mat)" alt="" coords="537,1228,685,1269"/>
+<area shape="rect" id="node39" href="$classocrt_1_1_o_c_r_tabs_engine.html#a1ce177f3d245c2458c903a15a307071e" title=" " alt="" coords="537,587,685,628"/>
+<area shape="rect" id="node5" href="$namespaceocrt_1_1aux.html#aea68d4931191f826f0649b3afd73d5c8" title="Counts time units passed since last call of startClock()." alt="" coords="984,409,1119,435"/>
+<area shape="rect" id="node6" href="$namespaceocrt_1_1aux.html#a011f97881ac2c9c396731e1116b19d7d" title="&quot;Starts the clock&quot;; Save current time." alt="" coords="981,466,1121,493"/>
+<area shape="rect" id="node21" href="$classocrt_1_1_image_processor.html#aa39666d62dc575d499e8529c504f491c" title="Extracts image that contains only text areas, based on input blocks. It basically clears non text are..." alt="" coords="761,893,907,935"/>
+<area shape="rect" id="node22" href="$classocrt_1_1_image_processor.html#aee7429285deff50bb06773d8b150c208" title="Binarize and segment image." alt="" coords="761,1076,907,1117"/>
+<area shape="rect" id="node30" href="$classocrt_1_1_o_c_r_tabs_engine.html#a365ff7ad2deb753a499fdc235d8a7381" title="Removes grid lines, because tesseract has a problem recognizing words when there are dark,..." alt="" coords="760,959,908,1000"/>
+<area shape="rect" id="node31" href="$classocrt_1_1_image_processor.html#aa00b8b1759b5bc38c9d3107ec346337a" title=" " alt="" coords="761,776,907,817"/>
+<area shape="rect" id="node23" href="$classocrt_1_1_image_processor.html#a29b69bdb68b4112a9dd2d70e2fa8604c" title="Segment input pix and extract segmentation blocks." alt="" coords="973,1011,1129,1052"/>
+<area shape="rect" id="node27" href="$classocrt_1_1_drawing_handler.html#a233a1b8c77f57a285978d814ba2d90f8" title=" " alt="" coords="980,1076,1123,1117"/>
+<area shape="rect" id="node28" href="$classocrt_1_1_image_processor.html#a6e5373b441124f1a0a2553aff407db8d" title=" " alt="" coords="978,1141,1125,1183"/>
+<area shape="rect" id="node29" href="$classocrt_1_1_image_processor.html#aeca052d12f5ff85d81e3c55a3ead40b3" title="Outputs a binary image." alt="" coords="978,945,1125,987"/>
+<area shape="rect" id="node24" href="$structocrt_1_1_segmentation_blocks.html#a04600e302d96795f7f78e342668ee082" title=" " alt="" coords="1177,945,1349,987"/>
+<area shape="rect" id="node25" href="$classocrt_1_1_image_processor.html#ac5de8f8149199ada4be9a8458ca6ae39" title=" " alt="" coords="1190,1011,1337,1052"/>
+<area shape="rect" id="node26" href="$structocrt_1_1_segmentation_blocks.html#aa91c32a620f5cdaf9cef2a34b4180cc2" title=" " alt="" coords="1177,1076,1349,1117"/>
+<area shape="rect" id="node33" href="$classocrt_1_1_o_c_r_tabs_engine.html#ac2790a8467b340366992ba5cd634324f" title=" " alt="" coords="760,1141,908,1183"/>
+<area shape="rect" id="node35" href="$classocrt_1_1_o_c_r_tabs_engine.html#a9f1a8d5da45564402543f09e87e53866" title=" " alt="" coords="743,1207,925,1248"/>
+<area shape="rect" id="node34" href="$classocrt_1_1_image_processor.html#aae1342fa77b55b1ad1ca4fc3fa5e50d9" title=" " alt="" coords="978,1207,1125,1248"/>
+<area shape="rect" id="node40" href="$namespaceocrt_1_1aux.html#a05f89928dbf25439b1ff7447935c6901" title="Write processed input doc into an HTML file." alt="" coords="761,594,907,621"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="cv::detail::BundleAdjusterRay" name="cv::detail::BundleAdjusterRay">
+<area shape="rect" id="node1" title=" " alt="" coords="318,749,510,827"/>
+<area shape="rect" id="node2" href="$classcv_1_1detail_1_1_bundle_adjuster_base.html" title=" " alt="" coords="309,388,519,700"/>
+<area shape="rect" id="node3" href="$classcv_1_1detail_1_1_estimator.html" title=" " alt="" coords="5,182,143,289"/>
+<area shape="rect" id="node4" title=" " alt="" coords="421,5,465,83"/>
+<area shape="rect" id="node5" href="$structcv_1_1detail_1_1_image_features.html" title=" " alt="" coords="167,189,333,281"/>
+<area shape="rect" id="node7" href="$structcv_1_1detail_1_1_matches_info.html" title=" " alt="" coords="357,145,508,325"/>
+<area shape="rect" id="node6" title=" " alt="" coords="215,5,263,83"/>
+<area shape="rect" id="node8" href="$struct_cv_term_criteria.html" title=" " alt="" coords="694,182,801,289"/>
+</map>

@@ -1,0 +1,24 @@
+digraph "P4ALL_OCR-TABLES/vendor/OpenCV/build/include/opencv2/stitching"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_82e4f955188045376eca4cdd73edc36b {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", style="filled,dashed,", label="opencv2", fontname="Helvetica", fontsize="10", URL="dir_82e4f955188045376eca4cdd73edc36b.html"]
+  dir_126bc893a34f338fb13307d15c2fd5e7 [shape=box, label="features2d", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_126bc893a34f338fb13307d15c2fd5e7.html"];
+  dir_e48ff80f84c28ff88b55c48d0d7e2325 [shape=box, label="imgproc", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_e48ff80f84c28ff88b55c48d0d7e2325.html"];
+  dir_d0a90bd216adce98fc120e9c5b54a47b [shape=box, label="core", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_d0a90bd216adce98fc120e9c5b54a47b.html"];
+  subgraph clusterdir_8055d10e4e712b974b3dfdb6fe1d4d5f {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", style="filled,bold,", label="", fontname="Helvetica", fontsize="10", URL="dir_8055d10e4e712b974b3dfdb6fe1d4d5f.html"]
+    dir_8055d10e4e712b974b3dfdb6fe1d4d5f [shape=plaintext, label="stitching"];
+  dir_e04dac5a864ecd91d347b5066e067913 [shape=box, label="detail", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_e04dac5a864ecd91d347b5066e067913.html"];
+  }
+  }
+  dir_8055d10e4e712b974b3dfdb6fe1d4d5f->dir_126bc893a34f338fb13307d15c2fd5e7 [headlabel="2", labeldistance=1.5 headhref="dir_000043_000011.html"];
+  dir_8055d10e4e712b974b3dfdb6fe1d4d5f->dir_d0a90bd216adce98fc120e9c5b54a47b [headlabel="15", labeldistance=1.5 headhref="dir_000043_000006.html"];
+  dir_8055d10e4e712b974b3dfdb6fe1d4d5f->dir_e04dac5a864ecd91d347b5066e067913 [headlabel="7", labeldistance=1.5 headhref="dir_000043_000009.html"];
+  dir_e04dac5a864ecd91d347b5066e067913->dir_126bc893a34f338fb13307d15c2fd5e7 [headlabel="1", labeldistance=1.5 headhref="dir_000009_000011.html"];
+  dir_e04dac5a864ecd91d347b5066e067913->dir_d0a90bd216adce98fc120e9c5b54a47b [headlabel="14", labeldistance=1.5 headhref="dir_000009_000006.html"];
+  dir_e04dac5a864ecd91d347b5066e067913->dir_e48ff80f84c28ff88b55c48d0d7e2325 [headlabel="1", labeldistance=1.5 headhref="dir_000009_000019.html"];
+}

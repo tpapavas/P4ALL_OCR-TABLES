@@ -1,0 +1,5 @@
+<map id="ocrt::aux::WriteHTML" name="ocrt::aux::WriteHTML">
+<area shape="rect" id="node1" title="Write processed input doc into an HTML file." alt="" coords="5,31,152,57"/>
+<area shape="rect" id="node2" href="$namespaceocrt_1_1aux.html#aea68d4931191f826f0649b3afd73d5c8" title="Counts time units passed since last call of startClock()." alt="" coords="203,5,337,32"/>
+<area shape="rect" id="node3" href="$namespaceocrt_1_1aux.html#a011f97881ac2c9c396731e1116b19d7d" title="&quot;Starts the clock&quot;; Save current time." alt="" coords="200,56,340,83"/>
+</map>

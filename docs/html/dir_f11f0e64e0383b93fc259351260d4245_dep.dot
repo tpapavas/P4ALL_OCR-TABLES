@@ -1,0 +1,11 @@
+digraph "P4ALL_OCR-TABLES/vendor/tesseract/include/tesseract"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_501bf32c6d1002899ed9821fe249f70f {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", style="filled,dashed,", label="include", fontname="Helvetica", fontsize="10", URL="dir_501bf32c6d1002899ed9821fe249f70f.html"]
+  dir_f11f0e64e0383b93fc259351260d4245 [shape=box, label="tesseract", style="filled,bold,", fillcolor="#edf0f7", color="grey25", URL="dir_f11f0e64e0383b93fc259351260d4245.html"];
+  }
+}

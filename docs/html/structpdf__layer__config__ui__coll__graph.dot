@@ -1,0 +1,7 @@
+digraph "pdf_layer_config_ui"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{pdf_layer_config_ui\n|+ text\l+ depth\l+ type\l+ selected\l+ locked\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

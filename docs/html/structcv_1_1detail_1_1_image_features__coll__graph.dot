@@ -1,0 +1,11 @@
+digraph "cv::detail::ImageFeatures"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::detail::ImageFeatures\n|+ img_idx\l+ keypoints\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +img_size" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{Size\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",tooltip=" "];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +descriptors" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{Mat\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",tooltip=" "];
+}

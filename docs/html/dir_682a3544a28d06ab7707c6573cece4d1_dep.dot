@@ -1,0 +1,20 @@
+digraph "P4ALL_OCR-TABLES/vendor/MuPDF/include/mupdf"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_c3d191ec12058351eee20a40bd159b97 {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", style="filled,dashed,", label="include", fontname="Helvetica", fontsize="10", URL="dir_c3d191ec12058351eee20a40bd159b97.html"]
+  subgraph clusterdir_682a3544a28d06ab7707c6573cece4d1 {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", style="filled,bold,", label="", fontname="Helvetica", fontsize="10", URL="dir_682a3544a28d06ab7707c6573cece4d1.html"]
+    dir_682a3544a28d06ab7707c6573cece4d1 [shape=plaintext, label="mupdf"];
+  dir_cb26a656b43188e6ad2025d45ff51edf [shape=box, label="fitz", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_cb26a656b43188e6ad2025d45ff51edf.html"];
+  dir_7bc99ee33518b961b27f61a1c2dfba90 [shape=box, label="helpers", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_7bc99ee33518b961b27f61a1c2dfba90.html"];
+  dir_bdf94d532916e445779b710dac2b7d3c [shape=box, label="pdf", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_bdf94d532916e445779b710dac2b7d3c.html"];
+  }
+  }
+  dir_682a3544a28d06ab7707c6573cece4d1->dir_bdf94d532916e445779b710dac2b7d3c [headlabel="15", labeldistance=1.5 headhref="dir_000030_000038.html"];
+  dir_682a3544a28d06ab7707c6573cece4d1->dir_cb26a656b43188e6ad2025d45ff51edf [headlabel="46", labeldistance=1.5 headhref="dir_000030_000012.html"];
+  dir_bdf94d532916e445779b710dac2b7d3c->dir_cb26a656b43188e6ad2025d45ff51edf [headlabel="1", labeldistance=1.5 headhref="dir_000038_000012.html"];
+}

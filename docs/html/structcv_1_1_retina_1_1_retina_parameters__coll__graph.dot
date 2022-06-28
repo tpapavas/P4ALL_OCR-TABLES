@@ -1,0 +1,11 @@
+digraph "cv::Retina::RetinaParameters"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::Retina::RetinaParameters\n||}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +OPLandIplParvo" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{cv::Retina::RetinaParameters\l::OPLandIplParvoParameters\n|+ colorMode\l+ normaliseOutput\l+ photoreceptorsLocalAdaptation\lSensitivity\l+ photoreceptorsTemporalConstant\l+ photoreceptorsSpatialConstant\l+ horizontalCellsGain\l+ hcellsTemporalConstant\l+ hcellsSpatialConstant\l+ ganglionCellsSensitivity\l|+ OPLandIplParvoParameters()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcv_1_1_retina_1_1_retina_parameters_1_1_o_p_land_ipl_parvo_parameters.html",tooltip=" "];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +IplMagno" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{cv::Retina::RetinaParameters\l::IplMagnoParameters\n|+ normaliseOutput\l+ parasolCells_beta\l+ parasolCells_tau\l+ parasolCells_k\l+ amacrinCellsTemporalCutFrequency\l+ V0CompressionParameter\l+ localAdaptintegration_tau\l+ localAdaptintegration_k\l|+ IplMagnoParameters()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcv_1_1_retina_1_1_retina_parameters_1_1_ipl_magno_parameters.html",tooltip=" "];
+}

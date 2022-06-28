@@ -1,0 +1,10 @@
+<map id="ocrt::ImageProcessor::PrepareAll" name="ocrt::ImageProcessor::PrepareAll">
+<area shape="rect" id="node1" title="Binarize and segment image." alt="" coords="5,169,152,211"/>
+<area shape="rect" id="node2" href="$classocrt_1_1_image_processor.html#a29b69bdb68b4112a9dd2d70e2fa8604c" title="Segment input pix and extract segmentation blocks." alt="" coords="200,71,356,112"/>
+<area shape="rect" id="node6" href="$classocrt_1_1_drawing_handler.html#a233a1b8c77f57a285978d814ba2d90f8" title=" " alt="" coords="207,136,349,177"/>
+<area shape="rect" id="node7" href="$classocrt_1_1_image_processor.html#a6e5373b441124f1a0a2553aff407db8d" title=" " alt="" coords="205,201,351,243"/>
+<area shape="rect" id="node8" href="$classocrt_1_1_image_processor.html#aeca052d12f5ff85d81e3c55a3ead40b3" title="Outputs a binary image." alt="" coords="205,267,351,308"/>
+<area shape="rect" id="node3" href="$structocrt_1_1_segmentation_blocks.html#a04600e302d96795f7f78e342668ee082" title=" " alt="" coords="404,5,576,47"/>
+<area shape="rect" id="node4" href="$classocrt_1_1_image_processor.html#ac5de8f8149199ada4be9a8458ca6ae39" title=" " alt="" coords="417,71,563,112"/>
+<area shape="rect" id="node5" href="$structocrt_1_1_segmentation_blocks.html#aa91c32a620f5cdaf9cef2a34b4180cc2" title=" " alt="" coords="404,136,576,177"/>
+</map>

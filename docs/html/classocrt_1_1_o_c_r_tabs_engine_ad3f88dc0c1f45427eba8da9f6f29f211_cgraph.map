@@ -1,0 +1,5 @@
+<map id="ocrt::OCRTabsEngine::FinalizeGrid" name="ocrt::OCRTabsEngine::FinalizeGrid">
+<area shape="rect" id="node1" title=" " alt="" coords="5,23,153,65"/>
+<area shape="rect" id="node2" href="$namespaceocrt_1_1aux.html#aea68d4931191f826f0649b3afd73d5c8" title="Counts time units passed since last call of startClock()." alt="" coords="204,5,339,32"/>
+<area shape="rect" id="node3" href="$namespaceocrt_1_1aux.html#a011f97881ac2c9c396731e1116b19d7d" title="&quot;Starts the clock&quot;; Save current time." alt="" coords="201,56,341,83"/>
+</map>

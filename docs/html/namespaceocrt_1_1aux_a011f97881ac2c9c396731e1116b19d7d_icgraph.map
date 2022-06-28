@@ -1,0 +1,24 @@
+<map id="ocrt::aux::startClock" name="ocrt::aux::startClock">
+<area shape="rect" id="node1" title="&quot;Starts the clock&quot;; Save current time." alt="" coords="975,475,1115,501"/>
+<area shape="rect" id="node2" href="$classocrt_1_1_o_c_r_tabs_engine.html#a625d781c911058d65551d3d3746de239" title=" " alt="" coords="773,238,921,279"/>
+<area shape="rect" id="node7" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3728b58200e59ace7d14ead9f3ffd51e" title="Assign Rows to tables. Each table must start with a type&#45;2 line. So if there are initially type&#45;3 wit..." alt="" coords="770,303,925,345"/>
+<area shape="rect" id="node8" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3cdae3b684e8055ec441c83e1e0b9c54" title="Create text Segments for each line. If the horizontal distance between two word boxes is smaller than..." alt="" coords="772,369,923,410"/>
+<area shape="rect" id="node9" href="$classocrt_1_1_o_c_r_tabs_engine.html#a23d4265bea1b3513ce65486d1d3fff84" title=" " alt="" coords="772,434,923,475"/>
+<area shape="rect" id="node10" href="$classocrt_1_1_o_c_r_tabs_engine.html#a8aefc470b0855e9e740a603231791356" title=" " alt="" coords="768,565,927,606"/>
+<area shape="rect" id="node11" href="$classocrt_1_1_o_c_r_tabs_engine.html#a1cf0c1eed2c3995e61e6ce196e931772" title=" " alt="" coords="773,630,921,671"/>
+<area shape="rect" id="node12" href="$classocrt_1_1_o_c_r_tabs_engine.html#ad3f88dc0c1f45427eba8da9f6f29f211" title=" " alt="" coords="773,695,921,737"/>
+<area shape="rect" id="node13" href="$classocrt_1_1_o_c_r_tabs_engine.html#a7b59ff20001dab4189f7d687c3e7ef9c" title="Retrieve all the recognized words and their bounding boxes from tesseract." alt="" coords="771,761,924,802"/>
+<area shape="rect" id="node14" href="$classocrt_1_1_o_c_r_tabs_engine.html#afbcf9e08d79372342c255e6161f5d509" title="Find the sizes of the columns. Each columns spans from the leftest single segment to the rightest sin..." alt="" coords="773,826,921,867"/>
+<area shape="rect" id="node15" href="$classocrt_1_1_o_c_r_tabs_engine.html#a953d4b7b3497ae173f296ac5cdc304c3" title="Find areas that can potentially be real tables. Such areas include consequential type&#45;2 and type&#45;3 li..." alt="" coords="773,891,921,933"/>
+<area shape="rect" id="node16" href="$classocrt_1_1_o_c_r_tabs_engine.html#a9f86a413776f7b5cf515f4c9cd6102a7" title=" " alt="" coords="773,499,921,541"/>
+<area shape="rect" id="node17" href="$classocrt_1_1_o_c_r_tabs_engine.html#a56fc69309eade1aa00bf30b43d810a12" title="Tesseract recognizes all data in the image." alt="" coords="773,173,921,214"/>
+<area shape="rect" id="node18" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3b9c63550aba6a81bddc94b347edad98" title=" " alt="" coords="549,107,697,149"/>
+<area shape="rect" id="node19" href="$classocrt_1_1_o_c_r_tabs_engine.html#a365ff7ad2deb753a499fdc235d8a7381" title="Removes grid lines, because tesseract has a problem recognizing words when there are dark,..." alt="" coords="773,107,921,149"/>
+<area shape="rect" id="node20" href="$classocrt_1_1_o_c_r_tabs_engine.html#a144f0066866624b50314642726de1f94" title=" " alt="" coords="773,957,921,998"/>
+<area shape="rect" id="node21" href="$namespaceocrt_1_1aux.html#a05f89928dbf25439b1ff7447935c6901" title="Write processed input doc into an HTML file." alt="" coords="774,5,921,32"/>
+<area shape="rect" id="node3" href="$classocrt_1_1_o_c_r_tabs_engine.html#ab44bbb26a8574deb4da2fd168e81174d" title=" " alt="" coords="331,434,479,475"/>
+<area shape="rect" id="node6" href="$classocrt_1_1_o_c_r_tabs_a_p_i.html#a1cc01b56b29d3f3f4477d367ad79889a" title=" " alt="" coords="527,499,720,541"/>
+<area shape="rect" id="node4" href="$classocrt_1_1_o_c_r_tabs_a_p_i.html#acf8f2a3030580cc5c72b9ffc51b32f4e" title=" " alt="" coords="104,434,283,475"/>
+<area shape="rect" id="node5" href="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,441,56,468"/>
+<area shape="rect" id="node22" href="$classocrt_1_1_o_c_r_tabs_engine.html#a1ce177f3d245c2458c903a15a307071e" title=" " alt="" coords="549,21,697,62"/>
+</map>

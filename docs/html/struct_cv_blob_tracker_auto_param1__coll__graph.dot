@@ -1,0 +1,26 @@
+digraph "CvBlobTrackerAutoParam1"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{CvBlobTrackerAutoParam1\n|+ FGTrainFrames\l+ UsePPData\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +pFG" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{CvFGDetector\n||+ CvFGDetector()\l+ GetMask()\l+ Process()\l+ Release()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_cv_f_g_detector.html",tooltip=" "];
+  Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node3 [label="{CvVSModule\n|# m_Wnd\l|+ CvVSModule()\l+ ~CvVSModule()\l+ GetParamName()\l+ GetParamComment()\l+ GetParam()\l+ GetParamStr()\l+ SetParam()\l+ SetParamStr()\l+ TransferParamsFromChild()\l+ TransferParamsToChild()\land 10 more...\l# IsParam()\l# AddParam()\l# AddParam()\l# AddParam()\l# AddParam()\l# AddParam()\l# CommentParam()\l# SetTypeName()\l# SetModuleName()\l# DelParam()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_cv_v_s_module.html",tooltip=" "];
+  Node4 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +pBD" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{CvBlobDetector\n||+ CvBlobDetector()\l+ DetectNewBlob()\l+ Release()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_cv_blob_detector.html",tooltip=" "];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node5 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +pBT" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{CvBlobTracker\n||+ CvBlobTracker()\l+ AddBlob()\l+ GetBlobNum()\l+ GetBlob()\l+ DelBlob()\l+ Process()\l+ Release()\l+ ProcessBlob()\l+ GetConfidence()\l+ GetConfidenceList()\land 10 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_cv_blob_tracker.html",tooltip=" "];
+  Node3 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node6 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +pBTGen" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{CvBlobTrackGen\n||+ CvBlobTrackGen()\l+ SetFileName()\l+ AddBlob()\l+ Process()\l+ Release()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_cv_blob_track_gen.html",tooltip=" "];
+  Node3 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node7 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +pBTPP" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{CvBlobTrackPostProc\n||+ CvBlobTrackPostProc()\l+ AddBlob()\l+ Process()\l+ GetBlobNum()\l+ GetBlob()\l+ Release()\l+ GetBlobByID()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_cv_blob_track_post_proc.html",tooltip=" "];
+  Node3 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node8 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +pBTA" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node8 [label="{CvBlobTrackAnalysis\n||+ CvBlobTrackAnalysis()\l+ AddBlob()\l+ Process()\l+ GetState()\l+ GetStateDesc()\l+ SetFileName()\l+ Release()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_cv_blob_track_analysis.html",tooltip=" "];
+  Node3 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+}

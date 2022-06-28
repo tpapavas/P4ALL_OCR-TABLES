@@ -1,0 +1,11 @@
+digraph "cv::ocl::CannyBuf"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{cv::ocl::CannyBuf\n|+ filterDX\l+ filterDY\l|+ CannyBuf()\l+ ~CannyBuf()\l+ CannyBuf()\l+ CannyBuf()\l+ create()\l+ release()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +counter\n+dx\n+dx_buf\n+dy\n+dy_buf\n+edgeBuf\n+trackBuf1\n+trackBuf2" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{cv::ocl::oclMat\n|+ flags\l+ rows\l+ cols\l+ step\l+ data\l+ refcount\l+ datastart\l+ dataend\l+ offset\l+ wholerows\l+ wholecols\l|+ oclMat()\l+ oclMat()\l+ oclMat()\l+ oclMat()\l+ oclMat()\l+ oclMat()\l+ oclMat()\l+ oclMat()\l+ oclMat()\l+ oclMat()\land 49 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1ocl_1_1ocl_mat.html",tooltip=" "];
+  Node3 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +clCxt" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{cv::ocl::Context\n||+ supportsFeature()\l+ getDeviceInfo()\l+ getOpenCLContextPtr()\l+ getOpenCLCommandQueuePtr()\l+ getOpenCLDeviceIDPtr()\l+ getContext()\l# Context()\l# ~Context()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcv_1_1ocl_1_1_context.html",tooltip=" "];
+}

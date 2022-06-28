@@ -1,0 +1,10 @@
+<map id="ocrt::ImageProcessor::ThresholdImage" name="ocrt::ImageProcessor::ThresholdImage">
+<area shape="rect" id="node1" title="Outputs a binary image." alt="" coords="917,71,1064,112"/>
+<area shape="rect" id="node2" href="$classocrt_1_1_image_processor.html#aee7429285deff50bb06773d8b150c208" title="Binarize and segment image." alt="" coords="723,37,869,79"/>
+<area shape="rect" id="node8" href="$classocrt_1_1_image_processor.html#a32cf570d8203640191b89d8342ef3b26" title=" " alt="" coords="723,103,869,144"/>
+<area shape="rect" id="node3" href="$classocrt_1_1_image_processor.html#a63fc5029f3f38e65fdb7fa83a2bddb1e" title=" " alt="" coords="527,5,674,47"/>
+<area shape="rect" id="node4" href="$classocrt_1_1_o_c_r_tabs_engine.html#a3b9c63550aba6a81bddc94b347edad98" title=" " alt="" coords="527,71,675,112"/>
+<area shape="rect" id="node5" href="$classocrt_1_1_o_c_r_tabs_engine.html#ab44bbb26a8574deb4da2fd168e81174d" title=" " alt="" coords="331,71,479,112"/>
+<area shape="rect" id="node6" href="$classocrt_1_1_o_c_r_tabs_a_p_i.html#acf8f2a3030580cc5c72b9ffc51b32f4e" title=" " alt="" coords="104,71,283,112"/>
+<area shape="rect" id="node7" href="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,78,56,105"/>
+</map>

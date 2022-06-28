@@ -1,0 +1,11 @@
+digraph "WebService/client"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_b1c8894e47e5d7bf41ba336ff03fd9c2 {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", style="filled,dashed,", label="WebService", fontname="Helvetica", fontsize="10", URL="dir_b1c8894e47e5d7bf41ba336ff03fd9c2.html"]
+  dir_106ce5cc9296dcbc169781608024e7e3 [shape=box, label="client", style="filled,bold,", fillcolor="#edf0f7", color="grey25", URL="dir_106ce5cc9296dcbc169781608024e7e3.html"];
+  }
+}

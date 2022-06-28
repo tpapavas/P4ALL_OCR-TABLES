@@ -1,0 +1,31 @@
+digraph "JbClasser"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{JbClasser\n|+ method\l+ components\l+ maxwidth\l+ maxheight\l+ npages\l+ baseindex\l+ sizehaus\l+ rankhaus\l+ thresh\l+ weightfactor\l+ w\l+ h\l+ nclass\l+ keep_pixaa\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +safiles" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{Sarray\n|+ nalloc\l+ n\l+ refcount\l+ array\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_sarray.html",tooltip=" "];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +naarea\n+naclass\n+nacomps\n+nafgt\n+napage" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{Numa\n|+ nalloc\l+ n\l+ refcount\l+ startx\l+ delx\l+ array\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_numa.html",tooltip=" "];
+  Node4 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +pixaa" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{Pixaa\n|+ n\l+ nalloc\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_pixaa.html",tooltip=" "];
+  Node5 -> Node4 [color="grey25",fontsize="10",style="solid",label=" +pixa" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{Pixa\n|+ n\l+ nalloc\l+ refcount\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_pixa.html",tooltip=" "];
+  Node6 -> Node5 [color="grey25",fontsize="10",style="solid",label=" +pix" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{Pix\n|+ w\l+ h\l+ d\l+ spp\l+ wpl\l+ refcount\l+ xres\l+ yres\l+ informat\l+ special\l+ text\l+ data\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_pix.html",tooltip=" "];
+  Node7 -> Node6 [color="grey25",fontsize="10",style="solid",label=" +colormap" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{PixColormap\n|+ array\l+ depth\l+ nalloc\l+ n\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_pix_colormap.html",tooltip=" "];
+  Node8 -> Node5 [color="grey25",fontsize="10",style="solid",label=" +boxa" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node8 [label="{Boxa\n|+ n\l+ nalloc\l+ refcount\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_boxa.html",tooltip=" "];
+  Node9 -> Node8 [color="grey25",fontsize="10",style="solid",label=" +box" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node9 [label="{Box\n|+ x\l+ y\l+ w\l+ h\l+ refcount\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_box.html",tooltip=" "];
+  Node8 -> Node4 [color="grey25",fontsize="10",style="solid",label=" +boxa" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +pixat\n+pixatd" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node10 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +dahash" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node10 [label="{L_DnaHash\n|+ nbuckets\l+ initsize\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_l___dna_hash.html",tooltip=" "];
+  Node11 -> Node10 [color="grey25",fontsize="10",style="solid",label=" +dna" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node11 [label="{L_Dna\n|+ nalloc\l+ n\l+ refcount\l+ startx\l+ delx\l+ array\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_l___dna.html",tooltip=" "];
+  Node12 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +ptac\n+ptact\n+ptall\n+ptaul" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node12 [label="{Pta\n|+ n\l+ nalloc\l+ refcount\l+ x\l+ y\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_pta.html",tooltip=" "];
+}

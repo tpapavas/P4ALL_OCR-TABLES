@@ -1,0 +1,27 @@
+var structfz__compression__params =
+[
+    [ "black_is_1", "structfz__compression__params.html#a79fe74a924534fa8b84ac468408336ad", null ],
+    [ "bpc", "structfz__compression__params.html#ab46620ab89689d324f9ffeeda46ae3c3", null ],
+    [ "color_transform", "structfz__compression__params.html#aabfa00f0d0d57f8d05d2971a970b1996", null ],
+    [ "colors", "structfz__compression__params.html#a150a64056e712e8ff88a00a3b810aafa", null ],
+    [ "columns", "structfz__compression__params.html#a17c70bb378eb7b5fa3c06e5b9f802bef", null ],
+    [ "damaged_rows_before_error", "structfz__compression__params.html#a7de6eae140e208d3e7e1bab8783a7a94", null ],
+    [ "early_change", "structfz__compression__params.html#a4c3f26cc12f02a3efeb936cde3f8fe13", null ],
+    [ "embedded", "structfz__compression__params.html#a620fa9114f432d82a10e7f0128736100", null ],
+    [ "encoded_byte_align", "structfz__compression__params.html#a6c283f11924f62104daa3b4c6ca54090", null ],
+    [ "end_of_block", "structfz__compression__params.html#ab6b02eaf72ecae52a4acb5df74eb6298", null ],
+    [ "end_of_line", "structfz__compression__params.html#af6d5af3fe29771d0ea7ded2209fa6e31", null ],
+    [ "fax", "structfz__compression__params.html#ac1489ffad897e5fcb36b80fc367e906b", null ],
+    [ "flate", "structfz__compression__params.html#a6db82ed346ea05bd5820c7f1782033a7", null ],
+    [ "globals", "structfz__compression__params.html#a12a9831f62eabadbd0a2f80892eb0640", null ],
+    [ "jbig2", "structfz__compression__params.html#a67407f22a9cc2ebb918c4847d2cd56cb", null ],
+    [ "jpeg", "structfz__compression__params.html#a8a7a458f0b12499625873b5389e18273", null ],
+    [ "jpx", "structfz__compression__params.html#a1580813d88cd19fa6d4a152458e3bd39", null ],
+    [ "k", "structfz__compression__params.html#ae91a6bc79400f715cbbebb5f196f1a91", null ],
+    [ "lzw", "structfz__compression__params.html#afc80fef9551119bd8f093fa0d2743948", null ],
+    [ "predictor", "structfz__compression__params.html#a8b37b27fb5eb4aa3601a41d70b143d98", null ],
+    [ "rows", "structfz__compression__params.html#a3140aed624c884eb7a035be007737d41", null ],
+    [ "smask_in_data", "structfz__compression__params.html#af08c8869828ead136a8cdea1131475b8", null ],
+    [ "type", "structfz__compression__params.html#a63eac63aadc0f689ef6d9a72adf0b97f", null ],
+    [ "u", "structfz__compression__params.html#afcc46b1ca76c1c024c27ce107ea6e5fe", null ]
+];

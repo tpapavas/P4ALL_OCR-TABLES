@@ -1,0 +1,5 @@
+<map id="ocrt::OCRTabsEngine::FindBoxesAndWords" name="ocrt::OCRTabsEngine::FindBoxesAndWords">
+<area shape="rect" id="node1" title="Retrieve all the recognized words and their bounding boxes from tesseract." alt="" coords="5,23,159,65"/>
+<area shape="rect" id="node2" href="$namespaceocrt_1_1aux.html#aea68d4931191f826f0649b3afd73d5c8" title="Counts time units passed since last call of startClock()." alt="" coords="209,5,344,32"/>
+<area shape="rect" id="node3" href="$namespaceocrt_1_1aux.html#a011f97881ac2c9c396731e1116b19d7d" title="&quot;Starts the clock&quot;; Save current time." alt="" coords="207,56,347,83"/>
+</map>

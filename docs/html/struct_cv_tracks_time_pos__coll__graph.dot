@@ -1,0 +1,7 @@
+digraph "CvTracksTimePos"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{CvTracksTimePos\n|+ len1\l+ len2\l+ beg1\l+ beg2\l+ end1\l+ end2\l+ comLen\l+ shift1\l+ shift2\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

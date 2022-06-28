@@ -1,0 +1,7 @@
+digraph "pdf_pkcs7_signer"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{pdf_pkcs7_signer\n|+ keep\l+ drop\l+ get_signing_name\l+ max_digest_size\l+ create_digest\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+}

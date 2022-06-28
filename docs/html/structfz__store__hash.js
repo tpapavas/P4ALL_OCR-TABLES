@@ -1,0 +1,27 @@
+var structfz__store__hash =
+[
+    [ "bgr", "structfz__store__hash.html#a072a46e8750f7adb8c4f86be23e22309", null ],
+    [ "bp", "structfz__store__hash.html#af4b8ea576c5b49005c76917ef55b3954", null ],
+    [ "copy_spots", "structfz__store__hash.html#aa6d7f785932e94f17be215beec2437c3", null ],
+    [ "drop", "structfz__store__hash.html#a2026336e7a83d3bad511e0500e493a92", null ],
+    [ "dst_extras", "structfz__store__hash.html#af1290f48a6f2e38a998bf905f3487eae", null ],
+    [ "dst_md5", "structfz__store__hash.html#a20316d22db09387ff498a9e0a9a0c370", null ],
+    [ "format", "structfz__store__hash.html#a8f9b0af92ee23274f49a7bd423b14d19", null ],
+    [ "has_group_alpha", "structfz__store__hash.html#a258a467e4591762bc2cd7c86e6fd5daa", null ],
+    [ "has_shape", "structfz__store__hash.html#a40a8aa2a4b0abece44a13953520becc7", null ],
+    [ "i", "structfz__store__hash.html#a552bd24180a5f762282e4e62a5a78bd2", null ],
+    [ "id", "structfz__store__hash.html#a660154eb1abf0cc9154122603f2c9aac", null ],
+    [ "im", "structfz__store__hash.html#aa7b76bbb22a5d8baa6ee90925a1b3eb5", null ],
+    [ "link", "structfz__store__hash.html#aea1f2f66361a57802d84203267dcfa10", null ],
+    [ "m", "structfz__store__hash.html#a908122f4c2a7f6ba712e95d6cec45798", null ],
+    [ "pi", "structfz__store__hash.html#a7e6b8255075097d632e574a85aa0ae5a", null ],
+    [ "pir", "structfz__store__hash.html#ad65374821da5fc765ce2c7d6ef6dd2d4", null ],
+    [ "proof", "structfz__store__hash.html#a8f7f50512a861a7013382007fc03924b", null ],
+    [ "ptr", "structfz__store__hash.html#a24e932ef216562fcd6862d4a94681920", null ],
+    [ "ptr", "structfz__store__hash.html#a7283584e1421da3c2de19d0c1f063981", null ],
+    [ "r", "structfz__store__hash.html#a06421b70bcd35ca855aee995741333c8", null ],
+    [ "ri", "structfz__store__hash.html#a1c5efb18037076729563f240ffa678be", null ],
+    [ "src_extras", "structfz__store__hash.html#a33beb4a1f2719bd06049faeaf8a88631", null ],
+    [ "src_md5", "structfz__store__hash.html#a673eaad5c1d5efabf3351dc8652681d3", null ],
+    [ "u", "structfz__store__hash.html#a708d36ede57b250eddb8a9d6142e4ed4", null ]
+];

@@ -1,0 +1,28 @@
+var struct_l___rdid =
+[
+    [ "beta", "struct_l___rdid.html#afde3cba4c60fc4225f13e6f371af8630", null ],
+    [ "boxa", "struct_l___rdid.html#aa3e78a67c70afbe986236f43dec34e7c", null ],
+    [ "counta", "struct_l___rdid.html#aaf91da29081426ac5a7990d42b6f394b", null ],
+    [ "delya", "struct_l___rdid.html#ac86c332359a8b0ee10cd7b1c20132522", null ],
+    [ "fullarrays", "struct_l___rdid.html#aa7fb688d02199516506a0e6667e795b4", null ],
+    [ "gamma", "struct_l___rdid.html#ab88af370164e6948d091e088493a485d", null ],
+    [ "nadely", "struct_l___rdid.html#af400139493014539b6bbbd31e8366163", null ],
+    [ "nadely_r", "struct_l___rdid.html#ab681055f1369606fde9534426a7d2bb0", null ],
+    [ "namoment", "struct_l___rdid.html#a5c56137c2a5b5acf24234f7fbdb62f69", null ],
+    [ "narray", "struct_l___rdid.html#a8e42bcf32feef527e25732ac6d043259", null ],
+    [ "nasample_r", "struct_l___rdid.html#ab86fc1f07fcbf8b18ee87fc7e2d4fc07", null ],
+    [ "nascore", "struct_l___rdid.html#abeeb01270508efe12dba142488129023", null ],
+    [ "nascore_r", "struct_l___rdid.html#ab7a86987495eacbecd2cf7a57fe8746e", null ],
+    [ "nasum", "struct_l___rdid.html#aa07540f4039c0227b87e12a6563f1a5e", null ],
+    [ "natempl", "struct_l___rdid.html#a9989a101e249891b3ae17b1bd8935ffe", null ],
+    [ "natempl_r", "struct_l___rdid.html#a395dd535dc8d3036ea82eaffae5d41e0", null ],
+    [ "nawidth", "struct_l___rdid.html#a28412593498686c25a1c45b6d02d4585", null ],
+    [ "nawidth_r", "struct_l___rdid.html#a6e2d1b33c88cf5287d0995b7167dfc22", null ],
+    [ "naxloc", "struct_l___rdid.html#a0c2a9026f9158d86aca152ac67e7b2c2", null ],
+    [ "naxloc_r", "struct_l___rdid.html#a19ae2bdba0f6d0df62a9c45d1b06827f", null ],
+    [ "pixs", "struct_l___rdid.html#ad46738b6de1c5d592cfb76ed374bbcab", null ],
+    [ "setwidth", "struct_l___rdid.html#a4b69c7bb61dd1955a0929ba3214fa4df", null ],
+    [ "size", "struct_l___rdid.html#a982cdd163ed35ee0ddfc9c01d9ce4a19", null ],
+    [ "trellisscore", "struct_l___rdid.html#a93c64e179a2adec3a8dc9ff20c714760", null ],
+    [ "trellistempl", "struct_l___rdid.html#a99b0acb6cb6216765823323588e92cae", null ]
+];
