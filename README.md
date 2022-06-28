@@ -1,18 +1,18 @@
-## P4A_OCR-TABLES
+## P4ALL_OCR-TABLES (version 1.1)
 A module that exports scanned documents (image or .pdf files) to .html, recognizing tabular structures. A description of the recognition algorithm can be found here: [Extraction of Tabular Data from Document Images](https://doi.org/10.1145/3058555.3058581)
 
 See [CHANGES.md](docs/CHANGES.md) for changes on version 1.1.
 
 ### Contents
-- [Repo](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#repo)
-- [Dependencies](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#dependencies)
-- [Building](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#building)
-- [DLL Usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#dll-usage)
-- [Standalone App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#standalone-app-usage)
-- [WebService App usage](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#webservice-app-usage)
-- [Current limitations (to be updated in next version)](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#current-limitations-to-be-updated-in-next-version)
-- [Citation](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#citation)
-- [Funding Acknowledgement](https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#funding-acknowledgement)
+- [Repo](#repo)
+- [Dependencies](#dependencies)
+- [Building](#building)
+- [DLL Usage](#dll-usage)
+- [Standalone App usage](#standalone-app-usage)
+- [WebService App usage](#webservice-app-usage)
+- [Current limitations (to be updated in next version)](#current-limitations-to-be-updated-in-next-version)
+- [Citation](#citation)
+- [Funding Acknowledgement](#funding-acknowledgement)
 
 ### Repo
 The repository contains 5 directories
