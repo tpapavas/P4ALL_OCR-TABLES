@@ -6,17 +6,16 @@
 
 ### New Code Structure
 ```
-								**module**
-									*
-									*
-        		*****************************************
-		     	*					*					*
-				*					*					*
-			  [CORE]			[HELPERS]			  debug 
-			 document			auxiliary			dll_config
+					    **module**
+						*
+						*
+        		*************************************************
+		     	*			*			*
+			*			*			*
+		     [CORE]		    [HELPERS]		      debug 
+		    document		    auxiliary		    dll_config
 		 ocr_tabs_engine	   file_handler 	   ocr_tabs_api
 		  img_processor		  drawing_handler
-
 ```
 
 ## Simple API Usage
