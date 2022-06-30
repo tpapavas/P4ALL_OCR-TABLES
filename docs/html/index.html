@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>P4ALL_OCR-TABLES: P4A_OCR-TABLES</title>
+<title>P4ALL_OCR-TABLES: P4ALL_OCR-TABLES (version 1.1)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,7 +83,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">P4A_OCR-TABLES </div></div>
+  <div class="headertitle"><div class="title">P4ALL_OCR-TABLES (version 1.1) </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p ><a class="anchor" id="md_README"></a>A module that exports scanned documents (image or .pdf files) to .html, recognizing tabular structures. A description of the recognition algorithm can be found here: <a href="https://doi.org/10.1145/3058555.3058581">Extraction of Tabular Data from Document Images</a></p>
@@ -91,33 +91,34 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <h2><a class="anchor" id="autotoc_md1"></a>
 Contents</h2>
 <ul>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#repo">Repo</a></li>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#dependencies">Dependencies</a></li>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#building">Building</a></li>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#dll-usage">DLL Usage</a></li>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#standalone-app-usage">Standalone App usage</a></li>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#webservice-app-usage">WebService App usage</a></li>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#current-limitations-to-be-updated-in-next-version">Current limitations (to be updated in next version)</a></li>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#citation">Citation</a></li>
-<li><a href="https://github.com/tpapavas/P4ALL_OCR-TABLES/tree/img-preprocessing#funding-acknowledgement">Funding Acknowledgement</a></li>
+<li>Repo</li>
+<li>Dependencies</li>
+<li>Building</li>
+<li>DLL Usage</li>
+<li>Standalone App usage</li>
+<li>WebService App usage</li>
+<li>Current limitations (to be updated in next version)</li>
+<li>Citation</li>
+<li>Funding Acknowledgement</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Repo</h2>
 <p >The repository contains 5 directories</p>
-<p >1) <a href="https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/ocr_tables">ocr_tables</a> : This includes the source code that generates the OCR_TABLES.dll.</p>
-<p >2) <a href="https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/App">App</a> : This includes the source code for a sample Qt-based app to test the module.</p>
-<p >3) <a href="https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/tessdata">tessdata</a> : This includes the traindata necessary for the OCR engine. The tessdata folder must be in the same directory as the executable.</p>
-<p >4) <a href="https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/test%20files">test files</a> : This includes some sample files to test the module.</p>
-<p >5) <a href="https://github.com/P4ALLcerthiti/P4ALL_OCR-TABLES/tree/master/WebService">WebService</a> : This includes the .php files for a sample webservice implementation.</p>
+<p >1) <a href="P4ALL_OCR-TABLES/src">ocr_tables</a> : This includes the source code that generates the OCR_TABLES.dll.</p>
+<p >2) [App](App) : This includes the source code for a sample Qt-based app to test the module.</p>
+<p >3) <a href="P4ALL_OCR-TABLES/tessdata">tessdata</a> : This includes the traindata necessary for the OCR engine. The tessdata folder must be in the same directory as the executable.</p>
+<p >4) <a href="P4ALL_OCR-TABLES/test%20files">test files</a> : This includes some sample files to test the module.</p>
+<p >5) [WebService](WebService) : This includes the .php files for a sample webservice implementation.</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
 Dependencies</h2>
 <p >The following libraries were used to build and test the module. Older subversions may also be compatible.</p>
-<p ><a href="http://opencv.org/">OpenCV 2.4.9</a> : Used by the ocr_tables module for image processing.\ opencv_core249.lib, opencv_highgui249.lib, opencv_imgproc249.lib.</p>
-<p ><a href="http://mupdf.com/">MuPDF 1.7</a> : Used by the ocr_tables module for pdf processing.\ libmupdf.lib, libthirdparty.lib.\ Also set /NODEFAULTLIB:"libcmt.lib".</p>
-<p ><a href="https://github.com/tesseract-ocr/tesseract">Tesseract-OCR 3.0.4</a> : Used by the ocr_tables module for OCR.\ libtesseract304.lib</p>
-<p ><a href="http://www.leptonica.com/">Leptonica 1.7.1</a> : Used by Tesseract-OCR for image processing, and for Document Image Analysis <br  />
- liblept171.lib</p>
-<p ><a href="http://www.qt.io/download-open-source/">Qt 5.1.0</a> : Used to build the sample App.\ qtmain.lib, Qt5Core.lib, Qt5Gui.lib, Qt5Widgets.lib.\ Also don't forget to copy Qt's "platforms" directory in the same folder as the executable.</p>
+<p ><a href="http://opencv.org/">OpenCV 2.4.13</a> : Used by the ocr_tables module for image processing.\ opencv_core2413.lib, opencv_highgui2413.lib, opencv_imgproc2413.lib.</p>
+<p ><a href="http://mupdf.com/">MuPDF 1.19.0</a> : Used by the ocr_tables module for pdf processing.\ libmupdf.lib, libthirdparty.lib.\ Also set /NODEFAULTLIB:"libcmt.lib".</p>
+<p ><a href="https://github.com/tesseract-ocr/tesseract">Tesseract-OCR 4.1</a> : Used by the ocr_tables module for OCR.\ tesseract41.lib</p>
+<p ><a href="http://www.leptonica.com/">Leptonica 1.82.0</a> : Used by Tesseract-OCR for image processing, and for Document Image Analysis <br  />
+ leptonica-1.82.0.lib</p>
+<p ><a href="http://www.qt.io/download-open-source/">Qt 5.15.2</a> : Used to build the sample App.\ qtmain.lib, Qt5Core.lib, Qt5Gui.lib, Qt5Widgets.lib.\ Also don't forget to copy Qt's "platforms" directory in the same folder as the executable.</p>
+<p >See INSTALL_DEPS.md for installation instuctions on dependencies.</p>
 <h2><a class="anchor" id="autotoc_md4"></a>
 Building</h2>
 <h3><a class="anchor" id="autotoc_md5"></a>
@@ -128,13 +129,21 @@ Windows</h3>
 <h2><a class="anchor" id="autotoc_md6"></a>
 DLL Usage</h2>
 <div class="fragment"><div class="line">//include header file</div>
-<div class="line">#include &quot;ocr_tabs.h&quot;</div>
-<div class="line">//create object  </div>
-<div class="line">ocr_tabs* tab = new ocr_tabs();</div>
-<div class="line">//process pdf file</div>
-<div class="line">tab-&gt;pdf2html(filename.toStdString();</div>
-<div class="line">//process image file</div>
-<div class="line">tab-&gt;img2html(filename.toStdString();</div>
+<div class="line">#include &lt;iostream&gt;</div>
+<div class="line">#include &quot;ocr_tabs_api.h&quot;</div>
+<div class="line"> </div>
+<div class="line">int main(int argc, char *argv[]) {</div>
+<div class="line">  std::string filename = &quot;test files/001.png&quot;;</div>
+<div class="line"> </div>
+<div class="line">    // Extract tables and creates html file</div>
+<div class="line">  // with OCRTabsAPI object</div>
+<div class="line">  ocrt::OCRTabsAPI tabs_api(filename);</div>
+<div class="line">  tabs_api.ExtractTables();  </div>
+<div class="line"> </div>
+<div class="line">  // or with OCRTabsEngine object  </div>
+<div class="line">  ocrt::OCRTabsEngine tab = ocrt::OCRTabsEngine();</div>
+<div class="line">  tab.doc2html(ocrt::IMG, filename, &quot;&quot;, false);</div>
+<div class="line">}</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
 Standalone App usage</h2>
 <p >Load an image or pdf file using the "LOAD" button. After the processing is finished an html file is create at "filename" + .html which can be opened using the "SHOW" button</p>

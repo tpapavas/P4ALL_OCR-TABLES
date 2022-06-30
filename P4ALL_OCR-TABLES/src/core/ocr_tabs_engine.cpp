@@ -12,6 +12,8 @@ extern "C" {
 
 using namespace cv;
 
+using std::vector;
+
 #pragma warning( disable : 4018 )
 #pragma warning( disable : 4305 )
 #pragma warning( disable : 4244 )
@@ -40,9 +42,9 @@ namespace ocrt {
 	}
 
 	/**
-	 * @brief Sets the Mat img we will work on from input img (Mat)
+	 * @brief Sets the Mat image we will work on from input (Mat) image
 	 * @param img: img (Mat) to be copied
-	*/
+	 */
 	void OCRTabsEngine::SetImage(Mat img) {
 		//test=SegmentImage(img);
 		test = img.clone();
@@ -208,7 +210,7 @@ namespace ocrt {
 	}
 
 	/**
-	 * @brief Retrieve all the recognized words and their bounding boxes from tesseract
+	 * @brief Retrieve all the recognized words and their bounding boxes from tesseract.
 	 */
 	void OCRTabsEngine::FindBoxesAndWords() {
 		//tess.SetPageSegMode( tesseract::PSM_AUTO_OSD);
@@ -256,7 +258,10 @@ namespace ocrt {
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
-	// Find the text boundaries of the whole image
+	
+	/**
+	 * @brief Find the text boundaries of the whole image.
+	 */
 	void OCRTabsEngine::FindTextBoundaries() {
 		OCR_LOG_MSG("Find text boundaries...");
 		aux::startClock();
@@ -275,7 +280,9 @@ namespace ocrt {
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
-	// Create lines by assigning vertically-overlapping word boxes to the same unique line
+	/**
+	 * @brief Create lines by assigning vertically-overlapping word boxes to the same unique line.
+	 */
 	void OCRTabsEngine::CreateTextLines() {
 		OCR_LOG_MSG("Find lines...");
 		aux::startClock();
@@ -314,6 +321,9 @@ namespace ocrt {
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
+	/**
+	 * @brief Remove headers and footers
+	 */
 	void OCRTabsEngine::RemoveHeadersFooters() {
 		int* header_limit=new int [lines_.size()];
 		int* footer_limit=new int [lines_.size()];
@@ -324,8 +334,8 @@ namespace ocrt {
 		for (int i = 0; i < lines_.size() - 1; i++) {
 			//search for similar headers/footers in consecutive pages
 			for (int k = 0; k < std::min(lines_[i].size(), lines_[i + 1].size()); k++) {
-				string tmp1;
-				string tmp2;
+				std::string tmp1;
+				std::string tmp2;
 				for (int j = 0; j < lines_[i][k].word_ids.size(); j++) {
 					tmp1.append(words_[i][lines_[i][k].word_ids[j]].name);
 				}
@@ -347,8 +357,8 @@ namespace ocrt {
 					k = std::min(lines_[i].size(), lines_[i + 1].size());
 				}
 			}
-			string tmp1;
-			string tmp2;
+			std::string tmp1;
+			std::string tmp2;
 			for (int j = 0; j < lines_[i][lines_[i].size() - 1].word_ids.size(); j++) {
 				tmp1.append(words_[i][lines_[i][lines_[i].size() - 1].word_ids[j]].name);
 			}
@@ -809,7 +819,7 @@ namespace ocrt {
 		ProcessGeneratedColumns();
 	}
 
-	// Create table rows that include more than one lines
+	// Create table rows that include more than one lines.
 	void OCRTabsEngine::CreateTableMultiRows() {
 		OCR_LOG_MSG("Find table multiple-rows...");
 		aux::startClock();
@@ -1192,6 +1202,11 @@ namespace ocrt {
 		return dst;
 	}
 
+	/**
+	 * @brief Preprocess image doing binarization, segmentation and cleanup.
+	 * @param img Mat image to be processed
+	 * @return the output image of processing
+	 */
 	Mat OCRTabsEngine::PreprocessImage(Mat img) {
 		OCR_LOG_MSG("Process Image...");
 		aux::startClock();
@@ -1253,14 +1268,32 @@ namespace ocrt {
 		return img;
 	}
 
+	/**
+	 * @brief Create HTML file with table structures.
+	 * @param filename file to be writen in
+	*/
 	void OCRTabsEngine::WriteHTML(std::string& filename) {
 		aux::WriteHTML(filename, doc);
 	}
 
+	/**
+	 * @brief Check if something goes wrong.
+	 * @return true if something failed
+	 */
 	bool OCRTabsEngine::fail_condition() { 
 		return fail; 
 	}
 
+	/**
+	 * @brief Reads image file and stores it as a Mat vector (for multiple pages).
+	 * @param pages the vector<Mat> representation of input image
+	 * @param pages_clean 
+	 * @param filetype type of file (IMG or PDF)
+	 * @param filename relative path of file
+	 * @param filenameXML 
+	 * @param withXML ture if the image has XML
+	 * @return 
+	 */
 	bool OCRTabsEngine::ReadImage(std::vector<cv::Mat>& pages, std::vector<cv::Mat>& pages_clean, FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML) {
 		switch (filetype) {
 		case FileType::PDF:
@@ -1286,6 +1319,14 @@ namespace ocrt {
 		return true;
 	}
 
+	/**
+	 * @brief Implements full table extraction algorithm and creates the HTML file.
+	 * @param filetype type of document file (IMG or PDF)
+	 * @param filename relative path to file
+	 * @param filenameXML 
+	 * @param withXML has XML
+	 * @return true if everything goes ok
+	 */
 	bool OCRTABS_API OCRTabsEngine::doc2html(FileType filetype, const std::string& filename, const std::string& filenameXML, bool withXML) {
 		resetAll();
 		std::vector<cv::Mat> pages, pages_clean;
@@ -1326,7 +1367,9 @@ namespace ocrt {
 		return true;
 	}
 
-	// Resets everything
+	/**
+	 * @brief Resets everything
+	 */
 	void OCRTabsEngine::resetAll() {
 		test = cv::Mat();
 		initial = cv::Mat();
@@ -1341,6 +1384,12 @@ namespace ocrt {
 		lines_.clear();
 	}
 
+	/**
+	 * @brief Read pdf and extract pages
+	 * @param filename relative path to file
+	 * @param imageList pdf pages as vector<Mat>
+	 * @return true if everything goes ok
+	*/
 	bool OCRTabsEngine::parsePDF(const std::string& filename, std::vector<cv::Mat>& imageList) {
 		fz_context* ctx = fz_new_context(NULL, NULL, FZ_STORE_UNLIMITED);
 		// Register document handlers for the default file types we support.
@@ -1446,7 +1495,7 @@ namespace ocrt {
 	 */
 	void OCRTabsEngine::RemoveFigures() {
 		for (int i = doc.words.size() - 1; i >= 0; i--) {
-			string tmp = doc.words[i].name;
+			std::string tmp = doc.words[i].name;
 			std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
 			if (tmp.find("figure") != std::string::npos) {
 				for (int j = i - 1; j >= 3; j--) {
@@ -1675,6 +1724,11 @@ namespace ocrt {
 		std::cout << " Done in " << aux::endClock() << "s \n";
 	}
 
+	/**
+	 * @brief Find the box inside a segment with the rightmost right side.
+	 * @param seg the segment to look into.
+	 * @return rightmost box id.
+	 */
 	int OCRTabsEngine::FindMaxRightBoxInSegment(const std::vector<int>& seg) {
 		int max_right = -1;
 		int max_box_id = -1;
@@ -1688,12 +1742,17 @@ namespace ocrt {
 		return max_box_id;
 	}
 
+	/**
+	 * @brief Find the box inside a segment with the leftmost left side.
+	 * @param seg the segment to look into.
+	 * @return leftmost box id.
+	 */
 	int OCRTabsEngine::FindMinLeftBoxInSegment(const std::vector<int>& seg) {
 		int min_left = doc.words[seg[0]].box[BOX_LEFT];
 		int min_box_id = seg[0];
 		for (int i = 1; i < seg.size(); i++) {
 			if (doc.words[seg[i]].box[BOX_LEFT] < min_left) {
-				min_left = doc.words[seg[i]].box[BOX_RIGHT];
+				min_left = doc.words[seg[i]].box[BOX_LEFT];
 				min_box_id = seg[i];
 			}
 		}

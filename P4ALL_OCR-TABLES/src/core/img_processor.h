@@ -13,11 +13,11 @@
 //MUPDF
 extern "C" {
 	//#include <mupdf\fitz\pixmap.h>
-	#include <mupdf\fitz.h>
+	#include <mupdf/fitz.h>
 }
 
 //LEPTONICA
-#include <leptonica\allheaders.h>
+#include <leptonica/allheaders.h>
 #define NO_CONSOLE_IO
 #define DFLAG 0
 

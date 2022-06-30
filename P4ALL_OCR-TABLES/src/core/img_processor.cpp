@@ -540,7 +540,7 @@ namespace ocrt {
 		cv::Mat mask(blk.text > 100);
 
 		cv::Mat vertSpaces;
-		cv::reduce(mask, vertSpaces, 0, CV_REDUCE_SUM, CV_32FC1);  //CV_REDUCE_SUM
+		cv::reduce(mask, vertSpaces, 0, cv::REDUCE_SUM, CV_32FC1);  //CV_REDUCE_SUM
 		float* data = (float*)vertSpaces.data;
 
 		std::vector<int> emptyCols, trueEmptyCols;
@@ -598,7 +598,7 @@ namespace ocrt {
 
 		//if non of the above works, check for subareas between empty rows
 		cv::Mat horSpaces;
-		cv::reduce(mask, horSpaces, 1, CV_REDUCE_SUM, CV_32FC1);
+		cv::reduce(mask, horSpaces, 1, cv::REDUCE_SUM, CV_32FC1);
 		data = (float*)horSpaces.data;
 
 		std::vector<int> emptyRows, trueEmptyRows;
@@ -640,7 +640,7 @@ namespace ocrt {
 			std::vector<int> localEmptyCols, localTrueEmptyCols;
 			if (rcts.height > (float)input.rows / 10) {
 				cv::Mat localVertSpaces;
-				cv::reduce(part, localVertSpaces, 0, CV_REDUCE_SUM, CV_32FC1);
+				cv::reduce(part, localVertSpaces, 0, cv::REDUCE_SUM, CV_32FC1);
 				data = (float*)localVertSpaces.data;
 
 				localEmptyCols.push_back(0);
@@ -770,7 +770,7 @@ namespace ocrt {
 	}
 
 
-	// I Have to find what to do in frame 
+	// not for use (under development)
 	bool ImageProcessor::ConstructImage(cv::Mat& image, cv::Mat& filter, int ker_len) {
 		int indx, ker_indx;
 		int img_width = image.size().width;
@@ -805,6 +805,7 @@ namespace ocrt {
 		return true;
 	}
 
+	// not for use (under development)
 	bool ImageProcessor::ClearImage(cv::Mat& image, cv::Mat& output) {
 		cv::Mat temp_er, temp_th, closed, se;
 		BinarizationType bin_type = BinarizationType::SAUVOLA;
@@ -820,6 +821,7 @@ namespace ocrt {
 		return true;
 	}
 
+	//not for use (under development)
 	void ImageProcessor::ApplyAdaptiveContrast(cv::Mat im, cv::Mat output, BinarizationType type, int winx, int winy, double k, double dR) {
 		double m, s, max_s, min_s;
 		double th = 0;

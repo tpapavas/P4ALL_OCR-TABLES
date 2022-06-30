@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="NameAndType">
+  <Class Name="ocrt::OCRTabsAPI">
+    <Position X="0.75" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQiAABIAAAAMAACAAAAAAAIEAAAAAgAA=</HashCode>
+      <FileName>src\ocr_tabs_api.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ocrt::ImageProcessor">
+    <Position X="15.75" Y="0.5" Width="3.75" />
+    <Members>
+      <Method Name="ApplyAdaptiveContrast" Hidden="true" />
+      <Method Name="ClearImage" Hidden="true" />
+      <Method Name="ConstructImage" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAIACAAUAUQAAgAAAAAAAAAACQYAAhNAAQsAAAAA=</HashCode>
+      <FileName>src\core\img_processor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ocrt::DrawingHandler">
+    <Position X="19.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>BAAAAEAAACAAgAAAIAABAAAAAAAABAAAAkABBAgAAAA=</HashCode>
+      <FileName>src\helpers\drawing_handler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ocrt::FileHandler">
+    <Position X="22.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAQAAAAAAAAAAAAIAAAAAAAAAAAAJAAgAEAAg=</HashCode>
+      <FileName>src\helpers\file_handler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ocrt::OCRTabsEngine">
+    <Position X="4.25" Y="0.5" Width="3" />
+    <Members>
+      <Field Name="duration" Hidden="true" />
+      <Field Name="fail" Hidden="true" />
+      <Method Name="fail_condition" Hidden="true" />
+      <Field Name="fail_msg" Hidden="true" />
+      <Method Name="Find" Hidden="true" />
+      <Method Name="getDoc" Hidden="true" />
+      <Method Name="getInitial" Hidden="true" />
+      <Method Name="getRaw" Hidden="true" />
+      <Method Name="InsertionSortBoxesInSegment" Hidden="true" />
+      <Field Name="lines_" Hidden="true" />
+      <Method Name="PreprocessImageWithXML" Hidden="true" />
+      <Field Name="raw" Hidden="true" />
+      <Method Name="resetAll" Hidden="true" />
+      <Method Name="ResetImage" Hidden="true" />
+      <Method Name="SetImage" Hidden="true" />
+      <Field Name="start" Hidden="true" />
+      <Field Name="table_area" Hidden="true" />
+      <Field Name="tmp_col" Hidden="true" />
+      <Field Name="words_" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="ocrt::OCRTabsEngine::BoxSide" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\core\ocr_tabs_engine.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="ocrt::OCRTabsEngine::LineSide" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\core\ocr_tabs_engine.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="ocrt::OCRTabsEngine::SegSide" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\core\ocr_tabs_engine.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAwEYISABAdIAkQKcIAIFAQAKcgARNACACGAAAQAo=</HashCode>
+      <FileName>src\core\ocr_tabs_engine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="ocrt::Document">
+    <Position X="10.75" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEACAAAABAAAAAAEAAAAIAAAAIACQAAEAAAAI=</HashCode>
+      <FileName>src\core\document.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ocrt::Line">
+    <Position X="8.75" Y="5.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAIIAAAAAABAAAAAAABAAAAAAA=</HashCode>
+      <FileName>src\core\document.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ocrt::Page">
+    <Position X="14" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\core\document.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ocrt::Table">
+    <Position X="8.75" Y="3.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAACAACAAAAAAAAAA=</HashCode>
+      <FileName>src\core\document.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ocrt::Word">
+    <Position X="12" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAQAAgAACAAAAAAAgAgAABAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\core\document.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ocrt::ContourSorter">
+    <Position X="15.75" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\core\img_processor.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ocrt::SegmentationBlocks">
+    <Position X="17.75" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAgAAAAAAAAAIAAAAAAUAAAI=</HashCode>
+      <FileName>src\core\img_processor.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="ocrt::BinarizationType" Collapsed="true">
+    <Position X="15.75" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAEAABAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\core\img_processor.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ocrt::FileType" Collapsed="true">
+    <Position X="22.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\helpers\auxiliary.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ocrt::Function" Collapsed="true">
+    <Position X="2.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgEAAAAAAVIAEACMAAABAQACAAAAMAAAAAAAAQAg=</HashCode>
+      <FileName>src\ocr_tabs_api.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ocrt::LineType" Collapsed="true">
+    <Position X="12" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAEAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\core\document.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ocrt::DrawMode" Collapsed="true">
+    <Position X="0.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAABEAAAAAAAIAAACCCAAACABAAAAAAAQA=</HashCode>
+      <FileName>src\ocr_tabs_api.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

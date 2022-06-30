@@ -111,10 +111,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7b59ff20001dab4189f7d687c3e7ef9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all the recognized words and their bounding boxes from tesseract.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a7b59ff20001dab4189f7d687c3e7ef9c">More...</a><br /></td></tr>
 <tr class="separator:a7b59ff20001dab4189f7d687c3e7ef9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f86a413776f7b5cf515f4c9cd6102a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a9f86a413776f7b5cf515f4c9cd6102a7">FindTextBoundaries</a> ()</td></tr>
+<tr class="memdesc:a9f86a413776f7b5cf515f4c9cd6102a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the text boundaries of the whole image.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a9f86a413776f7b5cf515f4c9cd6102a7">More...</a><br /></td></tr>
 <tr class="separator:a9f86a413776f7b5cf515f4c9cd6102a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cf0c1eed2c3995e61e6ce196e931772"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a1cf0c1eed2c3995e61e6ce196e931772">CreateTextLines</a> ()</td></tr>
+<tr class="memdesc:a1cf0c1eed2c3995e61e6ce196e931772"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create lines by assigning vertically-overlapping word boxes to the same unique line.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a1cf0c1eed2c3995e61e6ce196e931772">More...</a><br /></td></tr>
 <tr class="separator:a1cf0c1eed2c3995e61e6ce196e931772"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac48b39ad09187a5cbd282e73a5d8a08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#aac48b39ad09187a5cbd282e73a5d8a08">RemoveHeadersFooters</a> ()</td></tr>
+<tr class="memdesc:aac48b39ad09187a5cbd282e73a5d8a08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove headers and footers.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#aac48b39ad09187a5cbd282e73a5d8a08">More...</a><br /></td></tr>
 <tr class="separator:aac48b39ad09187a5cbd282e73a5d8a08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cdae3b684e8055ec441c83e1e0b9c54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a3cdae3b684e8055ec441c83e1e0b9c54">CreateLineSegments</a> ()</td></tr>
 <tr class="memdesc:a3cdae3b684e8055ec441c83e1e0b9c54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create text Segments for each line. If the horizontal distance between two word boxes is smaller than a threshold, they will be considered as a single text segment.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a3cdae3b684e8055ec441c83e1e0b9c54">More...</a><br /></td></tr>
@@ -142,27 +145,34 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a2f38f2408fad6c0f7969bfaa13a748bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preprocessing for multiple pages Concatenate pages (boxes, lines etc) as if there was one large page.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a2f38f2408fad6c0f7969bfaa13a748bf">More...</a><br /></td></tr>
 <tr class="separator:a2f38f2408fad6c0f7969bfaa13a748bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbe11d56116b3cc330ac902ce5cd400d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#adbe11d56116b3cc330ac902ce5cd400d">ReadImage</a> (std::vector&lt; cv::Mat &gt; &amp;, std::vector&lt; cv::Mat &gt; &amp;, <a class="el" href="namespaceocrt.html#a9402af3f49399e174b97f317ad3585dd">FileType</a> filetype, const std::string &amp;filename, const std::string &amp;filenameXML, bool withXML)</td></tr>
+<tr class="memdesc:adbe11d56116b3cc330ac902ce5cd400d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads image file and stores it as a Mat vector (for multiple pages).  <a href="classocrt_1_1_o_c_r_tabs_engine.html#adbe11d56116b3cc330ac902ce5cd400d">More...</a><br /></td></tr>
 <tr class="separator:adbe11d56116b3cc330ac902ce5cd400d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21968f121f3902bb99f7159c819addf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a21968f121f3902bb99f7159c819addf2">SetImage</a> (cv::Mat img)</td></tr>
-<tr class="memdesc:a21968f121f3902bb99f7159c819addf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Mat img we will work on from input img (Mat)  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a21968f121f3902bb99f7159c819addf2">More...</a><br /></td></tr>
+<tr class="memdesc:a21968f121f3902bb99f7159c819addf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Mat image we will work on from input (Mat) image.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a21968f121f3902bb99f7159c819addf2">More...</a><br /></td></tr>
 <tr class="separator:a21968f121f3902bb99f7159c819addf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a465218b78faee3d8eba466743391795f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a465218b78faee3d8eba466743391795f">ResetImage</a> ()</td></tr>
 <tr class="separator:a465218b78faee3d8eba466743391795f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a144f0066866624b50314642726de1f94"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a144f0066866624b50314642726de1f94">SegmentImage</a> (cv::Mat img)</td></tr>
 <tr class="separator:a144f0066866624b50314642726de1f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b9c63550aba6a81bddc94b347edad98"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a3b9c63550aba6a81bddc94b347edad98">PreprocessImage</a> (cv::Mat img)</td></tr>
+<tr class="memdesc:a3b9c63550aba6a81bddc94b347edad98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preprocess image doing binarization, segmentation and cleanup.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a3b9c63550aba6a81bddc94b347edad98">More...</a><br /></td></tr>
 <tr class="separator:a3b9c63550aba6a81bddc94b347edad98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f1a8d5da45564402543f09e87e53866"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a9f1a8d5da45564402543f09e87e53866">PreprocessImageWithXML</a> (const std::string &amp;fileXML, std::vector&lt; cv::Mat &gt; &amp;imageRAW, std::vector&lt; cv::Mat &gt; &amp;imageCLN)</td></tr>
 <tr class="separator:a9f1a8d5da45564402543f09e87e53866"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab44bbb26a8574deb4da2fd168e81174d"><td class="memItemLeft" align="right" valign="top">bool <a class="el" href="dll__config_8h.html#afb283ca4cf9ece182214336c2ddc4721">OCRTABS_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#ab44bbb26a8574deb4da2fd168e81174d">doc2html</a> (<a class="el" href="namespaceocrt.html#a9402af3f49399e174b97f317ad3585dd">FileType</a> filetype, const std::string &amp;filename, const std::string &amp;filenameXML, bool withXML)</td></tr>
+<tr class="memdesc:ab44bbb26a8574deb4da2fd168e81174d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements full table extraction algorithm and creates the HTML file.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#ab44bbb26a8574deb4da2fd168e81174d">More...</a><br /></td></tr>
 <tr class="separator:ab44bbb26a8574deb4da2fd168e81174d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2790a8467b340366992ba5cd634324f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#ac2790a8467b340366992ba5cd634324f">parsePDF</a> (const std::string &amp;filename, std::vector&lt; cv::Mat &gt; &amp;imageList)</td></tr>
+<tr class="memdesc:ac2790a8467b340366992ba5cd634324f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read pdf and extract pages.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#ac2790a8467b340366992ba5cd634324f">More...</a><br /></td></tr>
 <tr class="separator:ac2790a8467b340366992ba5cd634324f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ce177f3d245c2458c903a15a307071e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a1ce177f3d245c2458c903a15a307071e">WriteHTML</a> (std::string &amp;filename)</td></tr>
+<tr class="memdesc:a1ce177f3d245c2458c903a15a307071e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create HTML file with table structures.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a1ce177f3d245c2458c903a15a307071e">More...</a><br /></td></tr>
 <tr class="separator:a1ce177f3d245c2458c903a15a307071e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39b7e0e160aed3ea3bac82024ec997b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a39b7e0e160aed3ea3bac82024ec997b3">fail_condition</a> ()</td></tr>
+<tr class="memdesc:a39b7e0e160aed3ea3bac82024ec997b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if something goes wrong.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a39b7e0e160aed3ea3bac82024ec997b3">More...</a><br /></td></tr>
 <tr class="separator:a39b7e0e160aed3ea3bac82024ec997b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35004efca2e243723eb682de171002f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#a35004efca2e243723eb682de171002f6">resetAll</a> ()</td></tr>
+<tr class="memdesc:a35004efca2e243723eb682de171002f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets everything.  <a href="classocrt_1_1_o_c_r_tabs_engine.html#a35004efca2e243723eb682de171002f6">More...</a><br /></td></tr>
 <tr class="separator:a35004efca2e243723eb682de171002f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0bf06a5cfd2f12159493717db5f027a"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classocrt_1_1_o_c_r_tabs_engine.html#ae0bf06a5cfd2f12159493717db5f027a">getInitial</a> ()</td></tr>
 <tr class="separator:ae0bf06a5cfd2f12159493717db5f027a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -345,6 +355,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Create lines by assigning vertically-overlapping word boxes to the same unique line. </p>
+
 </div>
 </div>
 <a id="ab44bbb26a8574deb4da2fd168e81174d" name="ab44bbb26a8574deb4da2fd168e81174d"></a>
@@ -385,6 +397,18 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Implements full table extraction algorithm and creates the HTML file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filetype</td><td>type of document file (IMG or PDF) </td></tr>
+    <tr><td class="paramname">filename</td><td>relative path to file </td></tr>
+    <tr><td class="paramname">filenameXML</td><td></td></tr>
+    <tr><td class="paramname">withXML</td><td>has XML </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if everything goes ok </dd></dl>
+
 </div>
 </div>
 <a id="a39b7e0e160aed3ea3bac82024ec997b3" name="a39b7e0e160aed3ea3bac82024ec997b3"></a>
@@ -401,6 +425,9 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Check if something goes wrong. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if something failed </dd></dl>
 
 </div>
 </div>
@@ -493,6 +520,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Find the text boundaries of the whole image. </p>
 
 </div>
 </div>
@@ -616,6 +645,16 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Read pdf and extract pages. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>relative path to file </td></tr>
+    <tr><td class="paramname">imageList</td><td>pdf pages as vector&lt;Mat&gt; </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if everything goes ok </dd></dl>
+
 </div>
 </div>
 <a id="a6c0dea9e380342799c44fb5be73d57c1" name="a6c0dea9e380342799c44fb5be73d57c1"></a>
@@ -670,6 +709,15 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Preprocess image doing binarization, segmentation and cleanup. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">img</td><td>Mat image to be processed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the output image of processing </dd></dl>
 
 </div>
 </div>
@@ -757,6 +805,20 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Reads image file and stores it as a Mat vector (for multiple pages). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pages</td><td>the vector&lt;Mat&gt; representation of input image </td></tr>
+    <tr><td class="paramname">pages_clean</td><td></td></tr>
+    <tr><td class="paramname">filetype</td><td>type of file (IMG or PDF) </td></tr>
+    <tr><td class="paramname">filename</td><td>relative path of file </td></tr>
+    <tr><td class="paramname">filenameXML</td><td></td></tr>
+    <tr><td class="paramname">withXML</td><td>ture if the image has XML </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
 </div>
 </div>
 <a id="a365ff7ad2deb753a499fdc235d8a7381" name="a365ff7ad2deb753a499fdc235d8a7381"></a>
@@ -800,6 +862,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Remove headers and footers. </p>
+
 </div>
 </div>
 <a id="a35004efca2e243723eb682de171002f6" name="a35004efca2e243723eb682de171002f6"></a>
@@ -816,6 +880,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Resets everything. </p>
 
 </div>
 </div>
@@ -870,7 +936,7 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets the Mat img we will work on from input img (Mat) </p>
+<p>Sets the Mat image we will work on from input (Mat) image. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">img</td><td>img (Mat) to be copied </td></tr>
@@ -895,6 +961,14 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Create HTML file with table structures. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>file to be writen in </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

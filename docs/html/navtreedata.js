@@ -25,7 +25,7 @@
 var NAVTREE =
 [
   [ "P4ALL_OCR-TABLES", "index.html", [
-    [ "P4A_OCR-TABLES", "index.html", null ],
+    [ "P4ALL_OCR-TABLES (version 1.1)", "index.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [

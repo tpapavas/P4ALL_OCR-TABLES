@@ -22,26 +22,20 @@ project "P4ALL_OCR-TABLES"
     }
 
     includedirs {
-        "%{prj.name}/vendor/OpenCV/build/include",
-        "%{prj.name}/vendor/MuPDF/include",
-        "%{prj.name}/vendor/tesseract/include",
-        "%{prj.name}/vendor/leptonica/leptonica/include",
+        dependencesdir .. "/mupdf-1.19.0/include",
         "%{prj.name}/src"
     }
 
     libdirs {
-        "C:/OpenCV–2.4.13.6/build/x86/vc14/lib",
         dependencesdir .. "/mupdf-1.19.0/platform/win32/Debug",
-        dependencesdir .. "/vcpkg/packages/tesseract_x86-windows/lib",
-        dependencesdir .. "/vcpkg/packages/leptonica_x86-windows/lib"
     }
 
     links {
         "libmupdf",
         "libthirdparty",
-        "opencv_core2413",
-        "opencv_highgui2413",
-        "opencv_imgproc2413",
+        "opencv_core",
+        "opencv_highgui",
+        "opencv_imgproc",
         "tesseract41",
         "leptonica-1.82.0"
     }
@@ -54,6 +48,6 @@ project "P4ALL_OCR-TABLES"
         defines { "NDEBUG" }
         optimize "On"
         
-    postbuildcommands {
-        ("{COPY} %{prj.name}/vendor/OpenCV/build/x86/vc14/bin/ %{cfg.buildtarget.relpath")
-    }
+    -- postbuildcommands {
+        -- ("{COPY} %{prj.name}/vendor/OpenCV/build/x86/vc14/bin/ %{cfg.buildtarget.relpath")
+    -- }

@@ -23,6 +23,10 @@ namespace ocrt {
 
 	}
 
+	/**
+	 * @brief Calls a function of OCRTabsEngine.
+	 * @param function type of function
+	 */
 	void OCRTabsAPI::OCRTabsEngineCall(Function function) {
 		switch (function) {
 		case Function::RemoveGridLines:
@@ -95,6 +99,10 @@ namespace ocrt {
 		}
 	}
 	
+	/**
+	 * @brief Calls a function of DrawingHandler.
+	 * @param mode the tye of function 
+	 */
 	void OCRTabsAPI::Draw(DrawMode mode) {
 		switch (mode) {
 		case DrawMode::Boxes:
@@ -139,10 +147,19 @@ namespace ocrt {
 		}
 	}
 
+	/**
+	 * @brief Extract table structures of given file and creates the corresponding html file
+	 * @param filename 
+	 * @return true if everything goes ok.
+	 */
 	bool OCRTabsAPI::ExtractTables(const std::string& filename) {
 		return tabs_engine.doc2html(file_handler.ReadFileType(filename), filename, "", false);
 	}
 
+	/**
+	 * @brief This is an overloaded member function. It differs from the above function in that it extracts tables from already given file.
+	 * @return true if everything goes ok.
+	 */
 	bool OCRTabsAPI::ExtractTables() {
 		return ExtractTables(file_handler.getFilename());
 	}

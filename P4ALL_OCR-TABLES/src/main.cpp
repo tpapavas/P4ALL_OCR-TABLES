@@ -9,7 +9,6 @@
 #ifdef _SERVICE //dont forget to change the subsystem
 #include <Windows.h>
 #include "ocr_tabs_api.h"
-//#define OCR_DEBUG 1
 #include "debug.h"
 
 int main(int argc, char *argv[]) {

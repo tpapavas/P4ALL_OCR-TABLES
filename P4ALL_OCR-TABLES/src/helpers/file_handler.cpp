@@ -17,6 +17,11 @@ namespace ocrt {
 
 	}
 
+	/**
+	 * @brief dummy for reading file type (just checking the name).
+	 * @param filename relpath to file
+	 * @return type of file (IMG or PDF).
+	*/
 	FileType FileHandler::ReadFileType(const std::string& filename) {
 		if (filename.find(".pdf") != std::string::npos) {
 			filetype = ocrt::PDF;

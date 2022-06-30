@@ -244,6 +244,6 @@ namespace ocrt {
 			}
 		}
 		imshow("img", test);
-		char c = cvWaitKey(0);
+		char c = cv::waitKey(0);
 	}
 }

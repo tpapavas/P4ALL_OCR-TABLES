@@ -404,3 +404,6 @@ extra/
 
 #doxygen
 Doxyfile
+
+#intermediate
+bin-int/**
