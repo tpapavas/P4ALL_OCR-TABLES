@@ -14,7 +14,7 @@ project "P4ALL_OCR-TABLES"
     kind "ConsoleApp"
     language "C++"
     targetdir ("bin/" .. outputdir .. "%{prj.name}") 
-    objdir ("bin-int/" .. outputdir .. "%{prj.name}") 
+    objdir ("bin_int/" .. outputdir .. "%{prj.name}") 
 
     files { 
         "%{prj.name}/src/**.h", 
