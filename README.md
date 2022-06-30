@@ -30,8 +30,8 @@ The repository contains 5 directories
 ### Dependencies
 The following libraries were used to build and test the module. Older subversions may also be compatible.
 
-[OpenCV 2.4.13](http://opencv.org/) : Used by the ocr_tables module for image processing.\
-opencv_core2413.lib, opencv_highgui2413.lib, opencv_imgproc2413.lib.
+[OpenCV 4.5.5](http://opencv.org/) : Used by the ocr_tables module for image processing.\
+opencv_core.lib, opencv_highgui.lib, opencv_imgproc.lib.
 
 [MuPDF 1.19.0](http://mupdf.com/) : Used by the ocr_tables module for pdf processing.\
 libmupdf.lib, libthirdparty.lib.\
