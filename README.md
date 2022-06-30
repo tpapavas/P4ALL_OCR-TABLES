@@ -69,7 +69,7 @@ See full list in Premake Docs [Using Premake](https://premake.github.io/docs/Usi
 int main(int argc, char *argv[]) {
   std::string filename = "test files/001.png";
 
-	// Extract tables and creates html file
+  // Extract tables and creates html file
   // with OCRTabsAPI object
   ocrt::OCRTabsAPI tabs_api(filename);
   tabs_api.ExtractTables();  
@@ -90,8 +90,6 @@ Define "_SERVICE" to build the App in console mode, without GUI. The application
 The module works best for single column horizontal text, for both single and multi-page documents.
 Support for multi-column text and in-text images has been added in the updated version, however text/image segmentation may sometimes fail.
 Non-manhattan document layouts and vertical text are not supported yet.
-
-The module currently runs on x86 mode only.
 
 ### Citation
 Please cite the following paper in your publications if it helps your research:
