@@ -406,4 +406,4 @@ extra/
 Doxyfile
 
 #intermediate
-bin-int/**
+[Bb]in_int/

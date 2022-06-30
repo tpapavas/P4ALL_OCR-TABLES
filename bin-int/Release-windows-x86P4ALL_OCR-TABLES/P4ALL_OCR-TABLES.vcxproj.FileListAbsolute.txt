@@ -1,2 +1,0 @@
-C:\projects\premake_test\bin-int\Release-windows-x86P4ALL_OCR-TABLES\P4ALL_OCR-TABLES.vcxproj.CopyComplete
-C:\projects\P4ALL_OCR-TABLES\bin-int\Release-windows-x86P4ALL_OCR-TABLES\P4ALL_OCR-TABLES.vcxproj.CopyComplete
